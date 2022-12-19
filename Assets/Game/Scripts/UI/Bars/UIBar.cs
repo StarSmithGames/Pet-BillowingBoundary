@@ -29,8 +29,6 @@ namespace Game.UI
 		}
 
 		public bool isHasText = false;
-		[ShowIf("isHasText")]
-		public bool isTextShowOnHover = false;
 
 		[field: SerializeField] public Image WhiteBar { get; private set; }
 		[field: SerializeField] public Image Bar { get; private set; }

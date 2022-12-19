@@ -4,18 +4,18 @@ namespace Game.UI
 {
 	public abstract class UISubCanvas : UICanvas
 	{
-		public Transform VFXIndicators
+		public Transform VFX
 		{
 			get
 			{
-				if (vfxIndicators == null)
+				if (vfx == null)
 				{
-					vfxIndicators = transform.Find("VFX/Indicators");
+					vfx = transform.Find("VFX");
 				}
 
-				return vfxIndicators;
+				return vfx;
 			}
 		}
-		[SerializeField] protected Transform vfxIndicators;
+		[SerializeField] protected Transform vfx;
 	}
 }
