@@ -1,6 +1,7 @@
 using DG.Tweening;
 
-using Game.Systems.FloatingTextSystem;
+using Game.Entities;
+using Game.Systems.FloatingSystem;
 
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -16,12 +17,15 @@ public class ClickerHand : MonoBehaviour
 	[SerializeField] private Vector3 endPosition;
 
 	private Sequence sequence;
+
+	private Player player;
 	private ClickerConveyor clickerConveyor;
-	private FloatingTextSystem floatingTextSystem;
+	private FloatingSystem floatingTextSystem;
 
 	[Inject]
-	private void Construct(ClickerConveyor clickerConveyor, FloatingTextSystem floatingTextSystem)
+	private void Construct(Player player, ClickerConveyor clickerConveyor, FloatingSystem floatingTextSystem)
 	{
+		this.player = player;
 		this.clickerConveyor = clickerConveyor;
 		this.floatingTextSystem = floatingTextSystem;
 	}
@@ -41,7 +45,9 @@ public class ClickerHand : MonoBehaviour
 			.OnComplete(() =>
 			{
 				clickerConveyor.CurrentClickableObject.Sheet.TapCountBar.CurrentValue -= 1;
-				floatingTextSystem.CreateText(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, "+1", type: AnimationType.AdvanceDamage);
+				player.Gold.CurrentValue += 1;
+				floatingTextSystem.CreateText(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, "+1", type: AnimationType.BasicDamage);
+				floatingTextSystem.CreateCoin(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, type: AnimationType.AdvanceDamage);
 			});
 	}
 

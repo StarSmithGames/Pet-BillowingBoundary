@@ -1,4 +1,4 @@
-using Game.Systems.FloatingTextSystem;
+using Game.Systems.FloatingSystem;
 using Game.Systems.VFX;
 
 using Sirenix.OdinInspector;

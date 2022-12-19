@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Systems.FloatingTextSystem
+namespace Game.Systems.FloatingSystem
 {
 	public class FloatingPoint : MonoBehaviour
 	{
