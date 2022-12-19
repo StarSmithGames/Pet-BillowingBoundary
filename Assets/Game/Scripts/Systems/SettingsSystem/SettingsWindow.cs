@@ -17,7 +17,7 @@ namespace Game.Systems.SettingsSystem
 	public class SettingsWindow : WindowBase
 	{
 		[field: SerializeField] public Button OpenClose { get; private set; }
-		[field: SerializeField] public RectTransform Content { get; private set; }
+		[field: SerializeField] public RectTransform Window { get; private set; }
 
 		private bool isOpenned = false;
 		private RectTransform rectTransform;
@@ -51,14 +51,14 @@ namespace Game.Systems.SettingsSystem
 			IsInProcess = true;
 			CanvasGroup.alpha = 0f;
 			CanvasGroup.Enable(true, false);
-			Content.anchoredPosition = new Vector2(Content.anchoredPosition.x, Content.sizeDelta.y / 2);//up
+			Window.anchoredPosition = new Vector2(Window.anchoredPosition.x, Window.sizeDelta.y / 2);//up
 			IsShowing = true;
 
 			Sequence sequence = DOTween.Sequence();
 
 			sequence
 				.Append(CanvasGroup.DOFade(1f, 0.2f))
-				.Join(Content.DOAnchorPosY(-(Content.sizeDelta.y / 2), 0.2f, true))
+				.Join(Window.DOAnchorPosY(-(Window.sizeDelta.y / 2), 0.2f, true))
 				.AppendCallback(() =>
 				{
 					callback?.Invoke();
@@ -74,7 +74,7 @@ namespace Game.Systems.SettingsSystem
 
 			sequence
 				.Append(CanvasGroup.DOFade(0f, 0.15f))
-				.Join(Content.DOAnchorPosY(Content.sizeDelta.y / 2, 0.15f))
+				.Join(Window.DOAnchorPosY(Window.sizeDelta.y / 2, 0.15f))
 				.AppendCallback(() =>
 				{
 					CanvasGroup.Enable(false);
