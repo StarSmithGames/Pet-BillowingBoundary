@@ -1,6 +1,7 @@
 using DG.Tweening;
 
 using Game.Entities;
+using Game.Systems.CameraSystem;
 using Game.Systems.FloatingSystem;
 
 using Sirenix.OdinInspector;
@@ -21,13 +22,18 @@ public class ClickerHand : MonoBehaviour
 	private Player player;
 	private ClickerConveyor clickerConveyor;
 	private FloatingSystem floatingTextSystem;
+	private CameraSystem cameraSystem;
 
 	[Inject]
-	private void Construct(Player player, ClickerConveyor clickerConveyor, FloatingSystem floatingTextSystem)
+	private void Construct(Player player,
+		ClickerConveyor clickerConveyor,
+		FloatingSystem floatingTextSystem,
+		CameraSystem cameraSystem)
 	{
 		this.player = player;
 		this.clickerConveyor = clickerConveyor;
 		this.floatingTextSystem = floatingTextSystem;
+		this.cameraSystem = cameraSystem;
 	}
 
 	private void Start()
@@ -47,7 +53,8 @@ public class ClickerHand : MonoBehaviour
 				clickerConveyor.CurrentClickableObject.Sheet.TapCountBar.CurrentValue -= 1;
 				player.Gold.CurrentValue += 1;
 				floatingTextSystem.CreateText(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, "+1", type: AnimationType.BasicDamage);
-				floatingTextSystem.CreateCoin(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, type: AnimationType.AdvanceDamage);
+				floatingTextSystem.CreateCoin(clickerConveyor.CurrentClickableObject.GetRandomPoint().position);
+				cameraSystem.StartSmallestShake();
 			});
 	}
 

@@ -8,14 +8,68 @@ namespace Game.Systems.FloatingSystem
 {
 	public class FloatingCoin3D : FloatingObject
 	{
+		public Rigidbody Rigidbody => rigidbody;
+
 		[HideLabel]
 		[SerializeField] private Settings settings;
 		[Space]
 		[SerializeField] private Transform model;
 		[SerializeField] private Renderer renderer;
+		[SerializeField] private Rigidbody rigidbody;
+
 
 		private Material material;
-		
+		private Vector3 lastVelocity;
+		private Vector3 currentDirection;
+		private bool isDirectionChanged = false;
+
+		private CameraSystem.CameraSystem cameraSystem;
+
+		[Inject]
+		private void Construct(CameraSystem.CameraSystem cameraSystem)
+		{
+			this.cameraSystem = cameraSystem;
+		}
+
+		private void FixedUpdate()
+		{
+			lastVelocity = rigidbody.velocity;
+
+			var screenPosition = cameraSystem.Camera.WorldToScreenPoint(transform.position);
+
+			if (screenPosition.x > Screen.width && currentDirection != Vector3.left)
+			{
+				currentDirection = Vector3.left;
+				isDirectionChanged = true;
+			}
+			if (screenPosition.x < 0 && currentDirection != Vector3.right)
+			{
+				currentDirection = Vector3.right;
+				isDirectionChanged = true;
+			}
+
+			if (screenPosition.y < 0 && currentDirection != Vector3.down)
+			{
+				currentDirection = Vector3.down;
+				isDirectionChanged = true;
+			}
+			if (screenPosition.y > Screen.height && currentDirection != Vector3.up)
+			{
+				currentDirection = Vector3.up;
+				isDirectionChanged = true;
+			}
+
+			if (isDirectionChanged)
+			{
+				var speed = lastVelocity.magnitude;
+				var direction = Vector3.Reflect(lastVelocity.normalized, currentDirection);
+
+				rigidbody.velocity = direction * Mathf.Max(speed, 5f);
+
+				isDirectionChanged = false;
+			}
+		}
+
 		[Button(DirtyOnClick = true)]
 		public void StartRotate()
 		{
@@ -56,7 +110,14 @@ namespace Game.Systems.FloatingSystem
 			base.OnDespawned();
 		}
 
-		
+
+		[Button]
+		private void S()
+		{
+			rigidbody.useGravity = true;
+			rigidbody.AddForce(new Vector3(9.8f * 25f, 9.8f * 25f, 0));
+		}
+
 
 		[System.Serializable]
 		public class Settings

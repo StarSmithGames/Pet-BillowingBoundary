@@ -3,23 +3,20 @@ using DG.Tweening;
 using System.Linq;
 
 using UnityEngine;
-using UnityEngine.UIElements;
-
-using Zenject;
 
 namespace Game.Systems.FloatingSystem
 {
 	public class FloatingSystem
 	{
+		private CameraSystem.CameraSystem cameraSystem;
 		private FloatingText.Factory floatingTextFactory;
 		private FloatingCoin3D.Factory floatingCoin3DFactory;
-		private Camera camera;
 
-		private FloatingSystem(FloatingText.Factory floatingTextFactory, FloatingCoin3D.Factory floatingCoin3DFactory)
+		private FloatingSystem(CameraSystem.CameraSystem cameraSystem, FloatingText.Factory floatingTextFactory, FloatingCoin3D.Factory floatingCoin3DFactory)
 		{
+			this.cameraSystem = cameraSystem;
 			this.floatingTextFactory = floatingTextFactory;
 			this.floatingCoin3DFactory = floatingCoin3DFactory;
-			camera = Camera.main;
 		}
 
 		public void CreateText(Vector3 position, string text, Color? color = null, AnimationType type = AnimationType.BasicDamage)
@@ -35,17 +32,23 @@ namespace Game.Systems.FloatingSystem
 				item.Text.color = color ?? Color.white;
 				item.Text.text = text;
 				item.transform.position = position;
-				item.transform.rotation = camera.transform.rotation;//billboard, add to update?
+				item.transform.rotation = cameraSystem.transform.rotation;//billboard, add to update?
 
 				return item;
 			}
 		}
 	
-		public void CreateCoin(Vector3 position, AnimationType type = AnimationType.BasicDamage)
+		public void CreateCoin(Vector3 position)
 		{
 			var obj = Create();
 
-			ApplyAnimation(obj, type);
+			Sequence sequence = DOTween.Sequence();
+
+			sequence
+				.AppendCallback(() => obj.Rigidbody.AddForce(new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0.2f, 0.7f), 0) * Random.Range(300f, 800f)))
+				.AppendInterval(0.5f)
+				.Append(obj.Fade(0, 0.25f))
+				.OnComplete(obj.DespawnIt);
 
 			FloatingCoin3D Create()
 			{
