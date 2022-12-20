@@ -14,11 +14,12 @@ namespace Game.Systems.CameraSystem
 		[SerializeField] private Camera camera;
 
 		[Header("Shake")]
-		public ShakeSettings smallestShake;
-		public ShakeSettings smallShake;
+		[SerializeField] private ShakeSettings smallestShake;
+		[SerializeField] private ShakeSettings smallShake;
 
 		public void StartCustomShake(ShakeSettings settings)
 		{
+			camera.DORewind();
 			camera.DOShakePosition(settings.duration, settings.strength, settings.vibrato, settings.randomnes, settings.fadeOut, settings.mode);
 		}
 

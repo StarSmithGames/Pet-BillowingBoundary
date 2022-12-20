@@ -54,6 +54,7 @@ public class ClickerHand : MonoBehaviour
 				player.Gold.CurrentValue += 1;
 				floatingTextSystem.CreateText(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, "+1", type: AnimationType.BasicDamage);
 				floatingTextSystem.CreateCoin(clickerConveyor.CurrentClickableObject.GetRandomPoint().position);
+				clickerConveyor.CurrentClickableObject.SmallPunch();
 				cameraSystem.StartSmallestShake();
 			});
 	}

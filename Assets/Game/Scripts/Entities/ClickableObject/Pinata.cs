@@ -1,3 +1,5 @@
+using DG.Tweening;
+
 using Game.Systems.FloatingSystem;
 
 using Sirenix.OdinInspector;
@@ -12,6 +14,5 @@ namespace Game.Entities
 {
 	public class Pinata : ClickableObject
 	{
-
 	}
 }

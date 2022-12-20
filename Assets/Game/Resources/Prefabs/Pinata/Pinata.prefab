@@ -141,6 +141,16 @@ MonoBehaviour:
   particles:
   - {fileID: 8828003155651316687}
   collider: {fileID: 8542254347459855908}
+  smallPunch:
+    punch:
+      isPunchRandom: 1
+      punch: {x: 1, y: 1, z: 1}
+      randomXLimits: {x: -0.2, y: 0.7}
+      randomYLimits: {x: 0, y: 0.3}
+      randomZLimits: {x: 0, y: 0}
+    duration: 0.2
+    vibrato: 10
+    elasticity: 10
 --- !u!1 &8542254347459855896
 GameObject:
   m_ObjectHideFlags: 0
