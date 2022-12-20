@@ -75,6 +75,8 @@ namespace Game.Managers.ClickManager
 
 		private void SetClickableObject(ClickableObject clickable)
 		{
+			var lastTarget = CurrentClickableObject;
+
 			if (CurrentClickableObject != null)
 			{
 				CurrentClickableObject.onDead -= OnClickableObjectDead;
@@ -93,6 +95,11 @@ namespace Game.Managers.ClickManager
 				currentIndex = clickableObjects.IndexOf(CurrentClickableObject);
 				CurrentClickableObject.onDead += OnClickableObjectDead;
 				CurrentClickableObject.transform.SetParent(clickableContent);
+			}
+
+			if(lastTarget != null)
+			{
+				lastTarget.Sheet.Refresh();
 			}
 		}
 

@@ -33,6 +33,7 @@ namespace Game.Systems.SettingsSystem
 		private void Start()
 		{
 			Enable(false);
+			Window.anchoredPosition = new Vector2(Window.anchoredPosition.x, Window.sizeDelta.y / 2);//up
 
 			OpenClose.onClick.AddListener(OnOpenClosed);
 
@@ -49,6 +50,8 @@ namespace Game.Systems.SettingsSystem
 		public override void Show(UnityAction callback = null)
 		{
 			IsInProcess = true;
+			isOpenned = true;
+
 			CanvasGroup.alpha = 0f;
 			CanvasGroup.Enable(true, false);
 			Window.anchoredPosition = new Vector2(Window.anchoredPosition.x, Window.sizeDelta.y / 2);//up
@@ -69,6 +72,7 @@ namespace Game.Systems.SettingsSystem
 		public override void Hide(UnityAction callback = null)
 		{
 			IsInProcess = true;
+			isOpenned = false;
 
 			Sequence sequence = DOTween.Sequence();
 
@@ -98,8 +102,6 @@ namespace Game.Systems.SettingsSystem
 			{
 				Show();
 			}
-
-			isOpenned = !isOpenned;
 		}
 	}
 }

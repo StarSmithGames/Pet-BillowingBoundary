@@ -100,7 +100,6 @@ namespace Game.Managers.ClickManager
 			if(Sheet.HealthPointsBar.CurrentValue == 0)
 			{
 				onDead?.Invoke();
-				Sheet.Refresh();
 			}
 		}
 

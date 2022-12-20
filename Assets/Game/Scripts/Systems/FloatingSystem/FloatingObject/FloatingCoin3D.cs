@@ -31,6 +31,11 @@ namespace Game.Systems.FloatingSystem
 			this.cameraSystem = cameraSystem;
 		}
 
+		private void OnEnable()
+		{
+			rigidbody.velocity = Vector3.zero;
+		}
+
 		private void FixedUpdate()
 		{
 			lastVelocity = rigidbody.velocity;
