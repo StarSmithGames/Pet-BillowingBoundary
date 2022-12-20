@@ -19,16 +19,24 @@ namespace Game.Managers.ClickManager
 
 		private SignalBus signalBus;
 		private Player player;
+		private GameManager.GameManager gameManager;
 
-		public ClickHandler(SignalBus signalBus, Player player)
+		public ClickHandler(SignalBus signalBus, Player player, GameManager.GameManager gameManager)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
+			this.gameManager = gameManager;
 		}
 
 		public void Tick()
 		{
+			if (gameManager.CurrentGameState != GameManager.GameState.Gameplay) return;
+
 			if (EventSystem.current.IsPointerOverGameObject())//Windows
+			{
+				return;
+			}
+			if (IsPointerOverUIObject())//Mobile
 			{
 				return;
 			}
@@ -39,10 +47,6 @@ namespace Game.Managers.ClickManager
 				{
 					var touch = Input.GetTouch(i);
 					int id = touch.fingerId;
-					if (EventSystem.current.IsPointerOverGameObject(id))//Mobile
-					{
-						return;
-					}
 
 					if (touch.phase == TouchPhase.Began)
 					{
@@ -68,6 +72,15 @@ namespace Game.Managers.ClickManager
 					}
 				}
 			}
+		}
+
+		private bool IsPointerOverUIObject()
+		{
+			PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+			eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			List<RaycastResult> results = new List<RaycastResult>();
+			EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+			return results.Count > 0;
 		}
 	}
 }

@@ -8,9 +8,26 @@ namespace Game.Systems.VFX
 	{
 		[SerializeField] private ParticleSystem particleSystem;
 
+		private void Start()
+		{
+			Enable(false);
+		}
+
+		public void Enable(bool trigger)
+		{
+			if (trigger)
+			{
+				particleSystem.Emit(50);
+			}
+			else
+			{
+				particleSystem.Stop();
+			}
+		}
+
 		public void Play()
 		{
-			particleSystem.Play();
+			Enable(true);
 		}
 	}
 }

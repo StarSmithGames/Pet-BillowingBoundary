@@ -1,8 +1,5 @@
+using Game.Managers.ClickManager;
 using Game.UI;
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 using Zenject;
 
@@ -10,32 +7,45 @@ namespace Game.HUD
 {
 	public class UIEnemyBar : UIBar
 	{
-		private TapCountBar tapCountBar;
+		private HealthPointsBar hp;
 
+		private SignalBus signalBus;
 		private ClickerConveyor conveyor;
 
 		[Inject]
-		private void Construct(ClickerConveyor conveyor)
+		private void Construct(SignalBus signalBus, ClickerConveyor conveyor)
 		{
+			this.signalBus = signalBus;
 			this.conveyor = conveyor;
 		}
 		private void Start()
 		{
-			tapCountBar = conveyor.CurrentClickableObject.Sheet.TapCountBar;
-
-			tapCountBar.onChanged += OnTapCountBarChanged;
-			OnTapCountBarChanged();
+			signalBus?.Subscribe<SignalTargetChanged>(OnTargetChanged);
+			OnTargetChanged();
 		}
 
 		private void OnDestroy()
 		{
-			tapCountBar.onChanged -= OnTapCountBarChanged;
+			hp.onChanged -= OnTapCountBarChanged;
+			signalBus.Unsubscribe<SignalTargetChanged>(OnTargetChanged);
 		}
 
 		private void OnTapCountBarChanged()
 		{
-			FillAmount = tapCountBar.PercentValue;
-			BarText.text = tapCountBar.Output;
+			FillAmount = hp.PercentValue;
+			BarText.text = hp.Output;
+		}
+
+		private void OnTargetChanged()
+		{
+			if(hp != null)
+			{
+				hp.onChanged -= OnTapCountBarChanged;
+			}
+
+			hp = conveyor.CurrentClickableObject.Sheet.HealthPointsBar;
+			hp.onChanged += OnTapCountBarChanged;
+			OnTapCountBarChanged();
 		}
 	}
 }

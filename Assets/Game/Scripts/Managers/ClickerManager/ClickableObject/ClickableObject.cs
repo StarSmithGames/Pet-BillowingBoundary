@@ -2,31 +2,30 @@ using DG.Tweening;
 
 using Game.Systems.FloatingSystem;
 using Game.Systems.VFX;
-
 using Sirenix.OdinInspector;
-
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Game.Entities
+namespace Game.Managers.ClickManager
 {
 	public abstract class ClickableObject : MonoBehaviour
 	{
-		//Muzzle effect
-		//Impact effect
+		public UnityAction onDead; 
 
 		public EnemyData Data => data;
-		[HideLabel]
 		[SerializeField] public EnemyData data;
-		[Space]
-		[SerializeField] public List<FloatingPoint> points = new List<FloatingPoint>();
-		[SerializeField] public List<ParticleVFX> particles = new List<ParticleVFX>();
-		[SerializeField] private Collider collider;
-		[Space]
 		[SerializeField] private PunchSettings smallPunch;
+		[Header("Vars")]
+		[ReadOnly]
+		[SerializeField] public List<FloatingPoint> points = new List<FloatingPoint>();
+		[ReadOnly]
+		[SerializeField] public List<ParticleVFX> particles = new List<ParticleVFX>();
+		[ReadOnly]
+		public Collider Collider => collider;
+		[SerializeField] private Collider collider;
 
 		public SheetEnemy Sheet
 		{
@@ -42,9 +41,48 @@ namespace Game.Entities
 		}
 		private SheetEnemy sheet;
 
+		private Vector3 startRotation;
+
 		private void Start()
 		{
-			collider.enabled = false;
+			Sheet.HealthPointsBar.onChanged += OnHealthPointsChanged;
+
+			startRotation = transform.rotation.eulerAngles;
+		}
+
+		private void OnDestroy()
+		{
+			Sheet.HealthPointsBar.onChanged -= OnHealthPointsChanged;
+		}
+
+		
+
+		public void CustomPunch(PunchSettings settings)
+		{
+			transform.DORewind();
+			transform.DOPunchScale(settings.GetPunch(), settings.duration, settings.vibrato, settings.elasticity);
+		}
+
+		[Button]
+		public void SmallPunch()
+		{
+			CustomPunch(smallPunch);
+		}
+
+		[Button]
+		public Tween Flip()
+		{
+			Sequence sequence = DOTween.Sequence();
+			sequence
+				.Append(transform.DOMoveY(3f, 0.2f))
+				.Append(transform.DORotate(transform.eulerAngles + new Vector3(0, 0, 180), 0.2f))
+				.Join(transform.DOMoveY(0, 0.3f));
+
+			return sequence;
+		}
+		public void ResetFlip()
+		{
+			transform.eulerAngles = startRotation;
 		}
 
 		public Transform GetRandomPoint()
@@ -57,16 +95,13 @@ namespace Game.Entities
 			return particles.RandomItem();
 		}
 
-		public void CustomPunch(PunchSettings settings)
+		private void OnHealthPointsChanged()
 		{
-			transform.DORewind();
-			transform.DOPunchScale(settings.GetPunch(), settings.duration, settings.vibrato, settings.elasticity);
-		}
-
-		[Button]
-		public void SmallPunch()
-		{
-			CustomPunch(smallPunch);
+			if(Sheet.HealthPointsBar.CurrentValue == 0)
+			{
+				onDead?.Invoke();
+				Sheet.Refresh();
+			}
 		}
 
 		[Button(DirtyOnClick = true)]

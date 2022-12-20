@@ -2,10 +2,6 @@ using DG.Tweening;
 
 using Game.UI;
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
-
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;

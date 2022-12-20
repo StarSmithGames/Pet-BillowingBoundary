@@ -9,6 +9,7 @@ namespace Game.Managers.ClickManager
 		public override void InstallBindings()
 		{
 			Container.DeclareSignal<SignalTouchChanged>();
+			Container.DeclareSignal<SignalTargetChanged>();
 
 			Container.BindInterfacesAndSelfTo<ClickHandler>().AsSingle().NonLazy();
 		}
@@ -17,5 +18,10 @@ namespace Game.Managers.ClickManager
 	public struct SignalTouchChanged
 	{
 		public Touch touch;
+	}
+
+	public struct SignalTargetChanged
+	{
+		public ClickableObject clickable;
 	}
 }

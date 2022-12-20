@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
 
 public static class TransformExtensions
 {
 	public static Transform DestroyChildren(this Transform transform, bool isImmediate = false)
 	{
-		foreach (Transform child in transform)
+		var tempList = transform.Cast<Transform>().ToList();
+		foreach (Transform child in tempList)
 		{
 			if (isImmediate)
 			{

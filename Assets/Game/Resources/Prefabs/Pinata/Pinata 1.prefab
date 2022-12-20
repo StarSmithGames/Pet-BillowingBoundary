@@ -133,7 +133,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cab732e604f8c14d8c81127d7788da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: a1c8aa2f0039e6e4cbe7a15ab240ffe4, type: 2}
+  data: {fileID: 11400000, guid: a396f5d388299bb448e2062faeff8255, type: 2}
+  smallPunch:
+    punch:
+      isPunchRandom: 1
+      punch: {x: 1, y: 1, z: 1}
+      randomXLimits: {x: -0.2, y: 0.7}
+      randomYLimits: {x: 0, y: 0.3}
+      randomZLimits: {x: 0, y: 0}
+    duration: 0.2
+    vibrato: 10
+    elasticity: 10
   points:
   - {fileID: 8542254347566052022}
   - {fileID: 8542254346545556222}
@@ -167,7 +177,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8542254347459855896}
-  m_LocalRotation: {x: -0.03573092, y: 0.81837237, z: -0.02501906, w: 0.57303053}
+  m_LocalRotation: {x: -0.042133108, y: 0.96500653, z: -0.011289534, w: 0.2585728}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
@@ -178,7 +188,7 @@ Transform:
   - {fileID: 8542254346132586005}
   m_Father: {fileID: 8542254346796454499}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 110, z: -5}
+  m_LocalEulerAnglesHint: {x: 0, y: 150, z: -5}
 --- !u!33 &8542254347459855909
 MeshFilter:
   m_ObjectHideFlags: 0

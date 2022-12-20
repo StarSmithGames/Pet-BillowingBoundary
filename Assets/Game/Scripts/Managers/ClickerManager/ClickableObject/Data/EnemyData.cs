@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Entities
+namespace Game.Managers.ClickManager
 {
 	[System.Serializable]
 	[CreateAssetMenu(fileName = "EnemyData", menuName = "Game/Enemy")]

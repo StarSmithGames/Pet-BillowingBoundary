@@ -24,13 +24,13 @@ namespace Game.Systems.CameraSystem
 		}
 
 		[Button]
-		public void StartSmallestShake()
+		public void SmallestShake()
 		{
 			StartCustomShake(smallestShake);
 		}
 
 		[Button]
-		private void StartSmallShake()
+		private void SmallShake()
 		{
 			StartCustomShake(smallShake);
 		}
