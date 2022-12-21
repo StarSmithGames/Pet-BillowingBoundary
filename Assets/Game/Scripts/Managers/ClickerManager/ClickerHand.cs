@@ -21,6 +21,8 @@ namespace Game.Managers.ClickManager
 		[SerializeField] private Vector3 startPosition;
 		[ReadOnly]
 		[SerializeField] private Vector3 endPosition;
+		[Space]
+		[SerializeField] private ParticleSystem fire;
 
 		private Sequence sequence;
 
@@ -67,7 +69,7 @@ namespace Game.Managers.ClickManager
 				.OnComplete(() =>
 				{
 					clickerConveyor.CurrentClickableObject.Sheet.HealthPointsBar.CurrentValue -= settings.damage;
-					player.Gold.CurrentValue += settings.goldForPunch;
+					player.PlayerSheet.Gold.CurrentValue += settings.goldForPunch;
 					floatingSystem.CreateText(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, $"+{settings.goldForPunch}", type: AnimationType.BasicDamage);
 					floatingSystem.CreateCoin(clickerConveyor.CurrentClickableObject.GetRandomPoint().position);
 					clickerConveyor.CurrentClickableObject.GetRandomParticle().Play();
@@ -93,6 +95,18 @@ namespace Game.Managers.ClickManager
 				{
 					sequence.Kill(true);
 				}
+			}
+		}
+
+		public void EnableFireFist(bool trigger)
+		{
+			if (trigger)
+			{
+				fire.Play();
+			}
+			else
+			{
+				fire.Stop();
 			}
 		}
 

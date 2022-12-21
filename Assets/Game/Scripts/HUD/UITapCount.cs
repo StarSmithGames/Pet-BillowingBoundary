@@ -12,12 +12,12 @@ namespace Game.HUD
 	{
 		[field: SerializeField] public TMPro.TextMeshProUGUI Count { get; private set; }
 
-		private TapCount tapCount;
+		private Tap tapCount;
 
 		[Inject]
 		private void Construct(Player player)
 		{
-			this.tapCount = player.TapCount;
+			this.tapCount = player.PlayerSheet.TapCount;
 		}
 
 		private void Start()

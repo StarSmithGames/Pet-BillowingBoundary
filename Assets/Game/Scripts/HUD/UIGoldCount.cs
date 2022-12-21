@@ -17,7 +17,7 @@ namespace Game.HUD
 		[Inject]
 		private void Construct(Player player)
 		{
-			this.gold = player.Gold;
+			this.gold = player.PlayerSheet.Gold;
 		}
 
 		private void Start()

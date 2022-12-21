@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2532693231934830962}
   - component: {fileID: 3671988822891168627}
   m_Layer: 5
-  m_Name: Background (Color)
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,6 +298,10 @@ MonoBehaviour:
   <Bar>k__BackingField: {fileID: 3938748909322474643}
   isHasText: 1
   <BarText>k__BackingField: {fileID: 6229246294964252715}
+  barColors:
+    borderDark: {r: 0.101960786, g: 0.45490196, b: 0.7764706, a: 1}
+    backgroundNormal: {r: 0, g: 0.60784316, b: 0.83137256, a: 1}
+    gradientHightlight: {r: 0, g: 0.7254902, b: 0.8745098, a: 1}
 --- !u!1 &2745291098780751859
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +314,7 @@ GameObject:
   - component: {fileID: 2745291098758331573}
   - component: {fileID: 2745291098773702117}
   m_Layer: 5
-  m_Name: Background
+  m_Name: FrameBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,7 +466,7 @@ GameObject:
   - component: {fileID: 5444401059012735751}
   - component: {fileID: 7684035177809950712}
   m_Layer: 5
-  m_Name: Border (Dark Color)
+  m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,7 +580,7 @@ GameObject:
   - component: {fileID: 1857863543732008703}
   - component: {fileID: 4614862239097348251}
   m_Layer: 5
-  m_Name: Gradient (Hightight Color)
+  m_Name: Gradient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

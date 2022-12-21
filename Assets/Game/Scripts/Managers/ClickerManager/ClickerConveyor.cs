@@ -26,6 +26,8 @@ namespace Game.Managers.ClickManager
 	public class ClickerConveyor : MonoBehaviour
 	{
 		public ClickableObject CurrentClickableObject { get; private set; }
+		public ClickerHand CurrentLeftHand => clickerLeftHand;
+		public ClickerHand CurrentRightHand => clickerRightHand;
 
 		[Header("Components")]
 		[SerializeField] private Transform clickableContent;
@@ -144,7 +146,7 @@ namespace Game.Managers.ClickManager
 
 			Touch touch = signal.touch;
 
-			if (player.TapCount.CurrentValue % 2 == 0)
+			if (player.PlayerSheet.TapCount.CurrentValue % 2 == 0)
 			{
 				if (touch.phase == TouchPhase.Began)
 				{

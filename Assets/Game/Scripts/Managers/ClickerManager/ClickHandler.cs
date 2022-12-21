@@ -1,5 +1,6 @@
 using Game.Entities;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,14 @@ using Zenject;
 
 namespace Game.Managers.ClickManager
 {
-	public class ClickHandler : ITickable
+	public class ClickHandler : IInitializable, ITickable
 	{
 		public UnityAction onTouchBegan;
 		public UnityAction onTouchEnded;
 
 		private int maxTapCount = 0;
+
+		private Tap tapCount;
 
 		private SignalBus signalBus;
 		private Player player;
@@ -26,6 +29,11 @@ namespace Game.Managers.ClickManager
 			this.signalBus = signalBus;
 			this.player = player;
 			this.gameManager = gameManager;
+		}
+
+		public void Initialize()
+		{
+			tapCount = player.PlayerSheet.TapCount;
 		}
 
 		public void Tick()
@@ -50,7 +58,7 @@ namespace Game.Managers.ClickManager
 
 					if (touch.phase == TouchPhase.Began)
 					{
-						player.TapCount.CurrentValue++;
+						tapCount.CurrentValue++;
 
 						signalBus.Fire(new SignalTouchChanged()
 						{

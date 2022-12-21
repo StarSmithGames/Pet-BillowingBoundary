@@ -22,4 +22,16 @@ public static class TransformExtensions
 		}
 		return transform;
 	}
+
+	public static T GetChildComponentByName<T>(this Transform transform, string name) where T : Component
+	{
+		foreach (T component in transform.GetComponentsInChildren<T>(true))
+		{
+			if (component.gameObject.name == name)
+			{
+				return component;
+			}
+		}
+		return null;
+	}
 }

@@ -1,20 +1,24 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UIAnimatedBar : MonoBehaviour
+namespace Game.UI
 {
-	public float FillAmount
+	public class UIAnimatedBar : MonoBehaviour
 	{
-		get => Bar.anchorMax.x;
-		set
+		public float FillAmount
 		{
-			Bar.anchorMax = new Vector2(value, Bar.anchorMax.y);
-			//isDirty = true;
+			get => Bar.anchorMax.x;
+			set
+			{
+				Bar.anchorMax = new Vector2(value, Bar.anchorMax.y);
+				//isDirty = true;
+			}
 		}
-	}
 
-	[field: SerializeField] public RectTransform Bar { get; private set; }
-	[SerializeField] private bool isHasText = false;
-	[field: ShowIf("isHasText")]
-	[field: SerializeField] public TMPro.TextMeshProUGUI BarText { get; private set; }
+		[field: SerializeField] public RectTransform Bar { get; private set; }
+		[SerializeField] private bool isHasText = false;
+		[field: ShowIf("isHasText")]
+		[field: SerializeField] public TMPro.TextMeshProUGUI BarText { get; private set; }
+	}
 }

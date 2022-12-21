@@ -1,12 +1,16 @@
 using Game.Managers.ClickManager;
 using Game.UI;
 
+using UnityEngine;
+
 using Zenject;
 
 namespace Game.HUD
 {
-	public class UITargetBar : UIAnimatedBar
+	public class UITargetBar : MonoBehaviour
 	{
+		[SerializeField] private UIAnimatedBar bar;
+
 		private HealthPointsBar hp;
 
 		private SignalBus signalBus;
@@ -18,6 +22,7 @@ namespace Game.HUD
 			this.signalBus = signalBus;
 			this.conveyor = conveyor;
 		}
+
 		private void Start()
 		{
 			signalBus?.Subscribe<SignalTargetChanged>(OnTargetChanged);
@@ -32,8 +37,8 @@ namespace Game.HUD
 
 		private void OnTapCountBarChanged()
 		{
-			FillAmount = hp.PercentValue;
-			BarText.text = hp.Output;
+			bar.FillAmount = hp.PercentValue;
+			bar.BarText.text = hp.Output;
 		}
 
 		private void OnTargetChanged()
