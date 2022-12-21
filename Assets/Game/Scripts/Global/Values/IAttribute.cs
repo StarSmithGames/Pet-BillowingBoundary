@@ -71,3 +71,83 @@ public abstract partial class AttributeBar : Attribute, IBar
 		this.CurrentValue = value;
 	}
 }
+
+public abstract partial class AttributeModifiable : Attribute, IModifiable<AttributeModifier>
+{
+	public event UnityAction onModifiersChanged;
+
+	public virtual float TotalValue => (CurrentValue + ModifyAddValue) * (1f + (ModifyPercentValue / 100f));
+
+	public virtual float ModifyAddValue
+	{
+		get
+		{
+			float value = 0;
+
+			Modifiers.ForEach((modifier) =>
+			{
+				if (modifier is AddModifier)
+				{
+					value += modifier.CurrentValue;
+				}
+			});
+
+			return value;
+		}
+	}
+
+	public virtual float ModifyPercentValue
+	{
+		get
+		{
+			float value = 0;
+
+			Modifiers.ForEach((modifier) =>
+			{
+				if (modifier is PercentModifier)
+				{
+					value += modifier.CurrentValue;
+				}
+			});
+
+			return value;
+		}
+	}
+
+	public List<AttributeModifier> Modifiers { get; }
+
+	protected AttributeModifiable(float currentValue) : base(currentValue)
+	{
+		Modifiers = new List<AttributeModifier>();
+	}
+
+	public virtual bool AddModifier(AttributeModifier modifier)
+	{
+		if (!Contains(modifier))
+		{
+			Modifiers.Add(modifier);
+
+			onModifiersChanged?.Invoke();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public virtual bool RemoveModifier(AttributeModifier modifier)
+	{
+		if (Contains(modifier))
+		{
+			Modifiers.Remove(modifier);
+
+			onModifiersChanged?.Invoke();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public bool Contains(AttributeModifier modifier) => Modifiers.Contains(modifier);
+}

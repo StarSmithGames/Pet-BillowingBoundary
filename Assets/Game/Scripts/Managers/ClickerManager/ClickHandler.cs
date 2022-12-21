@@ -54,7 +54,6 @@ namespace Game.Managers.ClickManager
 				for (int i = 0; i < Input.touchCount; i++)
 				{
 					var touch = Input.GetTouch(i);
-					int id = touch.fingerId;
 
 					if (touch.phase == TouchPhase.Began)
 					{

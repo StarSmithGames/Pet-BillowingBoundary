@@ -1,9 +1,5 @@
 using DG.Tweening;
 using Game.UI;
-using System.Runtime.CompilerServices;
-
-
-using UnityEditor.PackageManager.UI;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,8 +11,10 @@ namespace Game.Systems.MarketSystem
 {
 	public class MarketWindow : WindowBase
 	{
+		[field: SerializeField] public Button Blank { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
-		[field: SerializeField] public RectTransform Window { get; private set; }
+		[field: SerializeField] public RectTransform WindowUp { get; private set; }
+		[field: SerializeField] public RectTransform WindowDown { get; private set; }
 
 		private bool isOpenned = false;
 
@@ -33,6 +31,7 @@ namespace Game.Systems.MarketSystem
 			Enable(false);
 
 			Close.onClick.AddListener(OnClosed);
+			Blank.onClick.AddListener(OnClosed);
 
 			subCanvas.WindowsRegistrator.Registrate(this);
 		}
@@ -40,6 +39,7 @@ namespace Game.Systems.MarketSystem
 		private void OnDestroy()
 		{
 			Close?.onClick.RemoveAllListeners();
+			Blank?.onClick.RemoveAllListeners();
 
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
 		}
@@ -51,14 +51,16 @@ namespace Game.Systems.MarketSystem
 
 			CanvasGroup.alpha = 0f;
 			CanvasGroup.Enable(true, false);
-			Window.anchoredPosition = new Vector2(Window.anchoredPosition.x, Window.sizeDelta.y / 2);//up
+			WindowUp.anchoredPosition = new Vector2(WindowUp.anchoredPosition.x, WindowUp.sizeDelta.y / 2);//up
+			WindowDown.anchoredPosition = new Vector2(WindowDown.anchoredPosition.x, -(WindowDown.sizeDelta.y / 2));//down
 			IsShowing = true;
 
 			Sequence sequence = DOTween.Sequence();
 
 			sequence
 				.Append(CanvasGroup.DOFade(1f, 0.2f))
-				.Join(Window.DOAnchorPosY(-(Window.sizeDelta.y / 2), 0.25f, true).SetEase(Ease.OutBounce))
+				.Join(WindowUp.DOAnchorPosY(-(WindowUp.sizeDelta.y / 2), 0.25f, true).SetEase(Ease.OutBounce))
+				.Join(WindowDown.DOAnchorPosY(WindowDown.sizeDelta.y / 2, 0.25f))
 				.AppendCallback(() =>
 				{
 					callback?.Invoke();
@@ -75,7 +77,8 @@ namespace Game.Systems.MarketSystem
 
 			sequence
 				.Append(CanvasGroup.DOFade(0f, 0.15f))
-				.Join(Window.DOAnchorPosY(Window.sizeDelta.y / 2, 0.15f))
+				.Join(WindowUp.DOAnchorPosY(WindowUp.sizeDelta.y / 2, 0.15f))
+				.Join(WindowDown.DOAnchorPosY(-(WindowDown.sizeDelta.y / 2), 0.15f))
 				.AppendCallback(() =>
 				{
 					CanvasGroup.Enable(false);

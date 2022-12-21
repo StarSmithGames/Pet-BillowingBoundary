@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
-    duration: 0.65
+    duration: 0.45
   model: {fileID: 3618787680660748591}
   renderer: {fileID: 7272827343095660414}
   rigidbody: {fileID: 4100064596880475495}

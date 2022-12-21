@@ -1,11 +1,6 @@
 using DG.Tweening;
-
 using Game.UI;
-
 using System.Collections.Generic;
-
-using UnityEditor.PackageManager.UI;
-
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -16,6 +11,7 @@ namespace Game.Systems.LocalizationSystem
 {
     public class LanguageWindow : WindowBase
     {
+		[field: SerializeField] public Button Blank { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
 		[field: SerializeField] public Transform Window { get; private set; }
 		[SerializeField] private List<Button> buttons = new List<Button>();
@@ -32,6 +28,7 @@ namespace Game.Systems.LocalizationSystem
 		{
 			Enable(false);
 
+			Blank.onClick.AddListener(OnClosed);
 			Close.onClick.AddListener(OnClosed);
 
 			subCanvas.WindowsRegistrator.Registrate(this);
@@ -39,6 +36,7 @@ namespace Game.Systems.LocalizationSystem
 
 		private void OnDestroy()
 		{
+			Blank?.onClick.RemoveAllListeners();
 			Close?.onClick.RemoveAllListeners();
 
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
@@ -57,7 +55,7 @@ namespace Game.Systems.LocalizationSystem
 
 			sequence
 				.Append(CanvasGroup.DOFade(1f, 0.2f))
-				.Join(Window.DOScale(1, 0.35f).SetEase(Ease.OutQuart))
+				.Join(Window.DOScale(1, 0.35f).SetEase(Ease.OutBounce))
 				.AppendCallback(() =>
 				{
 					callback?.Invoke();

@@ -12,7 +12,6 @@ namespace Game.Systems.AchievementSystem
 {
 	public class AchievementWindow : WindowBase
 	{
-		[field: SerializeField] public Button Open { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
 		[field: SerializeField] public Transform Content { get; private set; }
 		[field: SerializeField] public RectTransform Window { get; private set; }
@@ -29,7 +28,6 @@ namespace Game.Systems.AchievementSystem
 		{
 			Enable(false);
 
-			Open.onClick.AddListener(OnOpened);
 			Close.onClick.AddListener(OnClosed);
 
 			subCanvas.WindowsRegistrator.Registrate(this);
@@ -37,7 +35,6 @@ namespace Game.Systems.AchievementSystem
 
 		private void OnDestroy()
 		{
-			Open?.onClick.RemoveAllListeners();
 			Close?.onClick.RemoveAllListeners();
 
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
@@ -80,13 +77,6 @@ namespace Game.Systems.AchievementSystem
 
 					IsInProcess = false;
 				});
-		}
-
-		private void OnOpened()
-		{
-			if (IsInProcess) return;
-
-			Show();
 		}
 
 		private void OnClosed()

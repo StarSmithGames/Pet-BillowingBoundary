@@ -11,8 +11,6 @@ namespace Game.Entities
 		public Tap TapCount { get; }
 		public TapBar TapBar { get; }
 
-		public TapIncrement tapIncrement { get; }
-
 		public PlayerSheet()
 		{
 			Gold = new Gold(0);
@@ -62,8 +60,6 @@ namespace Game.Entities
 			MinValue = min;
 			MaxValue = max;
 			CurrentValue = currentValue;
-
-			Debug.LogError(MaxValue);
 		}
 
 		public void SetTapPhase(TapPhase tapPhase)

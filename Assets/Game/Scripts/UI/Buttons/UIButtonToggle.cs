@@ -13,6 +13,7 @@ namespace Game.UI
 
 		[field: SerializeField] public Button Button { get; private set; }
 		[field: SerializeField] public Image Image { get; private set; }
+		[field: SerializeField] public Image Shadow { get; private set; }
 		[SerializeField] private Sprite on;
 		[SerializeField] private Sprite off;
 
@@ -30,6 +31,10 @@ namespace Game.UI
 		{
 			IsEnable = trigger;
 			Image.sprite = IsEnable ? on : off;
+			if (Shadow != null)
+			{
+				Shadow.sprite = IsEnable ? on : off;
+			}
 		}
 
 		private void OnClick()

@@ -25,10 +25,14 @@ namespace Game.Managers.ClickManager
 		[SerializeField] private ParticleSystem fire;
 
 		private Sequence sequence;
+		private ClickableObject clickable;
+		private Gold goldCount;
+		private GoldMultiplier goldMultiplier;
+		private DamageMultiplier damageMultiplier;
 
 		private SignalBus signalBus;
 		private Player player;
-		private ClickerConveyor clickerConveyor;
+		private ClickerConveyor conveyor;
 		private FloatingSystem floatingSystem;
 		private CameraSystem cameraSystem;
 
@@ -42,7 +46,7 @@ namespace Game.Managers.ClickManager
 		{
 			this.signalBus = signalBus;
 			this.player = player;
-			this.clickerConveyor = clickerConveyor;
+			this.conveyor = clickerConveyor;
 			this.floatingSystem = floatingTextSystem;
 			this.cameraSystem = cameraSystem;
 		}
@@ -51,11 +55,18 @@ namespace Game.Managers.ClickManager
 		{
 			endPosition = endPosition - (transform.TransformPoint(pointHit) - startPosition);
 
+			signalBus?.Subscribe<SignalTargetChanged>(OnTargetChanged);
 			signalBus.Subscribe<SignalGameStateChanged>(OnGameStateChanged);
+
+			goldCount = player.PlayerSheet.Gold;
+			goldMultiplier = player.GoldMultiplier;
+			damageMultiplier = player.DamageMultiplier;
+			OnTargetChanged();
 		}
 
 		private void OnDestroy()
 		{
+			signalBus.Unsubscribe<SignalTargetChanged>(OnTargetChanged);
 			signalBus.Unsubscribe<SignalGameStateChanged>(OnGameStateChanged);
 		}
 
@@ -68,12 +79,17 @@ namespace Game.Managers.ClickManager
 				.Append(transform.DOMove(endPosition, 0.1f))
 				.OnComplete(() =>
 				{
-					clickerConveyor.CurrentClickableObject.Sheet.HealthPointsBar.CurrentValue -= settings.damage;
-					player.PlayerSheet.Gold.CurrentValue += settings.goldForPunch;
-					floatingSystem.CreateText(clickerConveyor.CurrentClickableObject.GetRandomPoint().position, $"+{settings.goldForPunch}", type: AnimationType.BasicDamage);
-					floatingSystem.CreateCoin(clickerConveyor.CurrentClickableObject.GetRandomPoint().position);
-					clickerConveyor.CurrentClickableObject.GetRandomParticle().Play();
-					clickerConveyor.CurrentClickableObject.SmallPunch();
+					float goldForPunch = settings.goldForPunch * goldMultiplier.TotalValue;
+					float damageForPunch = settings.damageForPunch * damageMultiplier.TotalValue;
+
+					goldCount.CurrentValue += goldForPunch;
+					clickable.Sheet.HealthPointsBar.CurrentValue -= damageForPunch;
+
+					//Visual
+					floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{goldForPunch}", type: AnimationType.BasicDamage);
+					floatingSystem.CreateCoin(clickable.GetRandomPoint().position);
+					clickable.GetRandomParticle().Play();
+					clickable.SmallPunch();
 					cameraSystem.SmallestShake();
 				});
 		}
@@ -110,6 +126,11 @@ namespace Game.Managers.ClickManager
 			}
 		}
 
+		private void OnTargetChanged()
+		{
+			clickable = conveyor.CurrentClickableObject;
+		}
+
 		private void OnGameStateChanged(SignalGameStateChanged signal)
 		{
 			if (signal.newGameState == GameState.None)
@@ -117,6 +138,7 @@ namespace Game.Managers.ClickManager
 				Back();
 			}
 		}
+		
 
 #if UNITY_EDITOR
 		private void OnDrawGizmos()
@@ -147,7 +169,7 @@ namespace Game.Managers.ClickManager
 	public class HandSettings
 	{
 		[Min(1)]
-		public int damage = 1;
+		public int damageForPunch = 1;
 		[Min(1)]
 		public int goldForPunch = 1;
 	}
