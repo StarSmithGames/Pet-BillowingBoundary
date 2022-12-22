@@ -1,10 +1,16 @@
 using DG.Tweening;
 
+using Game.Managers.NetworkTimeManager;
+using Game.Managers.StorageManager;
 using Game.UI;
 
-using System.Collections;
+using Sirenix.OdinInspector;
+
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -18,12 +24,22 @@ namespace Game.Systems.DailyRewardSystem
 		[field: SerializeField] public Button Close { get; private set; }
 		[field: SerializeField] public Transform Window { get; private set; }
 
+		[SerializeField] private List<UIRewardItem> rewards = new List<UIRewardItem>();
+
 		private UISubCanvas subCanvas;
+		private ISaveLoad saveLoad;
+		private DailyRewardSystem dailyRewardSystem;
+		private NetworkTimeManager networkTimeManager;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas)
+		private void Construct(UISubCanvas subCanvas, ISaveLoad saveLoad,
+			DailyRewardSystem dailyRewardSystem,
+			NetworkTimeManager networkTimeManager)
 		{
 			this.subCanvas = subCanvas;
+			this.saveLoad = saveLoad;
+			this.dailyRewardSystem = dailyRewardSystem;
+			this.networkTimeManager = networkTimeManager;
 		}
 
 		private void Start()
@@ -33,7 +49,17 @@ namespace Game.Systems.DailyRewardSystem
 			Blank.onClick.AddListener(OnClosed);
 			Close.onClick.AddListener(OnClosed);
 
+			for (int i = 0; i < rewards.Count; i++)
+			{
+				rewards[i].onRewardStateChanged += OnRewardStateChanged;
+			}
+
 			subCanvas.WindowsRegistrator.Registrate(this);
+
+			if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime show
+			{
+				Show();
+			}
 		}
 
 		private void OnDestroy()
@@ -41,11 +67,19 @@ namespace Game.Systems.DailyRewardSystem
 			Blank?.onClick.RemoveAllListeners();
 			Close?.onClick.RemoveAllListeners();
 
+			for (int i = 0; i < rewards.Count; i++)
+			{
+				rewards[i].onRewardStateChanged -= OnRewardStateChanged;
+			}
+
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
 		}
 
 		public override void Show(UnityAction callback = null)
 		{
+			var data = saveLoad.GetStorage().DailyRewardData.GetData();
+			SelectDay(data.currentDay, data.currentState);
+
 			Window.localScale = Vector3.zero;
 
 			IsInProcess = true;
@@ -86,9 +120,46 @@ namespace Game.Systems.DailyRewardSystem
 				});
 		}
 
+		private void SelectDay(DayType day, DailyRewardState state)
+		{
+			for (int i = 0; i < rewards.Count; i++)
+			{
+				if (rewards[i].DayType == day)
+				{
+					rewards[i].SetState(state, false);
+				}
+				else if(rewards[i].DayType < day)
+				{
+					rewards[i].SetState(DailyRewardState.Claimed, false);
+				}
+				else if (rewards[i].DayType > day)
+				{
+					rewards[i].SetState(DailyRewardState.Close, false);
+				}
+			}
+		}
+
+		private void OnRewardStateChanged(UIRewardItem rewardItem)
+		{
+			var data = saveLoad.GetStorage().DailyRewardData.GetData();
+			data.currentState = rewardItem.CurrentState;
+			if(rewardItem.CurrentState == DailyRewardState.Claimed)
+			{
+				data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
+			}
+
+			Assert.IsTrue(data.currentDay == rewardItem.DayType);
+		}
+
 		private void OnClosed()
 		{
 			Hide();
+		}
+
+		[Button(DirtyOnClick = true)]
+		private void Fill()
+		{
+			rewards = GetComponentsInChildren<UIRewardItem>().ToList();
 		}
 	}
 }

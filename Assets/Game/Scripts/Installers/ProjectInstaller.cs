@@ -1,4 +1,6 @@
 using Game.Managers.GameManager;
+using Game.Managers.NetworkTimeManager;
+using Game.Systems.ApplicationHandler;
 
 using Zenject;
 
@@ -10,6 +12,8 @@ namespace Game.Installers
 		{
 			SignalBusInstaller.Install(Container);
 
+			ApplicationHandlerInstaller.Install(Container);
+			NetworkTimeInstaller.Install(Container);
 			GameManagerInstaller.Install(Container);
 		}
 	}
