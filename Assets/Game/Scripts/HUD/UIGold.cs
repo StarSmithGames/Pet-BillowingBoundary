@@ -21,7 +21,7 @@ namespace Game.HUD
 		private void Construct(UISubCanvas subCanvas, Player player)
 		{
 			this.subCanvas = subCanvas;
-			this.gold = player.PlayerSheet.Gold;
+			this.gold = player.Gold;
 		}
 
 		private void Start()

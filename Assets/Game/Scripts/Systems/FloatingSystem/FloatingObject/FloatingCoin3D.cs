@@ -17,7 +17,6 @@ namespace Game.Systems.FloatingSystem
 		[SerializeField] private Renderer renderer;
 		[SerializeField] private Rigidbody rigidbody;
 
-
 		private Material material;
 		private Vector3 lastVelocity;
 		private Vector3 currentDirection;
@@ -75,7 +74,6 @@ namespace Game.Systems.FloatingSystem
 			}
 		}
 
-		[Button(DirtyOnClick = true)]
 		public void StartRotate()
 		{
 			model
@@ -113,14 +111,6 @@ namespace Game.Systems.FloatingSystem
 		{
 			model.DOKill(true);
 			base.OnDespawned();
-		}
-
-
-		[Button]
-		private void S()
-		{
-			rigidbody.useGravity = true;
-			rigidbody.AddForce(new Vector3(9.8f * 25f, 9.8f * 25f, 0));
 		}
 
 

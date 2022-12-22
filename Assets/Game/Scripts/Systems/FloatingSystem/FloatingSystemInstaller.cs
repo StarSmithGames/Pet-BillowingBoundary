@@ -12,7 +12,8 @@ namespace Game.Systems.FloatingSystem
 	public class FloatingSystemInstaller : ScriptableObjectInstaller<FloatingSystemInstaller>
 	{
 		public FloatingText floatingTextPrefab;
-		public FloatingCoin3D floatingCoinPrefab;
+		public FloatingCoin2D floatingCoin2DPrefab;
+		public FloatingCoin3D floatingCoin3DPrefab;
 
 		public override void InstallBindings()
 		{
@@ -20,15 +21,22 @@ namespace Game.Systems.FloatingSystem
 
 			Container
 				.BindFactory<FloatingText, FloatingText.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(3)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(5)
 				.FromComponentInNewPrefab(floatingTextPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
 
 			Container
+				.BindFactory<FloatingCoin2D, FloatingCoin2D.Factory>()
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(50)
+				.FromComponentInNewPrefab(floatingCoin2DPrefab)
+				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
+				.WhenInjectedInto<FloatingSystem>();
+
+			Container
 				.BindFactory<FloatingCoin3D, FloatingCoin3D.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(3)
-				.FromComponentInNewPrefab(floatingCoinPrefab))
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(5)
+				.FromComponentInNewPrefab(floatingCoin3DPrefab))
 				.WhenInjectedInto<FloatingSystem>();
 		}
 	}

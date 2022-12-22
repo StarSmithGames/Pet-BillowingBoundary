@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Text>k__BackingField: {fileID: 7259488067296168161}
-  localizationId: ui.market_system.shop_title
+  localizationId: ui.market_window.hud_button_title
 --- !u!1 &8523481394687990281
 GameObject:
   m_ObjectHideFlags: 0

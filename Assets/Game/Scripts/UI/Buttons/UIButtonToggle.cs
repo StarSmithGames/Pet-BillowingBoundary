@@ -17,7 +17,7 @@ namespace Game.UI
 		[SerializeField] private Sprite on;
 		[SerializeField] private Sprite off;
 
-		private void Start()
+		protected virtual void Start()
 		{
 			Button.onClick.AddListener(OnClick);
 		}
@@ -37,7 +37,7 @@ namespace Game.UI
 			}
 		}
 
-		private void OnClick()
+		protected virtual void OnClick()
 		{
 			Enable(!IsEnable);
 		}

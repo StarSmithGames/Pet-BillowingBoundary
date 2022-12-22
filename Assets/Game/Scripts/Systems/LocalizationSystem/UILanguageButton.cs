@@ -1,10 +1,13 @@
 using Game.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game.Systems.LocalizationSystem
 {
 	public class UILanguageButton : UIButtonToggle
 	{
+		public UnityAction<UILanguageButton> onClicked;
+
 		[field: SerializeField] public TMPro.TextMeshProUGUI Text { get; private set; }
 
 		public void SetText(string text)
@@ -21,6 +24,15 @@ namespace Game.Systems.LocalizationSystem
 			}
 
 			Text.text = text.FirstCharToUpper();
+		}
+
+		protected override void OnClick()
+		{
+			if (IsEnable) return;
+
+			base.OnClick();
+
+			onClicked?.Invoke(this);
 		}
 	}
 }

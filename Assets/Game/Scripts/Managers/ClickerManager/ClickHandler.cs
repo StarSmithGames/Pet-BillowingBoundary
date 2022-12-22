@@ -18,7 +18,7 @@ namespace Game.Managers.ClickManager
 
 		private int maxTapCount = 0;
 
-		private Tap tapCount;
+		private Taps taps;
 
 		private SignalBus signalBus;
 		private Player player;
@@ -33,7 +33,7 @@ namespace Game.Managers.ClickManager
 
 		public void Initialize()
 		{
-			tapCount = player.PlayerSheet.TapCount;
+			taps = player.Taps;
 		}
 
 		public void Tick()
@@ -57,7 +57,7 @@ namespace Game.Managers.ClickManager
 
 					if (touch.phase == TouchPhase.Began)
 					{
-						tapCount.CurrentValue++;
+						taps.CurrentValue++;
 
 						signalBus.Fire(new SignalTouchChanged()
 						{

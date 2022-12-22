@@ -47,8 +47,10 @@ namespace Game.Managers.StorageManager
 		public IStorageData<LocalizationSystem.Data> LocalizationData { get; private set; }
 		public IStorageData<DailyRewardSystem.Data> DailyRewardData { get; private set; }
 
-		//public bool IsHasProfile => CurrentProfile.GetData() != null;//like IsFirstTime
-		//public IStorageData<Profile> CurrentProfile { get; private set; }
+		public IStorageData<bool> IsSound { get; private set; }
+		public IStorageData<bool> IsMusic { get; private set; }
+		public IStorageData<bool> IsVibration { get; private set; }
+
 
 		/// <summary>
 		/// Default Data
@@ -83,7 +85,10 @@ namespace Game.Managers.StorageManager
 
 			LocalizationData = new StorageData<LocalizationSystem.Data>(Database, "localization_data", new LocalizationSystem.Data());
 			DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
-			//CurrentProfile = new StorageData<Profile>(Database, "profile_current", new Profile());
+
+			IsSound = new StorageData<bool>(Database, "is_sound", true);
+			IsMusic = new StorageData<bool>(Database, "is_music", true);
+			IsVibration = new StorageData<bool>(Database, "is_vibration", true);
 		}
 
 		[System.Serializable]

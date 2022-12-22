@@ -16,7 +16,23 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 36e0ceff18cba3949957e922955ce8a0
   m_Entries:
   - m_Id: 7053540659200
-    m_Key: ui.market_system.shop_title
+    m_Key: ui.market_window.hud_button_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920576
+    m_Key: ui.daily_reward_window.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920577
+    m_Key: ui.button.upgrade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920578
+    m_Key: ui.button.get
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908309114880
+    m_Key: ui.button.claim
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -146,7 +146,7 @@ namespace Game.Managers.ClickManager
 
 			Touch touch = signal.touch;
 
-			if (player.PlayerSheet.TapCount.CurrentValue % 2 == 0)
+			if (player.Taps.CurrentValue % 2 == 0)
 			{
 				if (touch.phase == TouchPhase.Began)
 				{

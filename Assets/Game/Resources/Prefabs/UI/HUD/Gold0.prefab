@@ -472,7 +472,7 @@ GameObject:
   - component: {fileID: 7122830928545170455}
   - component: {fileID: 7122830928545170453}
   - component: {fileID: 7122830928545170442}
-  - component: {fileID: 1447255128619581526}
+  - component: {fileID: 4293809370578437991}
   m_Layer: 5
   m_Name: Gold0
   m_TagString: Untagged
@@ -536,7 +536,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1447255128619581526
+--- !u!114 &4293809370578437991
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -545,7 +545,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7122830928545170454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 605ccb71e485e31449d8a6eb28f75d74, type: 3}
+  m_Script: {fileID: 11500000, guid: f5905eb428ef2f547be62d2d9cf50b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Count>k__BackingField: {fileID: 7122830929233114471}

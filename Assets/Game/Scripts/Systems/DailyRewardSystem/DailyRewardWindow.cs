@@ -1,11 +1,14 @@
 using DG.Tweening;
 
+using Game.Entities;
+using Game.HUD;
 using Game.Managers.NetworkTimeManager;
 using Game.Managers.StorageManager;
 using Game.UI;
 
 using Sirenix.OdinInspector;
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,23 +26,29 @@ namespace Game.Systems.DailyRewardSystem
 		[field: SerializeField] public Button Blank { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
 		[field: SerializeField] public Transform Window { get; private set; }
-
+		
 		[SerializeField] private List<UIRewardItem> rewards = new List<UIRewardItem>();
 
 		private UISubCanvas subCanvas;
 		private ISaveLoad saveLoad;
 		private DailyRewardSystem dailyRewardSystem;
 		private NetworkTimeManager networkTimeManager;
+		private FloatingSystem.FloatingSystem floatingSystem;
+		private Player player;
 
 		[Inject]
 		private void Construct(UISubCanvas subCanvas, ISaveLoad saveLoad,
 			DailyRewardSystem dailyRewardSystem,
-			NetworkTimeManager networkTimeManager)
+			NetworkTimeManager networkTimeManager,
+			FloatingSystem.FloatingSystem floatingSystem,
+			Player player)
 		{
 			this.subCanvas = subCanvas;
 			this.saveLoad = saveLoad;
 			this.dailyRewardSystem = dailyRewardSystem;
 			this.networkTimeManager = networkTimeManager;
+			this.floatingSystem = floatingSystem;
+			this.player = player;
 		}
 
 		private void Start()
@@ -146,9 +155,47 @@ namespace Game.Systems.DailyRewardSystem
 			if(rewardItem.CurrentState == DailyRewardState.Claimed)
 			{
 				data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
+
+				StartCoroutine(Test((rewardItem.transform as RectTransform).position, UIGoldHUD.Instance.transform, 25, 100));
 			}
 
 			Assert.IsTrue(data.currentDay == rewardItem.DayType);
+		}
+
+		//Count min 5
+		//Time required 0.05 * count
+		private IEnumerator Test(Vector3 startPosition, Transform target, int count, int coins)
+		{
+			var wait = new WaitForSeconds(0.05f);
+
+			for (int i = 0; i < 5; i++)
+			{
+				floatingSystem.CreateCoin2D(startPosition, target);
+
+				yield return wait;
+			}
+
+			count = count - 5;
+
+			StartCoroutine(IncreaseGold(coins, count * 0.05f));
+
+			for (int i = 0; i < count; i++)
+			{
+				floatingSystem.CreateCoin2D(startPosition, target);
+
+				yield return wait;
+			}
+		}
+
+		private IEnumerator IncreaseGold(int coins, float t)
+		{
+			var wait = new WaitForSeconds(t / coins);
+
+			for (int i = 0; i < coins; i++)
+			{
+				player.Gold.CurrentValue += 1;
+				yield return wait;
+			}
 		}
 
 		private void OnClosed()

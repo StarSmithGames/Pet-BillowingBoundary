@@ -21,7 +21,6 @@ namespace Game.Systems.LocalizationSystem
 {
 	public partial class LocalizationSystem : IInitializable, IDisposable
 	{
-
 		private Data data;
 		public bool IsLocaleProcess => localeCoroutine != null;
 		private Coroutine localeCoroutine;
@@ -39,9 +38,14 @@ namespace Game.Systems.LocalizationSystem
 
 		public void Initialize()
 		{
+			LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+
 			data = saveLoad.GetStorage().LocalizationData.GetData();
 
-			LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+			if(saveLoad.GetStorage().IsFirstTime.GetData() == false)
+			{
+				ChangeLocale(data.locale);
+			}
 		}
 
 		public void Dispose()
@@ -101,6 +105,8 @@ namespace Game.Systems.LocalizationSystem
 		private void OnLocaleChanged(Locale locale)
 		{
 			signalBus?.Fire(new SignalLocalizationChanged());
+
+			data.locale = CurrentLocaleIndex;
 		}
 
 		public class Data

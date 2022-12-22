@@ -42,28 +42,24 @@ namespace Game.Systems.LocalizationSystem
 			subCanvas.WindowsRegistrator.Registrate(this);
 
 			var names = localizationSystem.GetAllLanguageNativeNames();
+			var index = localizationSystem.CurrentLocaleIndex;
 			for (int i = 0; i < langs.Count; i++)
 			{
-				if(i < names.Length)
-				{
-					langs[i].SetText(names[i]);
-					langs[i].gameObject.SetActive(true);
-				}
-				else
-				{
-					langs[i].gameObject.SetActive(false);
-				}
-
-				langs[i].Enable(false);
+				langs[i].SetText(names[i]);
+				langs[i].Enable(i == index);
+				langs[i].onClicked += OnLangClicked;
 			}
-
-			langs[localizationSystem.CurrentLocaleIndex].Enable(true);
 		}
 
 		private void OnDestroy()
 		{
 			Blank?.onClick.RemoveAllListeners();
 			Close?.onClick.RemoveAllListeners();
+
+			for (int i = 0; i < langs.Count; i++)
+			{
+				langs[i].onClicked -= OnLangClicked;
+			}
 
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
 		}
@@ -110,6 +106,20 @@ namespace Game.Systems.LocalizationSystem
 				});
 		}
 
+
+		private void OnLangClicked(UILanguageButton lang)
+		{
+			if (localizationSystem.IsLocaleProcess) return;
+
+			var index = langs.IndexOf(lang);
+
+			for (int i = 0; i < langs.Count; i++)
+			{
+				langs[i].Enable(i == index);
+			}
+
+			localizationSystem.ChangeLocale(index);
+		}
 
 		private void OnClosed()
 		{

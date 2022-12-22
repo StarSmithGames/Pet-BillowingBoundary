@@ -1,41 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Game.Entities
 {
 	public class PlayerSheet
 	{
-		public Gold Gold { get; }
-		public Tap TapCount { get; }
 		public TapBar TapBar { get; }
 
 		public PlayerSheet()
 		{
-			Gold = new Gold(0);
-			TapCount = new Tap(0);
+			
 			TapBar = new TapBar(0, 0, 100);
 		}
-
 
 		public class Data
 		{
 			public int gold;
 			public int tapCount;
 		}
-	}
-
-	public class Gold : Attribute
-	{
-		public override string LocalizationKey => "vars.gold";
-
-		public Gold(float currentValue) : base(currentValue) { }
-	}
-
-	public class Tap : Attribute
-	{
-		public Tap(float currentValue) : base(currentValue) { }
 	}
 
 	public class TapBar : AttributeBar
@@ -67,12 +48,6 @@ namespace Game.Entities
 			TapPhase = tapPhase;
 		}
 	}
-
-	public class TapIncrement : Attribute
-	{
-		public TapIncrement(float currentValue) : base(currentValue) { }
-	}
-
 
 	public enum TapPhase
 	{

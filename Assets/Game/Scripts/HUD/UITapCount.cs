@@ -12,31 +12,31 @@ namespace Game.HUD
 	{
 		[field: SerializeField] public TMPro.TextMeshProUGUI Count { get; private set; }
 
-		private Tap tapCount;
+		private Taps taps;
 
 		[Inject]
 		private void Construct(Player player)
 		{
-			this.tapCount = player.PlayerSheet.TapCount;
+			this.taps = player.Taps;
 		}
 
 		private void Start()
 		{
-			tapCount.onChanged += OnTapCountChanged;
-			Count.text = tapCount.Output;
+			taps.onChanged += OnTapCountChanged;
+			Count.text = taps.Output;
 		}
 
 		private void OnDestroy()
 		{
-			if (tapCount != null)
+			if (taps != null)
 			{
-				tapCount.onChanged -= OnTapCountChanged;
+				taps.onChanged -= OnTapCountChanged;
 			}
 		}
 
 		private void OnTapCountChanged()
 		{
-			Count.text = tapCount.Output;
+			Count.text = taps.Output;
 		}
 	}
 }

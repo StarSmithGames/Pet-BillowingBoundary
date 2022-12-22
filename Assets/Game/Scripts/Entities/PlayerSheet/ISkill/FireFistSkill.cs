@@ -36,12 +36,12 @@ namespace Game.Entities
 
 			tapBar = player.PlayerSheet.TapBar;
 			tapBar.Resize(0, 0, 100);
-			player.PlayerSheet.TapCount.onChanged += OnTapCountChanged;
+			player.Taps.onChanged += OnTapsChanged;
 		}
 
 		private void OnDestroy()
 		{
-			player.PlayerSheet.TapCount.onChanged -= OnTapCountChanged;
+			player.Taps.onChanged -= OnTapsChanged;
 		}
 
 		protected override void Update()
@@ -68,8 +68,8 @@ namespace Game.Entities
 			conveyor.CurrentRightHand.EnableFireFist(false);
 			effect.Hide();
 
-			player.GoldMultiplier.RemoveModifier(x2Modifier);
-			player.DamageMultiplier.RemoveModifier(x2Modifier);
+			player.TapGoldMultiplier.RemoveModifier(x2Modifier);
+			player.TapDamageMultiplier.RemoveModifier(x2Modifier);
 		}
 
 		private void OnStartRelease()
@@ -78,11 +78,11 @@ namespace Game.Entities
 			conveyor.CurrentRightHand.EnableFireFist(true);
 			effect.Show();
 
-			player.GoldMultiplier.AddModifier(x2Modifier);
-			player.DamageMultiplier.AddModifier(x2Modifier);
+			player.TapGoldMultiplier.AddModifier(x2Modifier);
+			player.TapDamageMultiplier.AddModifier(x2Modifier);
 		}
 
-		private void OnTapCountChanged()
+		private void OnTapsChanged()
 		{
 			if (isHasCooldown && isCooldown) return;
 

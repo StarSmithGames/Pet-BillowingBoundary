@@ -10,12 +10,17 @@ namespace Game.Systems.FloatingSystem
 	{
 		private CameraSystem.CameraSystem cameraSystem;
 		private FloatingText.Factory floatingTextFactory;
+		private FloatingCoin2D.Factory floatingCoin2DFactory;
 		private FloatingCoin3D.Factory floatingCoin3DFactory;
 
-		private FloatingSystem(CameraSystem.CameraSystem cameraSystem, FloatingText.Factory floatingTextFactory, FloatingCoin3D.Factory floatingCoin3DFactory)
+		private FloatingSystem(CameraSystem.CameraSystem cameraSystem,
+			FloatingText.Factory floatingTextFactory,
+			FloatingCoin2D.Factory floatingCoin2DFactory,
+			FloatingCoin3D.Factory floatingCoin3DFactory)
 		{
 			this.cameraSystem = cameraSystem;
 			this.floatingTextFactory = floatingTextFactory;
+			this.floatingCoin2DFactory = floatingCoin2DFactory;
 			this.floatingCoin3DFactory = floatingCoin3DFactory;
 		}
 
@@ -37,12 +42,12 @@ namespace Game.Systems.FloatingSystem
 				return item;
 			}
 		}
-	
-		public void CreateCoin(Vector3 position)
-		{
-			var obj = Create();
 
+		public void CreateCoin3D(Vector3 position)
+		{
 			Sequence sequence = DOTween.Sequence();
+
+			var obj = Create();
 
 			sequence
 				.AppendCallback(() => obj.Rigidbody.AddForce(new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0.2f, 0.7f), 0) * Random.Range(300f, 800f)))
@@ -56,6 +61,27 @@ namespace Game.Systems.FloatingSystem
 				item.SetFade(1f);
 				item.transform.position = position;
 				item.StartRotate();
+
+				return item;
+			}
+		}
+
+		public void CreateCoin2D(Vector3 position, Transform target)
+		{
+			Sequence sequence = DOTween.Sequence();
+
+			var obj = Create();
+
+			sequence
+				.Append(obj.transform.DOMove(target.position, 0.25f))
+				.Append(obj.Fade(0, 0.1f))
+				.OnComplete(obj.DespawnIt);
+
+			FloatingCoin2D Create()
+			{
+				var item = floatingCoin2DFactory.Create();
+				item.SetFade(1f);
+				item.transform.position = position;
 
 				return item;
 			}

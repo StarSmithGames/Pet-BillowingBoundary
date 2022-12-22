@@ -26,9 +26,9 @@ namespace Game.Managers.ClickManager
 
 		private Sequence sequence;
 		private ClickableObject clickable;
+		private HealthPointsBar hpClickable;
 		private Gold goldCount;
-		private GoldMultiplier goldMultiplier;
-		private DamageMultiplier damageMultiplier;
+		private float goldForPunch, damageForPunch;
 
 		private SignalBus signalBus;
 		private Player player;
@@ -58,16 +58,21 @@ namespace Game.Managers.ClickManager
 			signalBus?.Subscribe<SignalTargetChanged>(OnTargetChanged);
 			signalBus.Subscribe<SignalGameStateChanged>(OnGameStateChanged);
 
-			goldCount = player.PlayerSheet.Gold;
-			goldMultiplier = player.GoldMultiplier;
-			damageMultiplier = player.DamageMultiplier;
+			goldCount = player.Gold;
+			player.onTapChanged += OnTapChanged;
+			OnTapChanged();
 			OnTargetChanged();
 		}
 
 		private void OnDestroy()
 		{
-			signalBus.Unsubscribe<SignalTargetChanged>(OnTargetChanged);
-			signalBus.Unsubscribe<SignalGameStateChanged>(OnGameStateChanged);
+			if(player != null)
+			{
+				player.onTapChanged -= OnTapChanged;
+			}
+
+			signalBus?.Unsubscribe<SignalTargetChanged>(OnTargetChanged);
+			signalBus?.Unsubscribe<SignalGameStateChanged>(OnGameStateChanged);
 		}
 
 		public void Punch()
@@ -79,15 +84,12 @@ namespace Game.Managers.ClickManager
 				.Append(transform.DOMove(endPosition, 0.1f))
 				.OnComplete(() =>
 				{
-					float goldForPunch = settings.goldForPunch * goldMultiplier.TotalValue;
-					float damageForPunch = settings.damageForPunch * damageMultiplier.TotalValue;
-
 					goldCount.CurrentValue += goldForPunch;
-					clickable.Sheet.HealthPointsBar.CurrentValue -= damageForPunch;
+					hpClickable.CurrentValue -= damageForPunch;
 
 					//Visual
 					floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{goldForPunch}", type: AnimationType.BasicDamage);
-					floatingSystem.CreateCoin(clickable.GetRandomPoint().position);
+					floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();
@@ -126,9 +128,16 @@ namespace Game.Managers.ClickManager
 			}
 		}
 
+		private void OnTapChanged()
+		{
+			goldForPunch = (settings.goldForPunch + player.TapGold.CurrentValue) * player.TapGoldMultiplier.TotalValue;
+			damageForPunch = (settings.damageForPunch + player.TapDamage.CurrentValue) * player.TapDamageMultiplier.TotalValue;
+		}
+
 		private void OnTargetChanged()
 		{
 			clickable = conveyor.CurrentClickableObject;
+			hpClickable = clickable.Sheet.HealthPointsBar;
 		}
 
 		private void OnGameStateChanged(SignalGameStateChanged signal)

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: FloatingSystemInstaller
   m_EditorClassIdentifier: 
   floatingTextPrefab: {fileID: 5215805515564087501, guid: edab67f7cc389c44b8af2bbc51715efd, type: 3}
-  floatingCoinPrefab: {fileID: 3079281889615683578, guid: b2ae866cbd6151e4fa946a0c40669417, type: 3}
+  floatingCoin2DPrefab: {fileID: 4661443261204356123, guid: e640a9699c207c14c9e7c4a1097b39f5, type: 3}
+  floatingCoin3DPrefab: {fileID: 3079281889615683578, guid: b2ae866cbd6151e4fa946a0c40669417, type: 3}

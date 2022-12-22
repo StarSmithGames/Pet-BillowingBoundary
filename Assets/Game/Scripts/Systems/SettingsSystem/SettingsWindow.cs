@@ -20,7 +20,6 @@ namespace Game.Systems.SettingsSystem
 		[field: SerializeField] public RectTransform Window { get; private set; }
 
 		private bool isOpenned = false;
-		private RectTransform rectTransform;
 
 		private UISubCanvas subCanvas;
 

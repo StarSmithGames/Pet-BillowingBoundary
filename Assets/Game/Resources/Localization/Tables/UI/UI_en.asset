@@ -22,6 +22,22 @@ MonoBehaviour:
     m_Localized: Shop
     m_Metadata:
       m_Items: []
+  - m_Id: 30908304920576
+    m_Localized: Daily Reward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920577
+    m_Localized: Upgrade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920578
+    m_Localized: Get
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908309114880
+    m_Localized: Claim
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
