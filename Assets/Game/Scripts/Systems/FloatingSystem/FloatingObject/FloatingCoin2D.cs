@@ -1,18 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FloatingCoin2D : MonoBehaviour
+namespace Game.Systems.FloatingSystem
 {
-    // Start is called before the first frame update
-    void Start()
+    public class FloatingCoin2D : MonoBehaviour
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

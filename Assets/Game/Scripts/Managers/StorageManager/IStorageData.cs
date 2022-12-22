@@ -1,4 +1,5 @@
 using Game.Systems.DailyRewardSystem;
+using Game.Systems.LocalizationSystem;
 
 namespace Game.Managers.StorageManager
 {
@@ -42,6 +43,8 @@ namespace Game.Managers.StorageManager
 		public Database Database { get; private set; }
 
 		public IStorageData<bool> IsFirstTime { get; private set; }
+
+		public IStorageData<LocalizationSystem.Data> LocalizationData { get; private set; }
 		public IStorageData<DailyRewardSystem.Data> DailyRewardData { get; private set; }
 
 		//public bool IsHasProfile => CurrentProfile.GetData() != null;//like IsFirstTime
@@ -77,6 +80,8 @@ namespace Game.Managers.StorageManager
 		private void Initialization()
 		{
 			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
+
+			LocalizationData = new StorageData<LocalizationSystem.Data>(Database, "localization_data", new LocalizationSystem.Data());
 			DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
 			//CurrentProfile = new StorageData<Profile>(Database, "profile_current", new Profile());
 		}

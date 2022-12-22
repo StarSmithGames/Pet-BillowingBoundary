@@ -1,6 +1,11 @@
 using DG.Tweening;
 using Game.UI;
+
+using Sirenix.OdinInspector;
+
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -14,14 +19,17 @@ namespace Game.Systems.LocalizationSystem
 		[field: SerializeField] public Button Blank { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
 		[field: SerializeField] public Transform Window { get; private set; }
-		[SerializeField] private List<Button> buttons = new List<Button>();
+		[Space]
+		[SerializeField] private List<UILanguageButton> langs = new List<UILanguageButton>();
 
 		private UISubCanvas subCanvas;
+		private LocalizationSystem localizationSystem;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas)
+		private void Construct(UISubCanvas subCanvas, LocalizationSystem localizationSystem)
 		{
 			this.subCanvas = subCanvas;
+			this.localizationSystem = localizationSystem;
 		}
 
 		private void Start()
@@ -32,6 +40,24 @@ namespace Game.Systems.LocalizationSystem
 			Close.onClick.AddListener(OnClosed);
 
 			subCanvas.WindowsRegistrator.Registrate(this);
+
+			var names = localizationSystem.GetAllLanguageNativeNames();
+			for (int i = 0; i < langs.Count; i++)
+			{
+				if(i < names.Length)
+				{
+					langs[i].SetText(names[i]);
+					langs[i].gameObject.SetActive(true);
+				}
+				else
+				{
+					langs[i].gameObject.SetActive(false);
+				}
+
+				langs[i].Enable(false);
+			}
+
+			langs[localizationSystem.CurrentLocaleIndex].Enable(true);
 		}
 
 		private void OnDestroy()
@@ -88,6 +114,12 @@ namespace Game.Systems.LocalizationSystem
 		private void OnClosed()
 		{
 			Hide();
+		}
+
+		[Button(DirtyOnClick = true)]
+		private void Fill()
+		{
+			langs = GetComponentsInChildren<UILanguageButton>(true).ToList();
 		}
 	}
 }

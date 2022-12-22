@@ -82,7 +82,6 @@ namespace Game.Systems.DailyRewardSystem
 		}
 
 
-
 		public bool IsMissedDay()
 		{
 			return GetLastTime() < -oneDay.TotalSeconds;
@@ -109,7 +108,6 @@ namespace Game.Systems.DailyRewardSystem
 			data.currentState = DailyRewardState.Open;
 		}
 
-		[System.Serializable]
 		public class Data
 		{
 			public double nextDay = 0;
