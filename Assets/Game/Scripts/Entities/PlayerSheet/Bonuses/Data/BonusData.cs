@@ -9,6 +9,8 @@ public abstract class BonusData : ScriptableObject
 	[HideLabel]
 	public Information information;
 
+	public bool isIconSimple = true;
+	[Space]
 	public bool isHasMaxLevel = true;
 	[ShowIf("isHasMaxLevel")]
 	[Min(1)]

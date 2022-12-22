@@ -127,6 +127,8 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 		{
 			Modifiers.Add(modifier);
 
+			modifier.onChanged += OnModifierChanged;
+
 			onModifiersChanged?.Invoke();
 
 			return true;
@@ -141,6 +143,8 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 		{
 			Modifiers.Remove(modifier);
 
+			modifier.onChanged -= OnModifierChanged;
+
 			onModifiersChanged?.Invoke();
 
 			return true;
@@ -150,4 +154,9 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 	}
 
 	public bool Contains(AttributeModifier modifier) => Modifiers.Contains(modifier);
+
+	private void OnModifierChanged()
+	{
+		onModifiersChanged?.Invoke();
+	}
 }

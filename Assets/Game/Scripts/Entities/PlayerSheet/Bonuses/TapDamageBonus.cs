@@ -2,6 +2,8 @@
 
 using UnityEngine;
 
+using Zenject;
+
 public class TapDamageBonus : Bonus
 {
 	public override BonusData BonusData => data;
@@ -11,8 +13,11 @@ public class TapDamageBonus : Bonus
 
 	private int currentLevel;
 
+	private AddModifier tapModifier;
+
 	private Player player;
 
+	[Inject]
 	public void Construct(Player player)
 	{
 		this.player = player;
@@ -20,7 +25,10 @@ public class TapDamageBonus : Bonus
 
 	private void Start()
 	{
+		tapModifier = new AddModifier(1);
 		player.BonusRegistrator.Registrate(this);
+
+		player.TapDamage.AddModifier(tapModifier);
 	}
 
 	private void OnDestroy()
@@ -28,12 +36,13 @@ public class TapDamageBonus : Bonus
 		player?.BonusRegistrator.UnRegistrate(this);
 	}
 
-	public void LevelUp()
+	public override void LevelUp()
 	{
 		currentLevel++;
+		tapModifier.SetValue(currentLevel);
 	}
 
-	public float GetCost()
+	public override float GetCost()
 	{
 		return data.baseCost * (Mathf.Pow(1.07f, currentLevel));
 	}

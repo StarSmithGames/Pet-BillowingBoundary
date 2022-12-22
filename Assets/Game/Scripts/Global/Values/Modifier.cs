@@ -7,11 +7,17 @@ public abstract class Modifier<T> : IReadOnlyValue<T>
 {
 	public event UnityAction onChanged;
 
-	public T CurrentValue { get; }
+	public T CurrentValue { get; private set; }
 
 	public Modifier(T value)
 	{
 		CurrentValue = value;
+	}
+
+	public void SetValue(T value)
+	{
+		CurrentValue = value;
+		onChanged?.Invoke();
 	}
 }
 

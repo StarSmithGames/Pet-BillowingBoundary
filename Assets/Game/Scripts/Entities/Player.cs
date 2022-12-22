@@ -32,10 +32,14 @@ namespace Game.Entities
 			BonusRegistrator = new Registrator<Bonus>();
 
 			TapGold.onChanged += onTapChanged;
+			TapGold.onModifiersChanged += onTapChanged;
 			TapGoldMultiplier.onChanged += onTapChanged;
+			TapGoldMultiplier.onModifiersChanged += onTapChanged;
 
 			TapDamage.onChanged += onTapChanged;
+			TapDamage.onModifiersChanged += onTapChanged;
 			TapDamageMultiplier.onChanged += onTapChanged;
+			TapDamageMultiplier.onModifiersChanged += onTapChanged;
 		}
 
 		private void OnTapChanged()

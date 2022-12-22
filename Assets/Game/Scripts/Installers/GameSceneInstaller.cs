@@ -2,9 +2,6 @@ using Game.Entities;
 using Game.Managers.ClickManager;
 using Game.Systems.CameraSystem;
 using Game.UI;
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using Zenject;

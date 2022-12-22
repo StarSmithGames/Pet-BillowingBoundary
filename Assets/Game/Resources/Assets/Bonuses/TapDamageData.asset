@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: TapDamageData
   m_EditorClassIdentifier: 
   information:
-    portrait: {fileID: 0}
-    name: 
+    portrait: {fileID: 21300000, guid: ee8eeb2db664a5f428fb27832feae45a, type: 3}
+    name: ui.bonus.muda_muda.title
     isNameId: 1
-    description: 
+    description: ui.bonus.muda_muda.description
     isDescriptionId: 1
+  isIconSimple: 0
+  isHasMaxLevel: 1
+  maxLevel: 100
+  baseCost: 50

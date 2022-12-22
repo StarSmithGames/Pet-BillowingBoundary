@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 8450259039099040926}
   - component: {fileID: 1774865013622051372}
   - component: {fileID: 2315257604852390453}
+  - component: {fileID: 7625863747481977476}
   - component: {fileID: 2028412107382443761}
   m_Layer: 5
   m_Name: Buy Button GET
@@ -169,6 +170,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7625863747481977476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382737504979958201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee92b56012f3658478d446eec72d4edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Button>k__BackingField: {fileID: 2315257604852390453}
+  <Text>k__BackingField: {fileID: 6552560598588295666}
 --- !u!114 &2028412107382443761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,6 +572,7 @@ GameObject:
   - component: {fileID: 4412974751733118892}
   - component: {fileID: 1300685269010856378}
   - component: {fileID: 543148026144982569}
+  - component: {fileID: 3660064684236119550}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -681,6 +697,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3660064684236119550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4860359944014618893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6966a6960c66574d9763461594c7428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Text>k__BackingField: {fileID: 543148026144982569}
+  localizationId: ui.button.get
 --- !u!1 &7068324219578050165
 GameObject:
   m_ObjectHideFlags: 0

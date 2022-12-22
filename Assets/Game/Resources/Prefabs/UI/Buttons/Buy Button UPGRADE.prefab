@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 7979162184980646462}
   - component: {fileID: 8782405147260946197}
   - component: {fileID: 3870902629210245910}
+  - component: {fileID: 1902435366729599638}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -211,6 +212,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1902435366729599638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981361237186508100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6966a6960c66574d9763461594c7428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Text>k__BackingField: {fileID: 3870902629210245910}
+  localizationId: ui.button.upgrade
 --- !u!1 &2239116606516108528
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,6 +645,7 @@ GameObject:
   - component: {fileID: 4085162437480984666}
   - component: {fileID: 7897494945546887230}
   - component: {fileID: 2151973866508281886}
+  - component: {fileID: 4765559895152966461}
   - component: {fileID: 1477420305406237189}
   m_Layer: 5
   m_Name: Buy Button UPGRADE
@@ -714,6 +730,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4765559895152966461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5811900160815484260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee92b56012f3658478d446eec72d4edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Button>k__BackingField: {fileID: 2151973866508281886}
+  <Text>k__BackingField: {fileID: 1851246681440538831}
 --- !u!114 &1477420305406237189
 MonoBehaviour:
   m_ObjectHideFlags: 0

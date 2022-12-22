@@ -1,5 +1,10 @@
 using DG.Tweening;
+
+using Game.Entities;
 using Game.UI;
+
+using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,25 +20,44 @@ namespace Game.Systems.MarketSystem
 		[field: SerializeField] public Button Close { get; private set; }
 		[field: SerializeField] public RectTransform WindowUp { get; private set; }
 		[field: SerializeField] public RectTransform WindowDown { get; private set; }
+		[field: Space]
+		[field: SerializeField] public Transform ContentTop0 { get; private set; }
+		[field: SerializeField] public Transform ContentTop1 { get; private set; }
+
+		private List<UIMarketItem> marketItems0 = new List<UIMarketItem>();
 
 		private bool isOpenned = false;
 
 		private UISubCanvas subCanvas;
+		private Player player;
+		private UIMarketItem.Factory marketItemFactory;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas)
+		private void Construct(UISubCanvas subCanvas, Player player,
+			UIMarketItem.Factory marketItemFactory)
 		{
 			this.subCanvas = subCanvas;
+			this.player = player;
+			this.marketItemFactory = marketItemFactory;
 		}
 		
 		private void Start()
 		{
 			Enable(false);
 
+			ContentTop0.DestroyChildren();
+			ContentTop1.DestroyChildren();
+
 			Close.onClick.AddListener(OnClosed);
 			Blank.onClick.AddListener(OnClosed);
 
 			subCanvas.WindowsRegistrator.Registrate(this);
+
+			player.BonusRegistrator.onCollectionChanged += OnBonusCollectionChanged;
+			if(player.BonusRegistrator.registers.Count != 0)
+			{
+				OnBonusCollectionChanged();
+			}
 		}
 
 		private void OnDestroy()
@@ -41,7 +65,12 @@ namespace Game.Systems.MarketSystem
 			Close?.onClick.RemoveAllListeners();
 			Blank?.onClick.RemoveAllListeners();
 
-			subCanvas.WindowsRegistrator.UnRegistrate(this);
+			subCanvas?.WindowsRegistrator.UnRegistrate(this);
+
+			if(player != null)
+			{
+				player.BonusRegistrator.onCollectionChanged -= OnBonusCollectionChanged;
+			}
 		}
 
 		public override void Show(UnityAction callback = null)
@@ -87,6 +116,35 @@ namespace Game.Systems.MarketSystem
 
 					IsInProcess = false;
 				});
+		}
+
+		private void OnBonusCollectionChanged()
+		{
+			CollectionExtensions.Resize(player.BonusRegistrator.registers, marketItems0,
+			() =>
+			{
+				var item = marketItemFactory.Create();
+				item.transform.SetParent(ContentTop0);
+				item.transform.localScale = Vector3.one;
+
+				return item;
+			},
+			() =>
+			{
+				var last = marketItems0.Last();
+				last.SetState(BuyType.None);
+				last.DespawnIt();
+
+				return last;
+			});
+
+			for (int i = 0; i < marketItems0.Count; i++)
+			{
+				marketItems0[i].SetBonus(player.BonusRegistrator.registers[i]);
+				marketItems0[i].EnbleSeparator(i < marketItems0.Count - 1);
+			}
+
+			Debug.LogError("OnBonusCollectionChanged");
 		}
 
 		private void OnClosed()
