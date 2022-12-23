@@ -161,6 +161,7 @@ namespace Game.Systems.MarketSystem
 		private void OnBonusChanged()
 		{
 			var num = CurrentBonus.GetCost();
+			SetState(CurrentBonus.BuyType);
 			currentButton.Enable(player.Gold.CurrentValue >= num);
 			currentButton.SetText(num.ToStringPritty());
 		}

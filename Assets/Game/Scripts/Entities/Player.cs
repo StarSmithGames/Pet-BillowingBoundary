@@ -15,6 +15,7 @@ namespace Game.Entities
 		public Gold Gold { get; }
 		public TapGold TapGold { get; }
 		public TapGoldMultiplier TapGoldMultiplier { get; }
+		public TapGoldChance TapGoldChance { get; }
 
 		public Registrator<Bonus> BonusRegistrator { get; }
 
@@ -27,8 +28,9 @@ namespace Game.Entities
 			TapGoldMultiplier = new TapGoldMultiplier(1f);
 
 			Taps = new Taps(0);
-			TapDamage = new TapDamage(BFN.Zero);
+			TapDamage = new TapDamage(BFN.One);
 			TapDamageMultiplier = new TapDamageMultiplier(1f);
+			TapGoldChance = new TapGoldChance(0f);
 
 			BonusRegistrator = new Registrator<Bonus>();
 
@@ -36,6 +38,8 @@ namespace Game.Entities
 			TapGold.onModifiersChanged += OnTapChanged;
 			TapGoldMultiplier.onChanged += OnTapChanged;
 			TapGoldMultiplier.onModifiersChanged += OnTapChanged;
+			TapGoldChance.onChanged += OnTapChanged;
+			TapGoldChance.onModifiersChanged += OnTapChanged;
 
 			TapDamage.onChanged += OnTapChanged;
 			TapDamage.onModifiersChanged += OnTapChanged;
@@ -83,6 +87,11 @@ namespace Game.Entities
 	public class TapGoldMultiplier : AttributeModifiableFloat
 	{
 		public TapGoldMultiplier(float currentValue) : base(currentValue) { }
+	}
+
+	public class TapGoldChance : AttributeModifiableFloat
+	{
+		public TapGoldChance(float currentValue) : base(currentValue) { }
 	}
 	#endregion
 }

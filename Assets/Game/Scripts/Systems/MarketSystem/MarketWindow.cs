@@ -160,7 +160,7 @@ namespace Game.Systems.MarketSystem
 			}
 
 			player.Gold.CurrentValue -= marketItem.CurrentBonus.GetCost();
-			marketItem.CurrentBonus.LevelUp();
+			marketItem.CurrentBonus.Purchase();
 		}
 
 		private void OnClosed()

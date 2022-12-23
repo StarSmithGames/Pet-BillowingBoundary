@@ -19,8 +19,6 @@ public class TapDamageBonus : Bonus
 	public float CurrentDamage => Level;
 
 	private AddModifierBFN tapModifier;
-	private bool isInitialized = false;
-	private BFN currentCost;
 
 	private Player player;
 
@@ -33,41 +31,26 @@ public class TapDamageBonus : Bonus
 	private void Start()
 	{
 		tapModifier = new AddModifierBFN(new BFN(CurrentDamage, 0).compressed);
-		player.BonusRegistrator.Registrate(this);
 
 		UpdateCost();
 
 		player.TapDamage.AddModifier(tapModifier);
 	}
 
-	private void OnDestroy()
-	{
-		player?.BonusRegistrator.UnRegistrate(this);
-	}
-
-	public override void LevelUp()
+	public override void Purchase()
 	{
 		Level++;
-		tapModifier.SetValue(new BFN(CurrentDamage, 0).compressed);
+		tapModifier.SetValue(new BFN(CurrentDamage, 0).compressed);//1 tap by level
 
 		UpdateCost();
 
-		base.LevelUp();
+		base.Purchase();
 	}
 
-	public override BFN GetCost()
+	protected override void UpdateCost()
 	{
-		if (!isInitialized)
-		{
-			UpdateCost();
-		}
-
-		return currentCost;
-	}
-	private void UpdateCost()
-	{
-		currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.15f, Level + 1))), 0).compressed;
-		isInitialized = true;
+		currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+		base.UpdateCost();
 	}
 
 	public class Data

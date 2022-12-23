@@ -1,4 +1,6 @@
 using Game.Systems.MarketSystem;
+using System;
+
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,10 +12,26 @@ public abstract class Bonus : MonoBehaviour
 	public abstract int Level { get; protected set; }
 	public abstract BuyType BuyType { get; protected set; }
 
-	public virtual void LevelUp()
+	protected bool isInitialized = false;
+	protected BFN currentCost;
+
+	public virtual void Purchase()
 	{
 		onChanged?.Invoke();
 	}
 
-	public abstract BFN GetCost();
+	public BFN GetCost()
+	{
+		if (!isInitialized)
+		{
+			UpdateCost();
+		}
+
+		return currentCost;
+	}
+
+	protected virtual void UpdateCost()
+	{
+		isInitialized = true;
+	}
 }

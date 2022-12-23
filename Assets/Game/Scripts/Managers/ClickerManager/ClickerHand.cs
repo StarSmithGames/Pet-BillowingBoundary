@@ -84,23 +84,29 @@ namespace Game.Managers.ClickManager
 				.Append(transform.DOMove(endPosition, 0.1f))
 				.OnComplete(() =>
 				{
-					BFN totalGoldForPunch = goldForPunch;
 
-					if (clickable.data.isHasCoinsOnPunch)
-					{
-						totalGoldForPunch += clickable.data.GetCoinsOnPunch();
-					}
-
-					goldCount.CurrentValue += totalGoldForPunch;
 					hpClickable.CurrentValue -= damageForPunch;
 
-					//Visual
-					if (goldForPunch != BFN.Zero)
+					//Coins
+					if (Random.value <= player.TapGoldChance.TotalValue)//isGoldChance
 					{
-						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch}", color: Color.yellow, type: AnimationType.BasicDamage);
+						BFN totalGoldForPunch = goldForPunch;
+
+						if (clickable.data.isHasCoinsOnPunch)
+						{
+							totalGoldForPunch += clickable.data.GetCoinsOnPunch();
+						}
+
+						if (totalGoldForPunch != BFN.Zero)
+						{
+							goldCount.CurrentValue += totalGoldForPunch;
+
+							floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch}", color: Color.yellow, type: AnimationType.BasicDamage);
+							floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
+						}
 					}
+
 					floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{damageForPunch}", color: Color.red, type: AnimationType.BasicDamage);
-					floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();
@@ -188,9 +194,9 @@ namespace Game.Managers.ClickManager
 	[System.Serializable]
 	public class HandSettings
 	{
-		[Min(1)]
+		[Min(0)]
 		public int damageForPunch = 1;
-		[Min(1)]
+		[Min(0)]
 		public int goldForPunch = 1;
 	}
 }

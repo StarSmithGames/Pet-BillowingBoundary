@@ -327,6 +327,7 @@ public struct BFN
 	};
 
 	public static BFN Zero => new BFN(0, 0);
+	public static BFN One => new BFN(1, 0);
 	public static BFN Thousand => new BFN(1, 3);
 	public static BFN Million => new BFN(1, 6);
 	public static BFN Billion => new BFN(1, 9);
