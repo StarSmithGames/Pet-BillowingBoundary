@@ -12,6 +12,8 @@ using UnityEngine.UI;
 
 using Zenject;
 
+using static UnityEditor.Progress;
+
 namespace Game.Systems.MarketSystem
 {
 	public class MarketWindow : WindowBase
@@ -127,12 +129,15 @@ namespace Game.Systems.MarketSystem
 				item.transform.SetParent(ContentTop0);
 				item.transform.localScale = Vector3.one;
 
+				item.onBuyClick += OnBuyClicked;
+
 				return item;
 			},
 			() =>
 			{
 				var last = marketItems0.Last();
-				last.SetState(BuyType.None);
+				last.SetBonus(null);
+				last.onBuyClick -= OnBuyClicked;
 				last.DespawnIt();
 
 				return last;
@@ -141,10 +146,15 @@ namespace Game.Systems.MarketSystem
 			for (int i = 0; i < marketItems0.Count; i++)
 			{
 				marketItems0[i].SetBonus(player.BonusRegistrator.registers[i]);
-				marketItems0[i].EnbleSeparator(i < marketItems0.Count - 1);
+				marketItems0[i].Separator.SetActive(i < marketItems0.Count - 1);
 			}
 
 			Debug.LogError("OnBonusCollectionChanged");
+		}
+
+		private void OnBuyClicked(UIMarketItem marketItem)
+		{
+			marketItem.CurrentBonus.LevelUp();
 		}
 
 		private void OnClosed()

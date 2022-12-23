@@ -744,6 +744,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Button>k__BackingField: {fileID: 2151973866508281886}
   <Text>k__BackingField: {fileID: 1851246681440538831}
+  on: {fileID: 21300000, guid: a2e1739d123c634449a8950ba9d46642, type: 3}
+  off: {fileID: 21300000, guid: 58a823fc037189d45a94b5f3056cd0f6, type: 3}
 --- !u!114 &1477420305406237189
 MonoBehaviour:
   m_ObjectHideFlags: 0

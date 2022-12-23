@@ -1,6 +1,11 @@
+using Game.Entities;
 using Game.Systems.LocalizationSystem;
+using Unity.VisualScripting;
+
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 using Zenject;
 
@@ -8,6 +13,8 @@ namespace Game.Systems.MarketSystem
 {
 	public class UIMarketItem : PoolableObject
 	{
+		public UnityAction<UIMarketItem> onBuyClick;
+
 		[field: SerializeField] public TMPro.TextMeshProUGUI Title { get; private set; }
 		[field: SerializeField] public TMPro.TextMeshProUGUI Description { get; private set; }
 		[field: Space]
@@ -20,67 +27,139 @@ namespace Game.Systems.MarketSystem
 		[field: Space]
 		[field: SerializeField] public GameObject Separator { get; private set; }
 
-		private BuyType type;
-		private Bonus bonus;
+		public BuyType BuyType { get; private set; }
+		public Bonus CurrentBonus { get; private set; }
+
 		private Information information;
+		private UIBuyButton currentButton;
 
 		private SignalBus signalBus;
+		private Player player;
 		private LocalizationSystem.LocalizationSystem localizationSystem;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, LocalizationSystem.LocalizationSystem localizationSystem)
+		private void Construct(SignalBus signalBus, Player player, LocalizationSystem.LocalizationSystem localizationSystem)
 		{
 			this.signalBus = signalBus;
+			this.player = player;
 			this.localizationSystem = localizationSystem;
 		}
 
 		private void Start()
 		{
+			Buy.Button.onClick.AddListener(OnBuyClick);
+			Get.Button.onClick.AddListener(OnBuyClick);
+			Upgrade.Button.onClick.AddListener(OnBuyClick);
+
 			signalBus?.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
 		private void OnDestroy()
 		{
-			signalBus?.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
-		}
+			Buy?.Button.onClick.RemoveAllListeners();
+			Get?.Button.onClick.RemoveAllListeners();
+			Upgrade?.Button.onClick.RemoveAllListeners();
 
-		public void SetState(BuyType type)
-		{
-			this.type = type;
+			signalBus?.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
 		public void SetBonus(Bonus bonus)
 		{
-			this.bonus = bonus;
-			this.information = bonus.BonusData.information;
-
-			if (bonus.BonusData.isIconSimple)
+			if(CurrentBonus != null)
 			{
-				IconSimple.Icon.sprite = information.portrait;
-				IconSimple.Shadow.sprite = information.portrait;
+				CurrentBonus.onChanged -= OnBonusChanged;
+			}
+
+			CurrentBonus = bonus;
+
+			if (CurrentBonus != null)
+			{
+				CurrentBonus.onChanged += OnBonusChanged;
+
+				information = bonus.BonusData.information;
+
+				if (bonus.BonusData.isIconSimple)
+				{
+					IconSimple.Icon.sprite = information.portrait;
+					IconSimple.Shadow.sprite = information.portrait;
+				}
+				else
+				{
+					IconFull.Icon.sprite = information.portrait;
+				}
+
+				IconSimple.gameObject.SetActive(bonus.BonusData.isIconSimple);
+				IconFull.gameObject.SetActive(!bonus.BonusData.isIconSimple);
+
+				SetState(bonus.BuyType);
+				currentButton?.SetText(bonus.GetCost().ToString());
+
+				OnLocalizationChanged();
 			}
 			else
 			{
-				IconFull.Icon.sprite = information.portrait;
+				SetState(BuyType.None);
 			}
-			IconSimple.gameObject.SetActive(bonus.BonusData.isIconSimple);
-			IconFull.gameObject.SetActive(!bonus.BonusData.isIconSimple);
-
-			Buy.SetText(bonus.GetCost().ToString());
-			Get.SetText(bonus.GetCost().ToString());
-			Upgrade.SetText(bonus.GetCost().ToString());
-
-			OnLocalizationChanged();
 		}
 
-		public void EnbleSeparator(bool trigger)
+		private void SetState(BuyType type)
 		{
-			Separator.SetActive(trigger);
+			BuyType = type;
+
+			currentButton = null;
+
+			Buy.gameObject.SetActive(false);
+			Get.gameObject.SetActive(false);
+			Upgrade.gameObject.SetActive(false);
+
+			switch (type)
+			{
+				case BuyType.BUY:
+				{
+					currentButton = Buy;
+					break;
+				}
+				case BuyType.GET:
+				{
+					currentButton = Get;
+					break;
+				}
+				case BuyType.UPGADE:
+				{
+					currentButton = Upgrade;
+					break;
+				}
+				case BuyType.LOCK:
+				{
+					break;
+				}
+
+				default:
+				{
+
+					break;
+				}
+			}
+
+			currentButton?.gameObject.SetActive(true);
+		}
+
+		private void OnBonusChanged()
+		{
+			float num = CurrentBonus.GetCost();
+
+			currentButton.Enable(player.Gold.CurrentValue >= num);
+			currentButton.SetText(string.Format((num < 1000) ? "{0:F3}" : "{0:0.00e0}", num));
+		}
+
+		private void OnBuyClick()
+		{
+			onBuyClick?.Invoke(this);
 		}
 
 		private void OnLocalizationChanged()
 		{
-			if (bonus == null) return;
+			if (CurrentBonus == null) return;
 
 			Title.text = information.isNameId ? localizationSystem.Translate(information.name) : information.name;
 			Description.text = information.isDescriptionId ? localizationSystem.Translate(information.description) : information.description;

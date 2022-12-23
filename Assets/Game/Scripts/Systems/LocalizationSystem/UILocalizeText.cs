@@ -28,7 +28,7 @@ namespace Game.Systems.LocalizationSystem
 
 		private void OnDestroy()
 		{
-			signalBus?.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
+			signalBus?.TryUnsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
 		private void OnLocalizationChanged()

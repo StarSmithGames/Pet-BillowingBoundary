@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,27 +5,23 @@ namespace Game.Systems.MarketSystem
 {
 	public class UIBuyButton : MonoBehaviour
 	{
+		public bool IsEnable { get; private set; } = true;
+
 		[field: SerializeField] public Button Button { get; private set; }
 		[field: SerializeField] public TMPro.TextMeshProUGUI Text { get; private set; }
+		[SerializeField] private Sprite on;
+		[SerializeField] private Sprite off;
 
-		private void Start()
+		public void Enable(bool trigger)
 		{
-			Button.onClick.AddListener(OnClick);
-		}
+			Button.image.sprite = trigger ? on : off;
 
-		private void OnDestroy()
-		{
-			Button?.onClick.RemoveAllListeners();
+			IsEnable = trigger;
 		}
 
 		public void SetText(string text)
 		{
 			Text.text = text;
-		}
-
-		private void OnClick()
-		{
-
 		}
 	}
 }
