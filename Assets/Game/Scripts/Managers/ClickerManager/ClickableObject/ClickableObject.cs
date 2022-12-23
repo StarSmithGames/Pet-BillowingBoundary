@@ -11,7 +11,7 @@ using UnityEngine.Events;
 
 namespace Game.Managers.ClickManager
 {
-	public abstract class ClickableObject : MonoBehaviour
+	public abstract partial class ClickableObject : MonoBehaviour
 	{
 		public UnityAction onDead;
 
@@ -78,49 +78,11 @@ namespace Game.Managers.ClickManager
 			IsEnabled = trigger;
 		}
 
-		public void CustomPunch(PunchSettings settings)
-		{
-			transform.DORewind();
-			transform.DOPunchScale(settings.GetPunch(), settings.duration, settings.vibrato, settings.elasticity);
-		}
-
-		public void SmallPunch()
-		{
-			CustomPunch(smallPunch);
-		}
-
-		[Button]
-		public void Dead()
-		{
-			Sheet.HealthPointsBar.CurrentValue -= Sheet.HealthPointsBar.CurrentValue;
-		}
-
-		public Tween Flip()
-		{
-			Sequence sequence = DOTween.Sequence();
-			sequence
-				.Append(transform.DOMoveY(3f, 0.2f))
-				.Append(transform.DORotate(transform.eulerAngles + new Vector3(0, 0, 180), 0.2f))
-				.Join(transform.DOMoveY(0, 0.3f));
-
-			return sequence;
-		}
 		public void Refresh()
 		{
 			transform.eulerAngles = startRotation;
 			sheet.HealthPointsBar.CurrentValue = sheet.HealthPointsBar.MaxValue;
 			isDead = false;
-			Debug.LogError("Refresh");
-		}
-
-		public Transform GetRandomPoint()
-		{
-			return points.RandomItem().transform;
-		}
-
-		public ParticleVFX GetRandomParticle()
-		{
-			return particles.RandomItem();
 		}
 
 		private void OnHealthPointsChanged()
@@ -142,6 +104,41 @@ namespace Game.Managers.ClickManager
 			collider = GetComponentInChildren<Collider>();
 		}
 	}
+
+	public partial class ClickableObject
+	{
+
+		public void CustomPunch(PunchSettings settings)
+		{
+			transform.DORewind();
+			transform.DOPunchScale(settings.GetPunch(), settings.duration, settings.vibrato, settings.elasticity);
+		}
+
+		public void SmallPunch()
+		{
+			CustomPunch(smallPunch);
+		}
+
+		public Tween Flip()
+		{
+			Sequence sequence = DOTween.Sequence();
+			return sequence
+				.Append(transform.DOMoveY(3f, 0.2f))
+				.Append(transform.DORotate(transform.eulerAngles + new Vector3(0, 0, 180), 0.2f))
+				.Join(transform.DOMoveY(0, 0.3f));
+		}
+
+		public Transform GetRandomPoint()
+		{
+			return points.RandomItem().transform;
+		}
+
+		public ParticleVFX GetRandomParticle()
+		{
+			return particles.RandomItem();
+		}
+	}
+
 
 	[System.Serializable]
 	public class PunchSettings

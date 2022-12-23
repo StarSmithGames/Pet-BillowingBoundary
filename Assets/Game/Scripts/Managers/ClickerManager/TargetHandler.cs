@@ -1,5 +1,6 @@
 using DG.Tweening;
 
+using Game.HUD;
 using Game.Managers.GameManager;
 using Game.Systems.FloatingSystem;
 
@@ -21,18 +22,21 @@ namespace Game.Managers.ClickManager
 
 		private SignalBus signalBus;
 		private ClickerConveyor conveyor;
+		private FloatingSystem floatingSystem;
 		private FloatingAwards floatingAwards;
 		private GameManager.GameManager gameManager;
 		private AsyncManager.AsyncManager asyncManager;
 
 		public TargetHandler(SignalBus signalBus,
 			ClickerConveyor clickerConveyor,
+			FloatingSystem floatingSystem,
 			FloatingAwards floatingAwards,
 			GameManager.GameManager gameManager,
 			AsyncManager.AsyncManager asyncManager)
 		{
 			this.signalBus = signalBus;
 			this.conveyor = clickerConveyor;
+			this.floatingSystem = floatingSystem;
 			this.floatingAwards = floatingAwards;
 			this.gameManager = gameManager;
 			this.asyncManager = asyncManager;
@@ -141,6 +145,8 @@ namespace Game.Managers.ClickManager
 				{
 					awardCoinsCoroutine = null;
 					asyncManager.StartCoroutine(ReplaceTarget());
+
+					floatingSystem.CreateTextUI(UIGoldHUD.Instance.Count.transform.position, $"+{totalCoins.ToStringPritty()}", Color.green, AnimationType.AddGold);
 				});
 			}
 			Next();

@@ -12,6 +12,7 @@ namespace Game.Systems.FloatingSystem
 	public class FloatingSystemInstaller : ScriptableObjectInstaller<FloatingSystemInstaller>
 	{
 		public FloatingText floatingTextPrefab;
+		public FloatingTextUI floatingText2DPrefab;
 		public FloatingCoin2D floatingCoin2DPrefab;
 		public FloatingCoin3D floatingCoin3DPrefab;
 
@@ -25,6 +26,13 @@ namespace Game.Systems.FloatingSystem
 				.BindFactory<FloatingText, FloatingText.Factory>()
 				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(5)
 				.FromComponentInNewPrefab(floatingTextPrefab)
+				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
+				.WhenInjectedInto<FloatingSystem>();
+
+			Container
+				.BindFactory<FloatingTextUI, FloatingTextUI.Factory>()
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(1)
+				.FromComponentInNewPrefab(floatingText2DPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
 

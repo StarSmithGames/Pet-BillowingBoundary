@@ -10,16 +10,19 @@ namespace Game.Systems.FloatingSystem
 	{
 		private CameraSystem.CameraSystem cameraSystem;
 		private FloatingText.Factory floatingTextFactory;
+		private FloatingTextUI.Factory floatingTextUIFactory;
 		private FloatingCoin2D.Factory floatingCoin2DFactory;
 		private FloatingCoin3D.Factory floatingCoin3DFactory;
 
 		private FloatingSystem(CameraSystem.CameraSystem cameraSystem,
 			FloatingText.Factory floatingTextFactory,
+			FloatingTextUI.Factory floatingTextUIFactory,
 			FloatingCoin2D.Factory floatingCoin2DFactory,
 			FloatingCoin3D.Factory floatingCoin3DFactory)
 		{
 			this.cameraSystem = cameraSystem;
 			this.floatingTextFactory = floatingTextFactory;
+			this.floatingTextUIFactory = floatingTextUIFactory;
 			this.floatingCoin2DFactory = floatingCoin2DFactory;
 			this.floatingCoin3DFactory = floatingCoin3DFactory;
 		}
@@ -33,6 +36,25 @@ namespace Game.Systems.FloatingSystem
 			FloatingText Create()
 			{
 				var item = floatingTextFactory.Create();
+
+				item.Text.color = color ?? Color.white;
+				item.Text.text = text;
+				item.transform.position = position;
+				item.transform.rotation = cameraSystem.transform.rotation;//billboard, add to update?
+
+				return item;
+			}
+		}
+
+		public void CreateTextUI(Vector3 position, string text, Color? color = null, AnimationType type = AnimationType.BasicDamage)
+		{
+			var obj = Create();
+
+			ApplyAnimation(obj, type);
+
+			FloatingTextUI Create()
+			{
+				var item = floatingTextUIFactory.Create();
 
 				item.Text.color = color ?? Color.white;
 				item.Text.text = text;
@@ -98,8 +120,8 @@ namespace Game.Systems.FloatingSystem
 					Sequence sequence = DOTween.Sequence();
 					position.y += 2;
 
-					floatingObject.transform.DOMove(position, 0.5f).SetEase(Ease.OutQuint);
 					sequence
+						.Append(floatingObject.transform.DOMove(position, 0.5f).SetEase(Ease.OutQuint))
 						.Append(floatingObject.Fade(0f, 0.7f))
 						.AppendCallback(floatingObject.DespawnIt);
 					break;
@@ -124,6 +146,18 @@ namespace Game.Systems.FloatingSystem
 						.AppendCallback(floatingObject.DespawnIt);
 					break;
 				}
+				case AnimationType.AddGold:
+				{
+					Sequence sequence = DOTween.Sequence();
+					position.y -= 100;
+					sequence
+						.Append(floatingObject.transform.DOMove(position, 0.5f).SetEase(Ease.OutQuint))
+						.Append(floatingObject.Fade(0f, 0.7f))
+						.AppendCallback(floatingObject.DespawnIt);
+
+					Debug.LogError("HERER");
+					break;
+				}
 				default:
 				{
 					Sequence sequence = DOTween.Sequence();
@@ -141,5 +175,6 @@ namespace Game.Systems.FloatingSystem
 		None,
 		BasicDamage,
 		AdvanceDamage,
+		AddGold,
 	}
 }
