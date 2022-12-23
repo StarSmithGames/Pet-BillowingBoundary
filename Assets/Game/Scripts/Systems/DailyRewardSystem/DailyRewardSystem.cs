@@ -56,29 +56,29 @@ namespace Game.Systems.DailyRewardSystem
 		public void Tick()
 		{
 			if (!isInitialized) return;
-			if (data.currentState != DailyRewardState.Claimed)
-			{
-				if (needCheck)
-				{
-					if (IsMissedDay())
-					{
-						Debug.LogError("Missed Day");
-						Reset();
-					}
+			//if (data.currentState != DailyRewardState.Claimed)
+			//{
+			//	if (needCheck)
+			//	{
+			//		if (IsMissedDay())
+			//		{
+			//			Debug.LogError("Missed Day");
+			//			Reset();
+			//		}
 
-					needCheck = false;
-				}
-				else
-				{
-					t += Time.deltaTime;
+			//		needCheck = false;
+			//	}
+			//	else
+			//	{
+			//		t += Time.deltaTime;
 
-					if (t >= checkDuration)
-					{
-						t = 0;
-						needCheck = true;
-					}
-				}
-			}
+			//		if (t >= checkDuration)
+			//		{
+			//			t = 0;
+			//			needCheck = true;
+			//		}
+			//	}
+			//}
 		}
 
 

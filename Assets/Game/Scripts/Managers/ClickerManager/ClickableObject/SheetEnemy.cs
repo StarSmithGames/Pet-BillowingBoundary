@@ -6,16 +6,11 @@ namespace Game.Managers.ClickManager
 
 		public SheetEnemy(EnemyData data)
 		{
-			HealthPointsBar = new HealthPointsBar(data.tapCount, 0, data.tapCount);
-		}
-
-		public void Refresh()
-		{
-			HealthPointsBar.CurrentValue = HealthPointsBar.MaxValue;
+			HealthPointsBar = new HealthPointsBar(data.baseHealthPoints.compressed, BFN.Zero, data.baseHealthPoints.compressed);
 		}
 	}
-	public class HealthPointsBar : AttributeBar
+	public class HealthPointsBar : AttributeBFNBar
 	{
-		public HealthPointsBar(float currentValue, float minValue, float maxValue) : base(currentValue, minValue, maxValue) { }
+		public HealthPointsBar(BFN currentValue, BFN minValue, BFN maxValue) : base(currentValue, minValue, maxValue) { }
 	}
 }

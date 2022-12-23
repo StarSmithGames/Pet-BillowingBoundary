@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public interface IModifiable<M> where M : Modifier<float>
+public interface IModifiable<M, T> where M : IModifier
 {
 	event UnityAction onModifiersChanged;
 
-	float TotalValue { get; }
-	float ModifyAddValue { get; }
-	float ModifyPercentValue { get; }
+	T ModifyAddValue { get; }
 
-	List<M> Modifiers { get; }
+	List<IModifier> Modifiers { get; }
 
 	bool AddModifier(M modifier);
 	bool RemoveModifier(M modifier);
 
-	bool Contains(M modifier);
+	bool Contains(IModifier modifier);
+}
+
+public interface IModifiablePercent
+{
+	float ModifyPercentValue { get; }
 }

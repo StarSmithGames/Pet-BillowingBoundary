@@ -14,13 +14,13 @@ namespace Game.HUD
 		private HealthPointsBar hp;
 
 		private SignalBus signalBus;
-		private ClickerConveyor conveyor;
+		private TargetHandler targetHandler;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, ClickerConveyor conveyor)
+		private void Construct(SignalBus signalBus, TargetHandler targetHandler)
 		{
 			this.signalBus = signalBus;
-			this.conveyor = conveyor;
+			this.targetHandler = targetHandler;
 		}
 
 		private void Start()
@@ -48,9 +48,9 @@ namespace Game.HUD
 				hp.onChanged -= OnTapCountBarChanged;
 			}
 
-			if (conveyor.CurrentClickableObject != null)
+			if (targetHandler.CurrentTarget != null)
 			{
-				hp = conveyor.CurrentClickableObject.Sheet.HealthPointsBar;
+				hp = targetHandler.CurrentTarget.Sheet.HealthPointsBar;
 				hp.onChanged += OnTapCountBarChanged;
 				OnTapCountBarChanged();
 			}

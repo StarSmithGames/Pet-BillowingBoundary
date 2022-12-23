@@ -28,11 +28,11 @@ namespace Game.Managers.ClickManager
 		private ClickableObject clickable;
 		private HealthPointsBar hpClickable;
 		private Gold goldCount;
-		private float goldForPunch, damageForPunch;
+		private BFN goldForPunch, damageForPunch;
 
 		private SignalBus signalBus;
 		private Player player;
-		private ClickerConveyor conveyor;
+		private TargetHandler targetHandler;
 		private FloatingSystem floatingSystem;
 		private CameraSystem cameraSystem;
 
@@ -40,13 +40,13 @@ namespace Game.Managers.ClickManager
 		private void Construct(
 			SignalBus signalBus,
 			Player player,
-			ClickerConveyor clickerConveyor,
+			TargetHandler targetHandler,
 			FloatingSystem floatingTextSystem,
 			CameraSystem cameraSystem)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
-			this.conveyor = clickerConveyor;
+			this.targetHandler = targetHandler;
 			this.floatingSystem = floatingTextSystem;
 			this.cameraSystem = cameraSystem;
 		}
@@ -84,11 +84,22 @@ namespace Game.Managers.ClickManager
 				.Append(transform.DOMove(endPosition, 0.1f))
 				.OnComplete(() =>
 				{
-					goldCount.CurrentValue += goldForPunch;
+					BFN totalGoldForPunch = goldForPunch;
+
+					if (clickable.data.isHasCoinsOnPunch)
+					{
+						totalGoldForPunch += clickable.data.GetCoinsOnPunch();
+					}
+
+					goldCount.CurrentValue += totalGoldForPunch;
 					hpClickable.CurrentValue -= damageForPunch;
 
 					//Visual
-					floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{goldForPunch}", type: AnimationType.BasicDamage);
+					if (goldForPunch != BFN.Zero)
+					{
+						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch}", color: Color.yellow, type: AnimationType.BasicDamage);
+					}
+					floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{damageForPunch}", color: Color.red, type: AnimationType.BasicDamage);
 					floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
@@ -130,13 +141,13 @@ namespace Game.Managers.ClickManager
 
 		private void OnTapChanged()
 		{
-			goldForPunch = (settings.goldForPunch + player.TapGold.CurrentValue) * player.TapGoldMultiplier.TotalValue;
-			damageForPunch = (settings.damageForPunch + player.TapDamage.CurrentValue) * player.TapDamageMultiplier.TotalValue;
+			goldForPunch = (settings.goldForPunch + player.TapGold.TotalValue) * player.TapGoldMultiplier.TotalValue;
+			damageForPunch = (settings.damageForPunch + player.TapDamage.TotalValue) * player.TapDamageMultiplier.TotalValue;
 		}
 
 		private void OnTargetChanged()
 		{
-			clickable = conveyor.CurrentClickableObject;
+			clickable = targetHandler.CurrentTarget;
 			hpClickable = clickable.Sheet.HealthPointsBar;
 		}
 

@@ -4,6 +4,7 @@ using Game.Systems.MarketSystem;
 using System;
 
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 using Zenject;
 
@@ -11,12 +12,15 @@ public class TapDamageBonus : Bonus
 {
 	public override BonusData BonusData => data;
 	[SerializeField] private BonusData data;
+
 	public override int Level { get; protected set; } = 0;
-	public override BuyType BuyType { get; protected set; } = BuyType.BUY;
+	public override BuyType BuyType { get; protected set; } = BuyType.UPGADE;
 
 	public float CurrentDamage => Level;
 
-	private AddModifier tapModifier;
+	private AddModifierBFN tapModifier;
+	private bool isInitialized = false;
+	private BFN currentCost;
 
 	private Player player;
 
@@ -28,8 +32,10 @@ public class TapDamageBonus : Bonus
 
 	private void Start()
 	{
-		tapModifier = new AddModifier(1);
+		tapModifier = new AddModifierBFN(new BFN(CurrentDamage, 0).compressed);
 		player.BonusRegistrator.Registrate(this);
+
+		UpdateCost();
 
 		player.TapDamage.AddModifier(tapModifier);
 	}
@@ -42,29 +48,30 @@ public class TapDamageBonus : Bonus
 	public override void LevelUp()
 	{
 		Level++;
-		tapModifier.SetValue(Level);
+		tapModifier.SetValue(new BFN(CurrentDamage, 0).compressed);
+
+		UpdateCost();
 
 		base.LevelUp();
 	}
 
-	public override float GetCost()
+	public override BFN GetCost()
 	{
-		return (float)Math.Ceiling(data.baseCost * (Mathf.Pow(1.15f, Level)));
+		if (!isInitialized)
+		{
+			UpdateCost();
+		}
+
+		return currentCost;
+	}
+	private void UpdateCost()
+	{
+		currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.15f, Level + 1))), 0).compressed;
+		isInitialized = true;
 	}
 
 	public class Data
 	{
 		public int level;
 	}
-}
-
-enum Multiplier
-{
-	Thousand,//K = 1000
-	Million,//M = 1000K
-	Billion,//B = 1000M
-	Trillion,//T = 1000B
-	Quadrillion,//q = 1000T
-	Quatrillion,//Q = 1000q
-	Sextillion,//s = 1000Q
 }

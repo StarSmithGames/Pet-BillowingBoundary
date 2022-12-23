@@ -10,11 +10,10 @@ public abstract class Bonus : MonoBehaviour
 	public abstract int Level { get; protected set; }
 	public abstract BuyType BuyType { get; protected set; }
 
-
 	public virtual void LevelUp()
 	{
 		onChanged?.Invoke();
 	}
 
-	public abstract float GetCost();
+	public abstract BFN GetCost();
 }

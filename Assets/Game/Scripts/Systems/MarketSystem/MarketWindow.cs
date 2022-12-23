@@ -154,6 +154,12 @@ namespace Game.Systems.MarketSystem
 
 		private void OnBuyClicked(UIMarketItem marketItem)
 		{
+			if(player.Gold.CurrentValue < marketItem.CurrentBonus.GetCost())
+			{
+				return;
+			}
+
+			player.Gold.CurrentValue -= marketItem.CurrentBonus.GetCost();
 			marketItem.CurrentBonus.LevelUp();
 		}
 

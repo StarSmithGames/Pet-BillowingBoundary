@@ -13,7 +13,10 @@ namespace Game.Managers.ClickManager
 {
 	public abstract class ClickableObject : MonoBehaviour
 	{
-		public UnityAction onDead; 
+		public UnityAction onDead;
+
+		public bool IsInitialized { get; private set; } = false;
+		public bool IsEnabled { get; private set; } = true;
 
 		public EnemyData Data => data;
 		[SerializeField] public EnemyData data;
@@ -41,13 +44,15 @@ namespace Game.Managers.ClickManager
 		}
 		private SheetEnemy sheet;
 
+		private bool isDead = false;
 		private Vector3 startRotation;
 
 		private void Start()
 		{
-			Sheet.HealthPointsBar.onChanged += OnHealthPointsChanged;
-
-			startRotation = transform.rotation.eulerAngles;
+			if (!IsInitialized)
+			{
+				Initialization();
+			}
 		}
 
 		private void OnDestroy()
@@ -55,7 +60,23 @@ namespace Game.Managers.ClickManager
 			Sheet.HealthPointsBar.onChanged -= OnHealthPointsChanged;
 		}
 
-		
+		public void Initialization(bool enable = false)
+		{
+			Enable(enable);
+
+			Sheet.HealthPointsBar.onChanged += OnHealthPointsChanged;
+
+			startRotation = transform.rotation.eulerAngles;
+
+			IsInitialized = true;
+		}
+
+		public void Enable(bool trigger)
+		{
+			gameObject.SetActive(trigger);
+
+			IsEnabled = trigger;
+		}
 
 		public void CustomPunch(PunchSettings settings)
 		{
@@ -63,13 +84,17 @@ namespace Game.Managers.ClickManager
 			transform.DOPunchScale(settings.GetPunch(), settings.duration, settings.vibrato, settings.elasticity);
 		}
 
-		[Button]
 		public void SmallPunch()
 		{
 			CustomPunch(smallPunch);
 		}
 
 		[Button]
+		public void Dead()
+		{
+			Sheet.HealthPointsBar.CurrentValue -= Sheet.HealthPointsBar.CurrentValue;
+		}
+
 		public Tween Flip()
 		{
 			Sequence sequence = DOTween.Sequence();
@@ -80,9 +105,12 @@ namespace Game.Managers.ClickManager
 
 			return sequence;
 		}
-		public void ResetFlip()
+		public void Refresh()
 		{
 			transform.eulerAngles = startRotation;
+			sheet.HealthPointsBar.CurrentValue = sheet.HealthPointsBar.MaxValue;
+			isDead = false;
+			Debug.LogError("Refresh");
 		}
 
 		public Transform GetRandomPoint()
@@ -97,8 +125,11 @@ namespace Game.Managers.ClickManager
 
 		private void OnHealthPointsChanged()
 		{
-			if(Sheet.HealthPointsBar.CurrentValue == 0)
+			if (isDead) return;
+
+			if(Sheet.HealthPointsBar.CurrentValue <= BFN.Zero)
 			{
+				isDead = true;
 				onDead?.Invoke();
 			}
 		}

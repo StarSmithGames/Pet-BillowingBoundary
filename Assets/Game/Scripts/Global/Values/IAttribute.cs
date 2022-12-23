@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public interface IAttribute : IValue<float>
+public interface IAttribute<T> : IValue<T> where T : struct
 {
 	string Output { get; }
 
 	string LocalizationKey { get; }
 }
 
-public abstract partial class Attribute : IAttribute
+public abstract class Attribute<T> : IAttribute<T> where T : struct
 {
 	public event UnityAction onChanged;
 
@@ -19,7 +19,7 @@ public abstract partial class Attribute : IAttribute
 
 	public virtual string LocalizationKey => "sheet.";
 
-	public virtual float CurrentValue
+	public virtual T CurrentValue
 	{
 		get => currentValue;
 		set
@@ -28,15 +28,15 @@ public abstract partial class Attribute : IAttribute
 			onChanged?.Invoke();
 		}
 	}
-	protected float currentValue;
+	protected T currentValue;
 
-	public Attribute(float currentValue)
+	public Attribute(T currentValue)
 	{
 		this.currentValue = currentValue;
 	}
 }
 
-public abstract partial class AttributeBar : Attribute, IBar
+public abstract class AttributeBar : Attribute<float>, IBar<float>
 {
 	public override string Output => $"{Math.Round(CurrentValue)} / {Math.Round(MaxValue)}";
 
@@ -72,7 +72,7 @@ public abstract partial class AttributeBar : Attribute, IBar
 	}
 }
 
-public abstract partial class AttributeModifiable : Attribute, IModifiable<AttributeModifier>
+public abstract class AttributeModifiableFloat : Attribute<float>, IModifiable<AttributeModifier, float>, IModifiablePercent
 {
 	public event UnityAction onModifiersChanged;
 
@@ -86,9 +86,9 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 
 			Modifiers.ForEach((modifier) =>
 			{
-				if (modifier is AddModifier)
+				if (modifier is AddModifier add)
 				{
-					value += modifier.CurrentValue;
+					value += add.CurrentValue;
 				}
 			});
 
@@ -104,9 +104,9 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 
 			Modifiers.ForEach((modifier) =>
 			{
-				if (modifier is PercentModifier)
+				if (modifier is PercentModifier percent)
 				{
-					value += modifier.CurrentValue;
+					value += percent.CurrentValue;
 				}
 			});
 
@@ -114,11 +114,11 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 		}
 	}
 
-	public List<AttributeModifier> Modifiers { get; }
+	public List<IModifier> Modifiers { get; }
 
-	protected AttributeModifiable(float currentValue) : base(currentValue)
+	public AttributeModifiableFloat(float value) : base(value)
 	{
-		Modifiers = new List<AttributeModifier>();
+		Modifiers = new List<IModifier>();
 	}
 
 	public virtual bool AddModifier(AttributeModifier modifier)
@@ -153,7 +153,171 @@ public abstract partial class AttributeModifiable : Attribute, IModifiable<Attri
 		return false;
 	}
 
-	public bool Contains(AttributeModifier modifier) => Modifiers.Contains(modifier);
+	public bool Contains(IModifier modifier) => Modifiers.Contains(modifier);
+
+	private void OnModifierChanged()
+	{
+		onModifiersChanged?.Invoke();
+	}
+}
+
+public abstract class AtributeBFN : Attribute<BFN>
+{
+	public override string Output => CurrentValue.ToStringPritty();
+
+	protected AtributeBFN(BFN currentValue) : base(currentValue) { }
+}
+
+public abstract class AttributeBFNBar : Attribute<BFN>, IBar<BFN>
+{
+	public override string Output => $"{CurrentValue.ToStringPritty()} / {CurrentValue.ToStringPritty()}";
+
+	public override BFN CurrentValue
+	{
+		get => currentValue;
+		set
+		{
+			base.CurrentValue = BFN.Clamp(value, MinValue, MaxValue);
+		}
+	}
+
+	public virtual BFN MaxValue
+	{
+		get => maxValue;
+		set
+		{
+			maxValue = value;
+			base.CurrentValue = BFN.Clamp(currentValue, MinValue, MaxValue);
+		}
+	}
+	protected BFN maxValue;
+
+	public virtual BFN MinValue { get; protected set; }
+
+	public float PercentValue => (float) (CurrentValue.coefficient / MaxValue.coefficient);
+
+	protected AttributeBFNBar(BFN value, BFN min, BFN max) : base(value)
+	{
+		this.maxValue = max;
+		this.MinValue = min;
+		this.CurrentValue = value;
+	}
+}
+
+public abstract class AttributeModifiableBFN : Attribute<BFN>, IModifiable<AttributeModifierBFN, BFN>, IModifiablePercent
+{
+	public event UnityAction onModifiersChanged;
+
+	public virtual BFN TotalValue => (CurrentValue + ModifyAddValue) * (1f + (ModifyPercentValue / 100f));
+
+	public virtual BFN ModifyAddValue
+	{
+		get
+		{
+			BFN value = BFN.Zero;
+
+			Modifiers.ForEach((modifier) =>
+			{
+				if (modifier is AddModifierBFN add)
+				{
+					value += add.CurrentValue;
+				}
+			});
+
+			return value;
+		}
+	}
+
+	public virtual float ModifyPercentValue
+	{
+		get
+		{
+			float value = 0;
+
+			Modifiers.ForEach((modifier) =>
+			{
+				if (modifier is PercentModifier percent)
+				{
+					value += percent.CurrentValue;
+				}
+			});
+
+			return value;
+		}
+	}
+
+	public List<IModifier> Modifiers { get; }
+
+	public AttributeModifiableBFN(BFN value) : base(value)
+	{
+		Modifiers = new List<IModifier>();
+	}
+
+	public virtual bool AddModifier(AttributeModifierBFN modifier)
+	{
+		if (!Contains(modifier))
+		{
+			Modifiers.Add(modifier);
+
+			modifier.onChanged += OnModifierChanged;
+
+			onModifiersChanged?.Invoke();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public virtual bool RemoveModifier(AttributeModifierBFN modifier)
+	{
+		if (Contains(modifier))
+		{
+			Modifiers.Remove(modifier);
+
+			modifier.onChanged -= OnModifierChanged;
+
+			onModifiersChanged?.Invoke();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public virtual bool AddModifier(PercentModifier modifier)
+	{
+		if (!Contains(modifier))
+		{
+			Modifiers.Add(modifier);
+
+			modifier.onChanged += OnModifierChanged;
+
+			onModifiersChanged?.Invoke();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public virtual bool RemoveModifier(PercentModifier modifier)
+	{
+		if (Contains(modifier))
+		{
+			Modifiers.Remove(modifier);
+
+			modifier.onChanged -= OnModifierChanged;
+
+			onModifiersChanged?.Invoke();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public bool Contains(IModifier modifier) => Modifiers.Contains(modifier);
 
 	private void OnModifierChanged()
 	{

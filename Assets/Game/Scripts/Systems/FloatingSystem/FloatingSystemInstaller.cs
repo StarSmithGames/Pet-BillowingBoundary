@@ -19,6 +19,8 @@ namespace Game.Systems.FloatingSystem
 		{
 			Container.BindInterfacesAndSelfTo<FloatingSystem>().AsSingle();
 
+			Container.BindInterfacesAndSelfTo<FloatingAwards>().AsSingle();
+
 			Container
 				.BindFactory<FloatingText, FloatingText.Factory>()
 				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(5)

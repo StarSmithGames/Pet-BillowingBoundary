@@ -10,12 +10,15 @@ public abstract class BonusData : ScriptableObject
 	public Information information;
 
 	public bool isIconSimple = true;
+
+	[Space]
+	public bool isUnlockedOnStart = false;
+	[HideIf("isUnlockedOnStart")]
+	public int unlockCost;
+	public int baseCost;
 	[Space]
 	public bool isHasMaxLevel = true;
 	[ShowIf("isHasMaxLevel")]
 	[Min(1)]
 	public int maxLevel = 100;
-	[Space]
-
-	public int baseCost;
 }

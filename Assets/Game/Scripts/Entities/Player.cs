@@ -1,10 +1,11 @@
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Game.Entities
 {
 	public class Player
 	{
-		public UnityAction onTapChanged;
+		public event UnityAction onTapChanged;
 
 		public PlayerSheet PlayerSheet { get; }
 
@@ -21,25 +22,25 @@ namespace Game.Entities
 		{
 			PlayerSheet = new PlayerSheet();
 
-			Gold = new Gold(0);
-			TapGold = new TapGold(1f);
+			Gold = new Gold(new BFN(1000, 0).compressed);
+			TapGold = new TapGold(BFN.Zero);
 			TapGoldMultiplier = new TapGoldMultiplier(1f);
 
 			Taps = new Taps(0);
-			TapDamage = new TapDamage(1f);
+			TapDamage = new TapDamage(BFN.Zero);
 			TapDamageMultiplier = new TapDamageMultiplier(1f);
 
 			BonusRegistrator = new Registrator<Bonus>();
 
-			TapGold.onChanged += onTapChanged;
-			TapGold.onModifiersChanged += onTapChanged;
-			TapGoldMultiplier.onChanged += onTapChanged;
-			TapGoldMultiplier.onModifiersChanged += onTapChanged;
+			TapGold.onChanged += OnTapChanged;
+			TapGold.onModifiersChanged += OnTapChanged;
+			TapGoldMultiplier.onChanged += OnTapChanged;
+			TapGoldMultiplier.onModifiersChanged += OnTapChanged;
 
-			TapDamage.onChanged += onTapChanged;
-			TapDamage.onModifiersChanged += onTapChanged;
-			TapDamageMultiplier.onChanged += onTapChanged;
-			TapDamageMultiplier.onModifiersChanged += onTapChanged;
+			TapDamage.onChanged += OnTapChanged;
+			TapDamage.onModifiersChanged += OnTapChanged;
+			TapDamageMultiplier.onChanged += OnTapChanged;
+			TapDamageMultiplier.onModifiersChanged += OnTapChanged;
 		}
 
 		private void OnTapChanged()
@@ -48,31 +49,38 @@ namespace Game.Entities
 		}
 	}
 
-	public class Gold : Attribute
+	public class Gold : AtributeBFN
 	{
-		public Gold(float currentValue) : base(currentValue) { }
+		public Gold(BFN currentValue) : base(currentValue) { }
 	}
 
 	#region Tap
-	public class Taps : Attribute
+
+	/// <summary>
+	/// max value 2147483647
+	/// </summary>
+	public class Taps : Attribute<int>
 	{
-		public Taps(float currentValue) : base(currentValue) { }
+		public Taps(int currentValue) : base(currentValue) { }
 	}
-	public class TapDamage : AttributeModifiable
+	/// <summary>
+	/// max value 1E+9223372036854776115
+	/// </summary>
+	public class TapDamage : AttributeModifiableBFN
 	{
-		public TapDamage(float currentValue) : base(currentValue) { }
+		public TapDamage(BFN currentValue) : base(currentValue) { }
 	}
 
-	public class TapDamageMultiplier : AttributeModifiable
+	public class TapDamageMultiplier : AttributeModifiableFloat
 	{
 		public TapDamageMultiplier(float currentValue) : base(currentValue) { }
 	}
-	public class TapGold : AttributeModifiable
+	public class TapGold : AttributeModifiableBFN
 	{
-		public TapGold(float currentValue) : base(currentValue) { }
+		public TapGold(BFN currentValue) : base(currentValue) { }
 	}
 
-	public class TapGoldMultiplier : AttributeModifiable
+	public class TapGoldMultiplier : AttributeModifiableFloat
 	{
 		public TapGoldMultiplier(float currentValue) : base(currentValue) { }
 	}

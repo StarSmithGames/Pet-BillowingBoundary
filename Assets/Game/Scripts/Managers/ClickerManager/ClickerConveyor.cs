@@ -16,6 +16,7 @@ using Zenject;
 using Unity.VisualScripting;
 using Game.Managers.GameManager;
 using UnityEngine.Assertions;
+using Game.Systems.FloatingSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -25,7 +26,9 @@ namespace Game.Managers.ClickManager
 {
 	public class ClickerConveyor : MonoBehaviour
 	{
-		public ClickableObject CurrentClickableObject { get; private set; }
+		public Transform ClickableContent => clickableContent;
+		public Transform ClickableConveyor => clickableConveyor;
+
 		public ClickerHand CurrentLeftHand => clickerLeftHand;
 		public ClickerHand CurrentRightHand => clickerRightHand;
 
@@ -48,26 +51,18 @@ namespace Game.Managers.ClickManager
 		private GameManager.GameManager gameManager;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, Player player, GameManager.GameManager gameManager)
+		private void Construct(SignalBus signalBus,
+			Player player,
+			GameManager.GameManager gameManager)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
 			this.gameManager = gameManager;
 		}
 
-		private IEnumerator Start()
+		private void Start()
 		{
 			signalBus?.Subscribe<SignalTouchChanged>(OnTouchChanged);
-
-			for (int i = 0; i < clickableObjects.Count; i++)
-			{
-				clickableObjects[i].gameObject.SetActive(false);
-			}
-
-			SetClickableObject(clickableObjects.FirstOrDefault());
-			CurrentClickableObject.transform.position = settings.startPositions.RandomItem();
-			yield return new WaitForSeconds(1f);
-			TargetMoveIn();
 		}
 
 		private void OnDestroy()
@@ -75,69 +70,15 @@ namespace Game.Managers.ClickManager
 			signalBus?.Unsubscribe<SignalTouchChanged>(OnTouchChanged);
 		}
 
-		private void SetClickableObject(ClickableObject clickable)
+		public ClickableObject CreateTarget()
 		{
-			var lastTarget = CurrentClickableObject;
-
-			if (CurrentClickableObject != null)
-			{
-				CurrentClickableObject.onDead -= OnClickableObjectDead;
-				CurrentClickableObject.gameObject.SetActive(false);
-				CurrentClickableObject.transform.SetParent(clickableConveyor);
-				CurrentClickableObject.ResetFlip();
-			}
-
-			CurrentClickableObject = clickable;
-			Assert.IsTrue(CurrentClickableObject != null);
-			CurrentClickableObject.gameObject.SetActive(true);
-			signalBus?.Fire(new SignalTargetChanged() { clickable = CurrentClickableObject });
-
-			if (CurrentClickableObject != null)
-			{
-				currentIndex = clickableObjects.IndexOf(CurrentClickableObject);
-				CurrentClickableObject.onDead += OnClickableObjectDead;
-				CurrentClickableObject.transform.SetParent(clickableContent);
-			}
-
-			if(lastTarget != null)
-			{
-				lastTarget.Sheet.Refresh();
-			}
+			currentIndex = (currentIndex + 1) % clickableObjects.Count;
+			return clickableObjects[currentIndex];
 		}
 
-		[Button]
-		private void Next()
+		public Vector3 GetRandomStartPosition()
 		{
-			gameManager.ChangeState(GameState.None);
-
-			DG.Tweening.Sequence sequence = DOTween.Sequence();
-
-			sequence
-				.Append(CurrentClickableObject.Flip())
-				.Append(CurrentClickableObject.transform.DOMove(Vector3.left * 5f, 0.2f))
-				.OnComplete(() =>
-				{
-					currentIndex = (currentIndex + 1) % clickableObjects.Count;
-					SetClickableObject(clickableObjects[currentIndex]);
-					CurrentClickableObject.transform.position = settings.startPositions.RandomItem();
-					TargetMoveIn();
-				});
-		}
-
-		private void TargetMoveIn()
-		{
-			CurrentClickableObject.transform
-				.DOMove(Vector3.zero, 0.35f)
-				.SetEase(Ease.OutBounce)
-				.OnComplete(() =>
-				{
-					gameManager.ChangeState(GameState.Gameplay);
-				});
-		}
-
-		private void OnClickableObjectDead()
-		{
-			Next();
+			return settings.startPositions.RandomItem();
 		}
 
 		private void OnTouchChanged(SignalTouchChanged signal)

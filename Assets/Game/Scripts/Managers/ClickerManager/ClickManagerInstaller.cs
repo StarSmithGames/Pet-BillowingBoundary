@@ -12,6 +12,7 @@ namespace Game.Managers.ClickManager
 			Container.DeclareSignal<SignalTargetChanged>();
 
 			Container.BindInterfacesAndSelfTo<ClickHandler>().AsSingle().NonLazy();
+			Container.BindInterfacesAndSelfTo<TargetHandler>().AsSingle().NonLazy();
 		}
 	}
 
@@ -22,6 +23,6 @@ namespace Game.Managers.ClickManager
 
 	public struct SignalTargetChanged
 	{
-		public ClickableObject clickable;
+		public ClickableObject target;
 	}
 }

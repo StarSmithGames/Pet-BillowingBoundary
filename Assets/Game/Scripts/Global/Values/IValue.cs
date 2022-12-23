@@ -22,7 +22,7 @@ public interface IBounded<T>
 	T MaxValue { get; }
 }
 
-public interface IBar : IBounded<float>
+public interface IBar<T> : IBounded<T> where T : struct
 {
 	float PercentValue { get; }
 }

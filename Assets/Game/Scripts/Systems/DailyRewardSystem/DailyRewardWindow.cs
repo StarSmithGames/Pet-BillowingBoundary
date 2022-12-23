@@ -4,6 +4,7 @@ using Game.Entities;
 using Game.HUD;
 using Game.Managers.NetworkTimeManager;
 using Game.Managers.StorageManager;
+using Game.Systems.FloatingSystem;
 using Game.UI;
 
 using Sirenix.OdinInspector;
@@ -33,21 +34,21 @@ namespace Game.Systems.DailyRewardSystem
 		private ISaveLoad saveLoad;
 		private DailyRewardSystem dailyRewardSystem;
 		private NetworkTimeManager networkTimeManager;
-		private FloatingSystem.FloatingSystem floatingSystem;
+		private FloatingAwards floatingAwards;
 		private Player player;
 
 		[Inject]
 		private void Construct(UISubCanvas subCanvas, ISaveLoad saveLoad,
 			DailyRewardSystem dailyRewardSystem,
 			NetworkTimeManager networkTimeManager,
-			FloatingSystem.FloatingSystem floatingSystem,
+			FloatingAwards floatingAwards,
 			Player player)
 		{
 			this.subCanvas = subCanvas;
 			this.saveLoad = saveLoad;
 			this.dailyRewardSystem = dailyRewardSystem;
 			this.networkTimeManager = networkTimeManager;
-			this.floatingSystem = floatingSystem;
+			this.floatingAwards = floatingAwards;
 			this.player = player;
 		}
 
@@ -156,46 +157,10 @@ namespace Game.Systems.DailyRewardSystem
 			{
 				data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
 
-				StartCoroutine(Test((rewardItem.transform as RectTransform).position, UIGoldHUD.Instance.transform, 25, 100));
+				floatingAwards.StartAwardCoins(rewardItem.transform.position, 25, new BFN(100, 0));
 			}
 
 			Assert.IsTrue(data.currentDay == rewardItem.DayType);
-		}
-
-		//Count min 5
-		//Time required 0.05 * count
-		private IEnumerator Test(Vector3 startPosition, Transform target, int count, int coins)
-		{
-			var wait = new WaitForSeconds(0.05f);
-
-			for (int i = 0; i < 5; i++)
-			{
-				floatingSystem.CreateCoin2D(startPosition, target);
-
-				yield return wait;
-			}
-
-			count = count - 5;
-
-			StartCoroutine(IncreaseGold(coins, count * 0.05f));
-
-			for (int i = 0; i < count; i++)
-			{
-				floatingSystem.CreateCoin2D(startPosition, target);
-
-				yield return wait;
-			}
-		}
-
-		private IEnumerator IncreaseGold(int coins, float t)
-		{
-			var wait = new WaitForSeconds(t / coins);
-
-			for (int i = 0; i < coins; i++)
-			{
-				player.Gold.CurrentValue += 1;
-				yield return wait;
-			}
 		}
 
 		private void OnClosed()

@@ -1,5 +1,7 @@
 using Game.Entities;
 using Game.Systems.LocalizationSystem;
+using System;
+
 using Unity.VisualScripting;
 
 using UnityEngine;
@@ -27,7 +29,6 @@ namespace Game.Systems.MarketSystem
 		[field: Space]
 		[field: SerializeField] public GameObject Separator { get; private set; }
 
-		public BuyType BuyType { get; private set; }
 		public Bonus CurrentBonus { get; private set; }
 
 		private Information information;
@@ -51,6 +52,8 @@ namespace Game.Systems.MarketSystem
 			Get.Button.onClick.AddListener(OnBuyClick);
 			Upgrade.Button.onClick.AddListener(OnBuyClick);
 
+			player.Gold.onChanged += GoldCheck;
+
 			signalBus?.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
@@ -59,6 +62,11 @@ namespace Game.Systems.MarketSystem
 			Buy?.Button.onClick.RemoveAllListeners();
 			Get?.Button.onClick.RemoveAllListeners();
 			Upgrade?.Button.onClick.RemoveAllListeners();
+
+			if(player != null)
+			{
+				player.Gold.onChanged -= GoldCheck;
+			}
 
 			signalBus?.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
@@ -78,6 +86,7 @@ namespace Game.Systems.MarketSystem
 
 				information = bonus.BonusData.information;
 
+				//Icon
 				if (bonus.BonusData.isIconSimple)
 				{
 					IconSimple.Icon.sprite = information.portrait;
@@ -92,8 +101,7 @@ namespace Game.Systems.MarketSystem
 				IconFull.gameObject.SetActive(!bonus.BonusData.isIconSimple);
 
 				SetState(bonus.BuyType);
-				currentButton?.SetText(bonus.GetCost().ToString());
-
+				OnBonusChanged();
 				OnLocalizationChanged();
 			}
 			else
@@ -104,8 +112,6 @@ namespace Game.Systems.MarketSystem
 
 		private void SetState(BuyType type)
 		{
-			BuyType = type;
-
 			currentButton = null;
 
 			Buy.gameObject.SetActive(false);
@@ -144,12 +150,19 @@ namespace Game.Systems.MarketSystem
 			currentButton?.gameObject.SetActive(true);
 		}
 
+		private void GoldCheck()
+		{
+			if (CurrentBonus == null || currentButton == null) return;
+
+			var num = CurrentBonus.GetCost();
+			currentButton.Enable(player.Gold.CurrentValue >= num);
+		}
+
 		private void OnBonusChanged()
 		{
-			float num = CurrentBonus.GetCost();
-
+			var num = CurrentBonus.GetCost();
 			currentButton.Enable(player.Gold.CurrentValue >= num);
-			currentButton.SetText(string.Format((num < 1000) ? "{0:F3}" : "{0:0.00e0}", num));
+			currentButton.SetText(num.ToStringPritty());
 		}
 
 		private void OnBuyClick()
@@ -172,8 +185,8 @@ namespace Game.Systems.MarketSystem
 	{
 		None,
 
-		BUY,
-		GET,
+		BUY,//once
+		GET,//once
 		UPGADE,
 		LOCK,
 	}
