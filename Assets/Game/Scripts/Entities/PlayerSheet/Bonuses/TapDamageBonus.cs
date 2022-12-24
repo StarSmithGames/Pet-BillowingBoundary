@@ -49,7 +49,14 @@ public class TapDamageBonus : Bonus
 
 	protected override void UpdateCost()
 	{
-		currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+		if(Level == 0)
+		{
+			currentCost = new BFN(data.baseCost, 0).compressed;
+		}
+		else
+		{
+			currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+		}
 		base.UpdateCost();
 	}
 

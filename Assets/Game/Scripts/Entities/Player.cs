@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 
 namespace Game.Entities
 {
@@ -20,12 +21,13 @@ namespace Game.Entities
 		public TapGoldChance TapGoldChance { get; }
 
 		public BonusRegistrator BonusRegistrator { get; }
+		public SkillRegistrator SkillRegistrator { get; }
 
 		public Player()
 		{
 			PlayerSheet = new PlayerSheet();
 
-			Gold = new Gold(new BFN(1000, 0).compressed);
+			Gold = new Gold(new BFN(100000, 0).compressed);
 			TapGold = new TapGold(BFN.Zero);
 			TapGoldMultiplier = new TapGoldMultiplier(1f);
 			TapGoldChance = new TapGoldChance(0f);
@@ -36,6 +38,7 @@ namespace Game.Entities
 			TapCriticalChance = new TapCriticalChance(0f);
 
 			BonusRegistrator = new BonusRegistrator();
+			SkillRegistrator = new SkillRegistrator();
 
 			TapGold.onChanged += OnTapChanged;
 			TapGold.onModifiersChanged += OnTapChanged;
@@ -79,6 +82,40 @@ namespace Game.Entities
 		private void OnBonusRemoved(Bonus bonus)
 		{
 			bonus.onChanged -= OnBonusChanged;
+		}
+	}
+
+	public class SkillRegistrator : Registrator<ActiveSkill>
+	{
+		public event UnityAction<ActiveSkill> onSkillChanged;
+
+		public ActiveSkill CurrentSkill { get; private set; }
+
+		public SkillRegistrator()
+		{
+			onItemAdded += OnSkillAdded;
+			onItemRemoved += OnSkillRemoved;
+		}
+
+		public void SelectSkill(int selectedSkill)
+		{
+			CurrentSkill = registers[selectedSkill];
+			onSkillChanged?.Invoke(CurrentSkill);
+		}
+
+		private void OnSkillChanged(ActiveSkill skill)
+		{
+			onSkillChanged?.Invoke(skill);
+		}
+
+		private void OnSkillAdded(ActiveSkill skill)
+		{
+			skill.onChanged += OnSkillChanged;
+		}
+
+		private void OnSkillRemoved(ActiveSkill skill)
+		{
+			skill.onChanged -= OnSkillChanged;
 		}
 	}
 

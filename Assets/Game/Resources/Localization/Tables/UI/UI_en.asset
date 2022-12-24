@@ -80,6 +80,18 @@ MonoBehaviour:
     m_Localized: Increase the power of crititcal tap on x{0}.
     m_Metadata:
       m_Items: []
+  - m_Id: 784520761118720
+    m_Localized: All chances increase on <color=yellow>{0}%</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 784520790478848
+    m_Localized: Increase the skill duration on <color=purple>{0}s</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 784520790478849
+    m_Localized: Increase the power of skill tap on <color=red>x{0}</color>.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

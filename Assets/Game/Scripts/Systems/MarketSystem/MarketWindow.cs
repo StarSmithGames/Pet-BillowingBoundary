@@ -25,18 +25,20 @@ namespace Game.Systems.MarketSystem
 		[field: Space]
 		[field: SerializeField] public Transform ContentTop0 { get; private set; }
 		[field: SerializeField] public Transform ContentTop1 { get; private set; }
+		[field: Space]
+		[field: SerializeField] public UIMarkertSkill MarkertSkill { get; private set; }
 
-		private List<UIMarketItem> marketItems0 = new List<UIMarketItem>();
+		private List<UIMarketBonusItem> marketItems0 = new List<UIMarketBonusItem>();
 
 		private bool isOpenned = false;
 
 		private UISubCanvas subCanvas;
 		private Player player;
-		private UIMarketItem.Factory marketItemFactory;
+		private UIMarketBonusItem.Factory marketItemFactory;
 
 		[Inject]
 		private void Construct(UISubCanvas subCanvas, Player player,
-			UIMarketItem.Factory marketItemFactory)
+			UIMarketBonusItem.Factory marketItemFactory)
 		{
 			this.subCanvas = subCanvas;
 			this.player = player;
@@ -60,6 +62,8 @@ namespace Game.Systems.MarketSystem
 			{
 				OnBonusCollectionChanged();
 			}
+
+			MarkertSkill.onBuyClick += OnBuyClicked;
 		}
 
 		private void OnDestroy()
@@ -73,6 +77,8 @@ namespace Game.Systems.MarketSystem
 			{
 				player.BonusRegistrator.onCollectionChanged -= OnBonusCollectionChanged;
 			}
+
+			MarkertSkill.onBuyClick += OnBuyClicked;
 		}
 
 		public override void Show(UnityAction callback = null)
@@ -152,7 +158,20 @@ namespace Game.Systems.MarketSystem
 			Debug.LogError("OnBonusCollectionChanged");
 		}
 
-		private void OnBuyClicked(UIMarketItem marketItem)
+		private void OnBuyClicked(int skillPropertyIndex)
+		{
+			var property = MarkertSkill.CurrentSkill.GetProperty(skillPropertyIndex);
+
+			if (player.Gold.CurrentValue < property.cost)
+			{
+				return;
+			}
+
+			player.Gold.CurrentValue -= property.cost;
+			MarkertSkill.CurrentSkill.PurchaseProperty(skillPropertyIndex);
+		}
+
+		private void OnBuyClicked(UIMarketBonusItem marketItem)
 		{
 			if(player.Gold.CurrentValue < marketItem.CurrentBonus.GetCost())
 			{

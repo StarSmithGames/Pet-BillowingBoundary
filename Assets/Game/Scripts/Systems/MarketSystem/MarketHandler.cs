@@ -43,7 +43,12 @@ namespace Game.Systems.MarketSystem
 
 		public bool IsPlayerCanBuy(Bonus bonus)
 		{
-			return gold.CurrentValue >= bonus.GetCost();
+			return IsPlayerCanBuy(bonus.GetCost());
+		}
+
+		public bool IsPlayerCanBuy(BFN bfn)
+		{
+			return gold.CurrentValue >= bfn;
 		}
 
 		private void OnGoldChanged()

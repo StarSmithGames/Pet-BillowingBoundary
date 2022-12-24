@@ -13,9 +13,9 @@ using Zenject;
 
 namespace Game.Systems.MarketSystem
 {
-	public class UIMarketItem : PoolableObject
+	public class UIMarketBonusItem : PoolableObject
 	{
-		public UnityAction<UIMarketItem> onBuyClick;
+		public UnityAction<UIMarketBonusItem> onBuyClick;
 
 		[field: SerializeField] public TMPro.TextMeshProUGUI Title { get; private set; }
 		[field: SerializeField] public TMPro.TextMeshProUGUI Description { get; private set; }
@@ -194,7 +194,7 @@ namespace Game.Systems.MarketSystem
 			}
 		}
 
-		public class Factory : PlaceholderFactory<UIMarketItem> { }
+		public class Factory : PlaceholderFactory<UIMarketBonusItem> { }
 	}
 
 	public enum BuyType

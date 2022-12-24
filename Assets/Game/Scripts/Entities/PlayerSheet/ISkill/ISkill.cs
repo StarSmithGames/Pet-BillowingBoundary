@@ -1,6 +1,12 @@
+using Game.Systems.LocalizationSystem;
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+using Zenject;
 
 namespace Game.Entities
 {
@@ -16,14 +22,27 @@ namespace Game.Entities
 	}
     public abstract class ActiveSkill : MonoBehaviour, ISkill
 	{
+		public UnityAction<ActiveSkill> onChanged;
 		public abstract SkillData Data { get; }
 
 		public Cooldown Cooldown { get; private set; }
 		protected bool isHasCooldown = true;
 		protected bool isCooldown = false;
 
+		protected Player player;
+		protected LocalizationSystem localizationSystem;
+
+		[Inject]
+		private void Construct(Player player, LocalizationSystem localizationSystem)
+		{
+			this.player = player;
+			this.localizationSystem = localizationSystem;
+		}
+
 		protected virtual void Start()
 		{
+			player.SkillRegistrator.Registrate(this);
+
 			isHasCooldown = (Data as ActiveSkillData).limitations.isHasCooldown;
 			if (isHasCooldown)
 			{
@@ -49,9 +68,19 @@ namespace Game.Entities
 			}
 		}
 
+		public abstract void PurchaseProperty(int index);
+		public abstract SkillProperty GetProperty(int index);
+
 		protected virtual void ResetSkill()
 		{
 			isCooldown = false;
 		}
+	}
+
+	public struct SkillProperty
+	{
+		public int level;
+		public string text;
+		public BFN cost;
 	}
 }

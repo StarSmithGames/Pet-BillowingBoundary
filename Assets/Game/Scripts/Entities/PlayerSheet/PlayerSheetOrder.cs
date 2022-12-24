@@ -7,9 +7,10 @@ using UnityEngine;
 
 using Zenject;
 
-public class BonusesOrder : MonoBehaviour
+public class PlayerSheetOrder : MonoBehaviour
 {
     [SerializeField] private List<Bonus> bonuses = new List<Bonus>();
+    [SerializeField] private List<ActiveSkill> skills = new List<ActiveSkill>();
 
 	private Player player;
 
@@ -25,6 +26,12 @@ public class BonusesOrder : MonoBehaviour
 		{
 			player.BonusRegistrator.Registrate(bonuses[i]);
 		}
+
+		for (int i = 0; i < skills.Count; i++)
+		{
+			player.SkillRegistrator.Registrate(skills[i]);
+		}
+		player.SkillRegistrator.SelectSkill(0);
 	}
 
 	private void OnDestroy()
@@ -41,5 +48,6 @@ public class BonusesOrder : MonoBehaviour
     private void Fill()
     {
         bonuses = GetComponentsInChildren<Bonus>().ToList();
+		skills = GetComponentsInChildren<ActiveSkill>().ToList();
 	}
 }

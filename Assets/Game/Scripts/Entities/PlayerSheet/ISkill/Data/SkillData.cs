@@ -17,6 +17,10 @@ namespace Game.Entities
 
 	public abstract class ActiveSkillData : SkillData
 	{
+		public string propertyId0;
+		public string propertyId1;
+		public string propertyId2;
+		[Space]
 		public SkillLimitations limitations;
 	}
 

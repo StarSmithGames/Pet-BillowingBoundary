@@ -1014,7 +1014,7 @@ GameObject:
   - component: {fileID: 1050873381}
   - component: {fileID: 1050873382}
   m_Layer: 0
-  m_Name: BonusesSkills
+  m_Name: Sheet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1057,6 +1057,8 @@ MonoBehaviour:
   - {fileID: 343491473}
   - {fileID: 863447149}
   - {fileID: 97903733}
+  skills:
+  - {fileID: 1054268781}
 --- !u!1 &1054268779
 GameObject:
   m_ObjectHideFlags: 0
