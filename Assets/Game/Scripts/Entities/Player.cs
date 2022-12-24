@@ -11,7 +11,9 @@ namespace Game.Entities
 
 		public Taps Taps { get; }
 		public TapDamage TapDamage { get; }
-		public TapDamageMultiplier TapDamageMultiplier { get; }
+		public TapCriticalPower TapCriticalPower { get; }
+		public TapCriticalChance TapCriticalChance { get; }
+
 		public Gold Gold { get; }
 		public TapGold TapGold { get; }
 		public TapGoldMultiplier TapGoldMultiplier { get; }
@@ -26,14 +28,14 @@ namespace Game.Entities
 			Gold = new Gold(new BFN(1000, 0).compressed);
 			TapGold = new TapGold(BFN.Zero);
 			TapGoldMultiplier = new TapGoldMultiplier(1f);
+			TapGoldChance = new TapGoldChance(0f);
 
 			Taps = new Taps(0);
 			TapDamage = new TapDamage(BFN.One);
-			TapDamageMultiplier = new TapDamageMultiplier(1f);
-			TapGoldChance = new TapGoldChance(0f);
+			TapCriticalPower = new TapCriticalPower(1f);
+			TapCriticalChance = new TapCriticalChance(0f);
 
 			BonusRegistrator = new BonusRegistrator();
-			
 
 			TapGold.onChanged += OnTapChanged;
 			TapGold.onModifiersChanged += OnTapChanged;
@@ -44,8 +46,8 @@ namespace Game.Entities
 
 			TapDamage.onChanged += OnTapChanged;
 			TapDamage.onModifiersChanged += OnTapChanged;
-			TapDamageMultiplier.onChanged += OnTapChanged;
-			TapDamageMultiplier.onModifiersChanged += OnTapChanged;
+			TapCriticalPower.onChanged += OnTapChanged;
+			TapCriticalPower.onModifiersChanged += OnTapChanged;
 		}
 
 		private void OnTapChanged()
@@ -102,10 +104,16 @@ namespace Game.Entities
 		public TapDamage(BFN currentValue) : base(currentValue) { }
 	}
 
-	public class TapDamageMultiplier : AttributeModifiableFloat
+	public class TapCriticalPower : AttributeModifiableFloat
 	{
-		public TapDamageMultiplier(float currentValue) : base(currentValue) { }
+		public TapCriticalPower(float currentValue) : base(currentValue) { }
 	}
+
+	public class TapCriticalChance : AttributeModifiableFloat
+	{
+		public TapCriticalChance(float currentValue) : base(currentValue) { }
+	}
+
 	public class TapGold : AttributeModifiableBFN
 	{
 		public TapGold(BFN currentValue) : base(currentValue) { }

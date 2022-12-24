@@ -154,6 +154,7 @@ namespace Game.Managers.ClickManager
 					asyncManager.StartCoroutine(ReplaceTarget());
 
 					floatingSystem.CreateTextUI(UIGoldHUD.Instance.Count.transform.position, $"+{totalCoins.ToStringPritty()}", Color.green, AnimationType.AddGold);
+					UIGoldHUD.Instance.Punch();
 				});
 			}
 			Next();

@@ -12,7 +12,7 @@ public class TapDamageBonus : Bonus
 {
 	public override BonusData BonusData => data;
 	[SerializeField] private BonusData data;
-
+	public override bool IsUnknow { get; protected set; } = false;
 	public override int Level { get; protected set; } = 0;
 	public override BuyType BuyType { get; protected set; } = BuyType.UPGADE;
 

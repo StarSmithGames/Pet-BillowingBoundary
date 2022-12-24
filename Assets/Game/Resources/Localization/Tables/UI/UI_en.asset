@@ -38,6 +38,48 @@ MonoBehaviour:
     m_Localized: Claim
     m_Metadata:
       m_Items: []
+  - m_Id: 728845750177792
+    m_Localized: Muda Muda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149312
+    m_Localized: 'Tap Damage.
+
+      You deal this much damage every time you tap
+      on monster.
+
+      Get more Tap Damage by leveling up.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149313
+    m_Localized: Gold Chance!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149314
+    m_Localized: 'Increase the chance of a coin drop from one tap.
+
+      Chance
+      now {0}%.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604992
+    m_Localized: Critical Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604993
+    m_Localized: 'Increase the chance of a critical tap.
+
+      Chance now {0}%.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659200
+    m_Localized: Critical Power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659201
+    m_Localized: Increase the power of crititcal tap on x{0}.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

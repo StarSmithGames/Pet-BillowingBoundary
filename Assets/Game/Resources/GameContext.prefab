@@ -4440,6 +4440,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2001629181}
     m_Modifications:
+    - target: {fileID: 403474959925276170, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403474959925276170, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403474959925276170, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 403474959925276170, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 536890364255182490, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000030517578
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504689196858900989, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504689196858900989, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504689196858900989, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504689196858900989, guid: c60ec20754abe0e459e587af92d59999, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4513170821742545003, guid: c60ec20754abe0e459e587af92d59999, type: 3}
       propertyPath: m_Alpha
       value: 0
@@ -4688,6 +4724,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 802348910447680203}
     m_Modifications:
+    - target: {fileID: 4293809370578437991, guid: 754dfb584e8c6e940b24c696dab4cd45, type: 3}
+      propertyPath: punchSettings.duration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4293809370578437991, guid: 754dfb584e8c6e940b24c696dab4cd45, type: 3}
+      propertyPath: punchSettings.punch.punch.x
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4293809370578437991, guid: 754dfb584e8c6e940b24c696dab4cd45, type: 3}
+      propertyPath: punchSettings.punch.punch.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4293809370578437991, guid: 754dfb584e8c6e940b24c696dab4cd45, type: 3}
+      propertyPath: punchSettings.punch.isPunchRandom
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7122830928545170454, guid: 754dfb584e8c6e940b24c696dab4cd45, type: 3}
       propertyPath: m_Name
       value: Gold

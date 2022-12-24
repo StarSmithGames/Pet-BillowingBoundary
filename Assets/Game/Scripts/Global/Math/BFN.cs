@@ -135,7 +135,7 @@ public struct BFN
 	#endregion
 	#region public methods
 
-	public string ToStringPritty() => $"{Math.Round(coefficient, 3)}{GetExponentNamePritty()}";
+	public string ToStringPritty() => $"{(exponent > 0 ? Math.Round(coefficient, 3) : Math.Round(coefficient))}{GetExponentNamePritty()}";
 
 	public string ToStringPrecise() => $"{coefficient.ToString("G17")}e{exponent.ToString("G17")}";
 

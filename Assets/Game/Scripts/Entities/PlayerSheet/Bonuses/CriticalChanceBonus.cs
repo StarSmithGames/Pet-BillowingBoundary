@@ -1,14 +1,20 @@
 using Game.Entities;
 using Game.Systems.MarketSystem;
+
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
 
 using Zenject;
 
-public class GoldChanceBonus : Bonus
+public class CriticalChanceBonus : Bonus
 {
 	public override BonusData BonusData => data;
 	[SerializeField] private BonusData data;
+	[SerializeField] private CriticalPowerBonus criticalPowerBonus;
 
 	public override bool IsUnknow { get; protected set; } = false;
 	public override int Level { get; protected set; } = 0;
@@ -28,9 +34,10 @@ public class GoldChanceBonus : Bonus
 	{
 		tapModifier = new AddModifier(0f);
 
+
 		UpdateCost();
 
-		player.TapGoldChance.AddModifier(tapModifier);
+		player.TapCriticalChance.AddModifier(tapModifier);
 	}
 
 	public override string GetDescription()
@@ -40,9 +47,10 @@ public class GoldChanceBonus : Bonus
 
 	public override void Purchase()
 	{
-		if(BuyType == BuyType.GET)
+		if (BuyType == BuyType.GET)
 		{
 			BuyType = BuyType.UPGADE;
+			criticalPowerBonus.SetBuyType(BuyType.UPGADE);
 		}
 
 		Level++;
@@ -55,13 +63,13 @@ public class GoldChanceBonus : Bonus
 
 	protected override void UpdateCost()
 	{
-		if(BuyType == BuyType.GET)
+		if (BuyType == BuyType.GET)
 		{
 			currentCost = new BFN(data.baseCost, 0).compressed;
 		}
-		else if(BuyType == BuyType.UPGADE)
+		else if (BuyType == BuyType.UPGADE)
 		{
-			currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+			currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.15f, Level + 1))), 0).compressed;
 		}
 
 		base.UpdateCost();

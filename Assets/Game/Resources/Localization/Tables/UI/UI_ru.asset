@@ -27,11 +27,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 30908304920577
-    m_Localized: "\u0423\u043B\u0443\u0447\u0448\u0438\u0442\u044C"
+    m_Localized: Upgade
     m_Metadata:
       m_Items: []
   - m_Id: 30908304920578
-    m_Localized: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C"
+    m_Localized: Get
     m_Metadata:
       m_Items: []
   - m_Id: 30908309114880

@@ -1,6 +1,7 @@
 using DG.Tweening;
 
 using Game.Entities;
+using Game.HUD;
 using Game.Managers.GameManager;
 using Game.Systems.CameraSystem;
 using Game.Systems.FloatingSystem;
@@ -85,8 +86,6 @@ namespace Game.Managers.ClickManager
 				.OnComplete(() =>
 				{
 
-					hpClickable.CurrentValue -= damageForPunch;
-
 					//Coins
 					if (Random.value <= player.TapGoldChance.TotalValue)//isGoldChance
 					{
@@ -103,10 +102,26 @@ namespace Game.Managers.ClickManager
 
 							floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch}", color: Color.yellow, type: AnimationType.BasicDamage);
 							floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
+							UIGoldHUD.Instance.Punch();
 						}
 					}
 
-					floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{damageForPunch}", color: Color.red, type: AnimationType.BasicDamage);
+					//Damage
+					if(Random.value <= player.TapCriticalChance.TotalValue)//isCriticalChance
+					{
+						BFN totalGoldForPunch = damageForPunch * player.TapCriticalPower.TotalValue;
+
+						hpClickable.CurrentValue -= totalGoldForPunch;
+						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"CRIT", color: Color.red, type: AnimationType.BasicDamage);
+						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{totalGoldForPunch}", color: Color.red, type: AnimationType.AdvanceDamage);
+					}
+					else
+					{
+						hpClickable.CurrentValue -= damageForPunch;
+						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{damageForPunch}", color: Color.red, type: AnimationType.BasicDamage);
+					}
+
+					//Hit
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();
@@ -148,7 +163,7 @@ namespace Game.Managers.ClickManager
 		private void OnTapChanged()
 		{
 			goldForPunch = (settings.goldForPunch + player.TapGold.TotalValue) * player.TapGoldMultiplier.TotalValue;
-			damageForPunch = (settings.damageForPunch + player.TapDamage.TotalValue) * player.TapDamageMultiplier.TotalValue;
+			damageForPunch = (settings.damageForPunch + player.TapDamage.TotalValue);// * player.TapCriticalPower.TotalValue;
 		}
 
 		private void OnTargetChanged()

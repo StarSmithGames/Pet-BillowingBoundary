@@ -66,6 +66,8 @@ namespace Game.Systems.FloatingSystem
 
 				t += Time.deltaTime;
 
+				UIGoldHUD.Instance.Punch();
+
 				yield return null;
 			}
 		}

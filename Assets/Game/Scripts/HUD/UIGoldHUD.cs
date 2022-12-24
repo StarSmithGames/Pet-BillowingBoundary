@@ -1,3 +1,5 @@
+using DG.Tweening;
+
 using UnityEngine;
 
 namespace Game.HUD
@@ -17,5 +19,14 @@ namespace Game.HUD
 			}
 		}
 		private static UIGoldHUD instance;
+
+		[SerializeField] private Transform puncher;
+		[SerializeField] private PunchSettings punchSettings;
+
+		public void Punch()
+		{
+			puncher.DORewind();
+			puncher.DOPunchScale(punchSettings.GetPunch(), punchSettings.duration, punchSettings.vibrato, punchSettings.elasticity);
+		}
 	}
 }

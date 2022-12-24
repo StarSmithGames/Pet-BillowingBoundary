@@ -140,38 +140,37 @@ namespace Game.Managers.ClickManager
 			return particles.RandomItem();
 		}
 	}
+}
 
+[System.Serializable]
+public class PunchSettings
+{
+	public Punch punch;
+	public float duration = 0.25f;
+	public int vibrato = 10;
+	public float elasticity = 1f;
+
+	public Vector3 GetPunch()
+	{
+		if (punch.isPunchRandom)
+		{
+			return new Vector3(punch.randomXLimits.RandomBtw(), punch.randomYLimits.RandomBtw(), punch.randomZLimits.RandomBtw());
+		}
+
+		return punch.punch;
+	}
 
 	[System.Serializable]
-	public class PunchSettings
+	public class Punch
 	{
-		public Punch punch;
-		public float duration = 0.25f;
-		public int vibrato = 10;
-		public float elasticity = 1f;
-
-		public Vector3 GetPunch()
-		{
-			if (punch.isPunchRandom)
-			{
-				return new Vector3(punch.randomXLimits.RandomBtw(), punch.randomYLimits.RandomBtw(), punch.randomZLimits.RandomBtw());
-			}
-
-			return punch.punch;
-		}
-
-		[System.Serializable]
-		public class Punch
-		{
-			public bool isPunchRandom = false;
-			[HideIf("isPunchRandom")]
-			public Vector3 punch = Vector3.one;
-			[ShowIf("isPunchRandom")]
-			public Vector2 randomXLimits;
-			[ShowIf("isPunchRandom")]
-			public Vector2 randomYLimits;
-			[ShowIf("isPunchRandom")]
-			public Vector2 randomZLimits;
-		}
+		public bool isPunchRandom = false;
+		[HideIf("isPunchRandom")]
+		public Vector3 punch = Vector3.one;
+		[ShowIf("isPunchRandom")]
+		public Vector2 randomXLimits;
+		[ShowIf("isPunchRandom")]
+		public Vector2 randomYLimits;
+		[ShowIf("isPunchRandom")]
+		public Vector2 randomZLimits;
 	}
 }

@@ -23,29 +23,28 @@ namespace Game.Systems.MarketSystem
 		[field: SerializeField] public UIBuyButton Buy { get; private set; }
 		[field: SerializeField] public UIBuyButton Get { get; private set; }
 		[field: SerializeField] public UIBuyButton Upgrade { get; private set; }
+		[field: SerializeField] public UIBuyButton Lock { get; private set; }
 		[field: Space]
 		[field: SerializeField] public UIIcon IconSimple { get; private set; }
 		[field: SerializeField] public UIIcon IconFull { get; private set; }
+		[field: SerializeField] public UIIcon IconUnknow { get; private set; }
 		[field: Space]
 		[field: SerializeField] public GameObject Separator { get; private set; }
 
 		public Bonus CurrentBonus { get; private set; }
 
-		private Information information;
 		private UIBuyButton currentButton;
 
 		private SignalBus signalBus;
 		private Player player;
 		private MarketHandler marketHandler;
-		private LocalizationSystem.LocalizationSystem localizationSystem;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, Player player, MarketHandler marketHandler, LocalizationSystem.LocalizationSystem localizationSystem)
+		private void Construct(SignalBus signalBus, Player player, MarketHandler marketHandler)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
 			this.marketHandler = marketHandler;
-			this.localizationSystem = localizationSystem;
 		}
 
 		private void Start()
@@ -86,23 +85,6 @@ namespace Game.Systems.MarketSystem
 			{
 				CurrentBonus.onChanged += OnBonusChanged;
 
-				information = bonus.BonusData.information;
-
-				//Icon
-				if (bonus.BonusData.isIconSimple)
-				{
-					IconSimple.Icon.sprite = information.portrait;
-					IconSimple.Shadow.sprite = information.portrait;
-				}
-				else
-				{
-					IconFull.Icon.sprite = information.portrait;
-				}
-
-				IconSimple.gameObject.SetActive(bonus.BonusData.isIconSimple);
-				IconFull.gameObject.SetActive(!bonus.BonusData.isIconSimple);
-
-				SetState(bonus.BuyType);
 				OnBonusChanged(CurrentBonus);
 				OnLocalizationChanged();
 			}
@@ -119,6 +101,7 @@ namespace Game.Systems.MarketSystem
 			Buy.gameObject.SetActive(false);
 			Get.gameObject.SetActive(false);
 			Upgrade.gameObject.SetActive(false);
+			Lock.gameObject.SetActive(false);
 
 			switch (type)
 			{
@@ -139,12 +122,7 @@ namespace Game.Systems.MarketSystem
 				}
 				case BuyType.LOCK:
 				{
-					break;
-				}
-
-				default:
-				{
-
+					currentButton = Lock;
 					break;
 				}
 			}
@@ -161,9 +139,38 @@ namespace Game.Systems.MarketSystem
 
 		private void OnBonusChanged(Bonus bonus)
 		{
-			SetState(bonus.BuyType);
-			currentButton.Enable(marketHandler.IsPlayerCanBuy(bonus));
-			currentButton.SetText(bonus.GetCost().ToStringPritty());
+			//Icon
+			if (bonus.IsUnknow)
+			{
+				IconSimple.Enable(false);
+				IconFull.Enable(false);
+				IconUnknow.Enable(true);
+
+				SetState(BuyType.None);
+			}
+			else
+			{
+				if (bonus.BonusData.isIconSimple)
+				{
+					IconSimple.Icon.sprite = CurrentBonus.BonusData.information.portrait;
+					IconSimple.Shadow.sprite = IconSimple.Icon.sprite;
+				}
+				else
+				{
+					IconFull.Icon.sprite = CurrentBonus.BonusData.information.portrait;
+				}
+
+				IconSimple.Enable(bonus.BonusData.isIconSimple);
+				IconFull.Enable(!bonus.BonusData.isIconSimple);
+				IconUnknow.Enable(false);
+
+				SetState(bonus.BuyType);
+
+				currentButton.Enable(marketHandler.IsPlayerCanBuy(bonus));
+				currentButton.SetText(bonus.GetCost().ToStringPritty());
+			}
+
+			OnLocalizationChanged();
 		}
 
 		private void OnBuyClick()
@@ -175,8 +182,16 @@ namespace Game.Systems.MarketSystem
 		{
 			if (CurrentBonus == null) return;
 
-			Title.text = information.isNameId ? localizationSystem.Translate(information.name) : information.name;
-			Description.text = information.isDescriptionId ? localizationSystem.Translate(information.description) : information.description;
+			if (CurrentBonus.IsUnknow)
+			{
+				Title.text = CurrentBonus.GetName().ReplaceAllCharsOn('?');
+				Description.text = CurrentBonus.GetDescription().ReplaceAllCharsOn('?');
+			}
+			else
+			{
+				Title.text = CurrentBonus.GetName();
+				Description.text = CurrentBonus.GetDescription();
+			}
 		}
 
 		public class Factory : PlaceholderFactory<UIMarketItem> { }

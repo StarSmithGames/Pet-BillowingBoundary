@@ -35,26 +35,35 @@ public class Information
 
 	public bool IsHasPortrait => portrait != null;
 
+
+	public string GetName(LocalizationSystem localizationSystem)
+	{
+		return isNameId ? localizationSystem.Translate(name) : name;
+	}
+
+	public string GetDescription(LocalizationSystem localizationSystem)
+	{
+		return isDescriptionId ? localizationSystem.Translate(description) : description;
+	}
+
+#if UNITY_EDITOR
 	public virtual string GetName()
 	{
-#if UNITY_EDITOR
 		if (isNameId)
 		{
-			return (!name.IsEmpty() ? LocalizationSystem.TranslateStatic(name, LocalizationSystem.CurrentLocaleStatic) : "");
+			return (!name.IsEmpty() ? LocalizationSystem.TranslateStatic(name, LocalizationSystem.CurrentLocaleStatic) : "NULL Name");
 		}
-#endif
 		return name;
 	}
 	public virtual string GetDescription()
 	{
-#if UNITY_EDITOR
 		if (isNameId)
 		{
 			return (!description.IsEmpty() ? LocalizationSystem.TranslateStatic(description, LocalizationSystem.CurrentLocaleStatic) : "NULL Description");
 		}
-#endif
 		return description;
 	}
+#endif
 
 	private string NameLabel => isNameId ? "Name Id" : "Name";
 	private string DescriptionLabel => isDescriptionId ? "Description Id" : "Description";

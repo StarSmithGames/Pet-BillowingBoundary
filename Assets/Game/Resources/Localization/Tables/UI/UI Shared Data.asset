@@ -35,6 +35,38 @@ MonoBehaviour:
     m_Key: ui.button.claim
     m_Metadata:
       m_Items: []
+  - m_Id: 728845750177792
+    m_Key: ui.bonus.muda_muda.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149312
+    m_Key: ui.bonus.muda_muda.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149313
+    m_Key: ui.bonus.gold_chance.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149314
+    m_Key: ui.bonus.gold_chance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604992
+    m_Key: ui.bonus.critical_chance.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604993
+    m_Key: ui.bonus.critical_chance.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659200
+    m_Key: ui.bonus.critical_power.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659201
+    m_Key: ui.bonus.critical_power.description
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

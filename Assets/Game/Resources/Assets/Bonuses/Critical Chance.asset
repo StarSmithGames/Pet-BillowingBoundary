@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c6d434316233a142a79cb6217b7ab0d, type: 3}
-  m_Name: GoldChance
+  m_Name: Critical Chance
   m_EditorClassIdentifier: 
   information:
-    portrait: {fileID: 21300000, guid: 1bb377ed5b465aa47897e170ef0fa3a6, type: 3}
-    name: ui.bonus.gold_chance.title
+    portrait: {fileID: 21300000, guid: 228ae7fa2073e664290d8636f88672c2, type: 3}
+    name: ui.bonus.critical_chance.title
     isNameId: 1
-    description: ui.bonus.gold_chance.description
+    description: ui.bonus.critical_chance.description
     isDescriptionId: 1
   isIconSimple: 0
   baseCost: 150

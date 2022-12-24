@@ -7,5 +7,10 @@ namespace Game.Systems.MarketSystem
 	{
 		[field: SerializeField] public Image Icon { get; private set; }
 		[field: SerializeField] public Image Shadow { get; private set; }
+
+		public void Enable(bool trigger)
+		{
+			gameObject.SetActive(trigger);
+		}
 	}
 }

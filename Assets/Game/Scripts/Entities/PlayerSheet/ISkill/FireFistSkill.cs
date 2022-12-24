@@ -69,7 +69,7 @@ namespace Game.Entities
 			effect.Hide();
 
 			player.TapGoldMultiplier.RemoveModifier(x2Modifier);
-			player.TapDamageMultiplier.RemoveModifier(x2Modifier);
+			player.TapCriticalPower.RemoveModifier(x2Modifier);
 		}
 
 		private void OnStartRelease()
@@ -79,7 +79,7 @@ namespace Game.Entities
 			effect.Show();
 
 			player.TapGoldMultiplier.AddModifier(x2Modifier);
-			player.TapDamageMultiplier.AddModifier(x2Modifier);
+			player.TapCriticalPower.AddModifier(x2Modifier);
 		}
 
 		private void OnTapsChanged()

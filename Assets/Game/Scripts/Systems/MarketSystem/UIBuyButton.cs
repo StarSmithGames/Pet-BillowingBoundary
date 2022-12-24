@@ -21,6 +21,8 @@ namespace Game.Systems.MarketSystem
 
 		public void SetText(string text)
 		{
+			if (Text == null) return;
+
 			Text.text = text;
 		}
 	}

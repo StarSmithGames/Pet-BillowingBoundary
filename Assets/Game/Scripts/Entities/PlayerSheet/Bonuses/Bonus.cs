@@ -1,19 +1,41 @@
+using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 using System;
 
 using UnityEngine;
 using UnityEngine.Events;
 
+using Zenject;
+
 public abstract class Bonus : MonoBehaviour
 {
-	public event UnityAction<Bonus> onChanged;
+	public UnityAction<Bonus> onChanged;
 
 	public abstract BonusData BonusData { get; }
+	public abstract bool IsUnknow { get; protected set; }
 	public abstract int Level { get; protected set; }
 	public abstract BuyType BuyType { get; protected set; }
 
 	protected bool isInitialized = false;
 	protected BFN currentCost;
+
+	private LocalizationSystem localizationSystem;
+
+	[Inject]
+	private void Construct(LocalizationSystem localizationSystem)
+	{
+		this.localizationSystem = localizationSystem;
+	}
+
+	public virtual string GetName()
+	{
+		return BonusData.information.GetName(localizationSystem);
+	}
+
+	public virtual string GetDescription()
+	{
+		return BonusData.information.GetDescription(localizationSystem);
+	}
 
 	public virtual void Purchase()
 	{
