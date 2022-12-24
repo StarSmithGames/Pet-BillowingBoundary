@@ -20,7 +20,7 @@ namespace Game.Managers.ClickManager
 		public bool IsEnabled { get; private set; } = true;
 
 		public EnemyData Data => data;
-		[SerializeField] public EnemyData data;
+		[SerializeField] private EnemyData data;
 		[SerializeField] private PunchSettings smallPunch;
 		[Header("Vars")]
 		[ReadOnly]

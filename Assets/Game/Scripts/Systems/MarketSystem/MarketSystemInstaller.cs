@@ -11,6 +11,8 @@ namespace Game.Systems.MarketSystem
 
 		public override void InstallBindings()
 		{
+			Container.BindInterfacesAndSelfTo<MarketHandler>().AsSingle().NonLazy();
+
 			Container.BindFactory<UIMarketItem, UIMarketItem.Factory>();
 			Container
 				.BindFactory<UIMarketItem, UIMarketItem.Factory>()

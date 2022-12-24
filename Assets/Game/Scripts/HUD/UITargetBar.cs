@@ -9,6 +9,7 @@ namespace Game.HUD
 {
 	public class UITargetBar : MonoBehaviour
 	{
+		[field: SerializeField] public TMPro.TextMeshProUGUI TargetName { get; private set; }
 		[SerializeField] private UIAnimatedBar bar;
 
 		private HealthPointsBar hp;
@@ -50,6 +51,7 @@ namespace Game.HUD
 
 			if (targetHandler.CurrentTarget != null)
 			{
+				TargetName.text = targetHandler.CurrentTarget.Data.information.name;
 				hp = targetHandler.CurrentTarget.Sheet.HealthPointsBar;
 				hp.onChanged += OnTapCountBarChanged;
 				OnTapCountBarChanged();

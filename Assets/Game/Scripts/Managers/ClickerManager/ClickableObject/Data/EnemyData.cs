@@ -8,6 +8,8 @@ namespace Game.Managers.ClickManager
 	[CreateAssetMenu(fileName = "EnemyData", menuName = "Game/Enemy")]
 	public class EnemyData : ScriptableObject
 	{
+		public Information information;
+
 		public BFN baseHealthPoints;
 		[Space]
 		#region Coins After Defeat

@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1995ba4f9222243825ace9981da7fb, type: 3}
   m_Name: Pinata 1
   m_EditorClassIdentifier: 
+  information:
+    portrait: {fileID: 0}
+    name: Shpinata
+    isNameId: 0
+    description: 
+    isDescriptionId: 1
   baseHealthPoints:
-    coefficient: 10
+    coefficient: 50
     exponent: 0
   isHasCoinsAfterDefeat: 1
   baseCoinsAfterDefeat:

@@ -143,9 +143,9 @@ namespace Game.Managers.ClickManager
 
 		private void OnTargetDead()
 		{
-			if (CurrentTarget.data.isHasCoinsAfterDefeat)
+			if (CurrentTarget.Data.isHasCoinsAfterDefeat)
 			{
-				BFN totalCoins = CurrentTarget.data.GetCoinsAfterDefeat();
+				BFN totalCoins = CurrentTarget.Data.GetCoinsAfterDefeat();
 
 				awardCoinsCoroutine = floatingAwards.StartAwardCoins(Camera.main.WorldToScreenPoint(CurrentTarget.transform.position), 25, totalCoins,
 				() =>

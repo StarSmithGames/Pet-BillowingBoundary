@@ -1,3 +1,4 @@
+using Game.HUD;
 using Game.UI;
 
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace Game.Systems.AchievementSystem
 	public class UIAchievementButton : MonoBehaviour
 	{
 		[field: SerializeField] public Button Button { get; private set; }
+		[field: SerializeField] public UIAlert Alert { get; private set; }
+
 
 		private UISubCanvas subCanvas;
 

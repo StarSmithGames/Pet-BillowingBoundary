@@ -6,7 +6,8 @@ using UnityEngine.Events;
 public class Registrator<T>
 {
 	public event UnityAction onCollectionChanged;
-
+	public event UnityAction<T> onItemAdded;
+	public event UnityAction<T> onItemRemoved;
 
 	public List<T> registers;
 
@@ -21,6 +22,7 @@ public class Registrator<T>
 		{
 			registers.Add(register);
 
+			onItemAdded?.Invoke(register);
 			onCollectionChanged?.Invoke();
 
 			return true;
@@ -43,6 +45,7 @@ public class Registrator<T>
 		{
 			registers.Remove(register);
 
+			onItemRemoved?.Invoke(register);
 			onCollectionChanged?.Invoke();
 
 			return true;

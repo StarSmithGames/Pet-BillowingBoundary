@@ -92,9 +92,9 @@ namespace Game.Managers.ClickManager
 					{
 						BFN totalGoldForPunch = goldForPunch;
 
-						if (clickable.data.isHasCoinsOnPunch)
+						if (clickable.Data.isHasCoinsOnPunch)
 						{
-							totalGoldForPunch += clickable.data.GetCoinsOnPunch();
+							totalGoldForPunch += clickable.Data.GetCoinsOnPunch();
 						}
 
 						if (totalGoldForPunch != BFN.Zero)

@@ -1,3 +1,4 @@
+using Game.HUD;
 using Game.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ namespace Game.Systems.DailyRewardSystem
     public class UIDailyRewardButton : MonoBehaviour
     {
 		[field: SerializeField] public Button Button { get; private set; }
+		[field: SerializeField] public UIAlert Alert { get; private set; }
 
 		private UISubCanvas subCanvas;
 

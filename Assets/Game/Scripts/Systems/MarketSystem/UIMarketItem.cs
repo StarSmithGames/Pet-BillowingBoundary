@@ -36,13 +36,15 @@ namespace Game.Systems.MarketSystem
 
 		private SignalBus signalBus;
 		private Player player;
+		private MarketHandler marketHandler;
 		private LocalizationSystem.LocalizationSystem localizationSystem;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, Player player, LocalizationSystem.LocalizationSystem localizationSystem)
+		private void Construct(SignalBus signalBus, Player player, MarketHandler marketHandler, LocalizationSystem.LocalizationSystem localizationSystem)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
+			this.marketHandler = marketHandler;
 			this.localizationSystem = localizationSystem;
 		}
 
@@ -101,7 +103,7 @@ namespace Game.Systems.MarketSystem
 				IconFull.gameObject.SetActive(!bonus.BonusData.isIconSimple);
 
 				SetState(bonus.BuyType);
-				OnBonusChanged();
+				OnBonusChanged(CurrentBonus);
 				OnLocalizationChanged();
 			}
 			else
@@ -154,16 +156,14 @@ namespace Game.Systems.MarketSystem
 		{
 			if (CurrentBonus == null || currentButton == null) return;
 
-			var num = CurrentBonus.GetCost();
-			currentButton.Enable(player.Gold.CurrentValue >= num);
+			currentButton.Enable(marketHandler.IsPlayerCanBuy(CurrentBonus));
 		}
 
-		private void OnBonusChanged()
+		private void OnBonusChanged(Bonus bonus)
 		{
-			var num = CurrentBonus.GetCost();
-			SetState(CurrentBonus.BuyType);
-			currentButton.Enable(player.Gold.CurrentValue >= num);
-			currentButton.SetText(num.ToStringPritty());
+			SetState(bonus.BuyType);
+			currentButton.Enable(marketHandler.IsPlayerCanBuy(bonus));
+			currentButton.SetText(bonus.GetCost().ToStringPritty());
 		}
 
 		private void OnBuyClick()

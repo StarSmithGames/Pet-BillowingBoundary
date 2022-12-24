@@ -17,7 +17,7 @@ namespace Game.Entities
 		public TapGoldMultiplier TapGoldMultiplier { get; }
 		public TapGoldChance TapGoldChance { get; }
 
-		public Registrator<Bonus> BonusRegistrator { get; }
+		public BonusRegistrator BonusRegistrator { get; }
 
 		public Player()
 		{
@@ -32,7 +32,8 @@ namespace Game.Entities
 			TapDamageMultiplier = new TapDamageMultiplier(1f);
 			TapGoldChance = new TapGoldChance(0f);
 
-			BonusRegistrator = new Registrator<Bonus>();
+			BonusRegistrator = new BonusRegistrator();
+			
 
 			TapGold.onChanged += OnTapChanged;
 			TapGold.onModifiersChanged += OnTapChanged;
@@ -50,6 +51,32 @@ namespace Game.Entities
 		private void OnTapChanged()
 		{
 			onTapChanged?.Invoke();
+		}
+	}
+
+	public class BonusRegistrator : Registrator<Bonus>
+	{
+		public event UnityAction<Bonus> onBonusChanged;
+
+		public BonusRegistrator()
+		{
+			onItemAdded += OnBonusAdded;
+			onItemRemoved += OnBonusRemoved;
+		}
+
+		private void OnBonusChanged(Bonus bonus)
+		{
+			onBonusChanged?.Invoke(bonus);
+		}
+
+		private void OnBonusAdded(Bonus bonus)
+		{
+			bonus.onChanged += OnBonusChanged;
+		}
+
+		private void OnBonusRemoved(Bonus bonus)
+		{
+			bonus.onChanged -= OnBonusChanged;
 		}
 	}
 

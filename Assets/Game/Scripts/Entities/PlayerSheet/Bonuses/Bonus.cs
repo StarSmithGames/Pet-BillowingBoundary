@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public abstract class Bonus : MonoBehaviour
 {
-	public event UnityAction onChanged;
+	public event UnityAction<Bonus> onChanged;
 
 	public abstract BonusData BonusData { get; }
 	public abstract int Level { get; protected set; }
@@ -17,7 +17,7 @@ public abstract class Bonus : MonoBehaviour
 
 	public virtual void Purchase()
 	{
-		onChanged?.Invoke();
+		onChanged?.Invoke(this);
 	}
 
 	public BFN GetCost()

@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1995ba4f9222243825ace9981da7fb, type: 3}
   m_Name: Pinata
   m_EditorClassIdentifier: 
+  information:
+    portrait: {fileID: 0}
+    name: Pinata
+    isNameId: 0
+    description: 
+    isDescriptionId: 1
   baseHealthPoints:
     coefficient: 100
     exponent: 0

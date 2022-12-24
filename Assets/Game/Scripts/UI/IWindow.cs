@@ -17,7 +17,54 @@ namespace Game.UI
 		void Hide(UnityAction callback = null);
 	}
 
-	public abstract class WindowBase : MonoBehaviour, IWindow
+	public abstract class WindowBase : ShowHideFadeBehavior, IWindow { }
+
+	public abstract class WindowBasePoolable : WindowBase, IPoolable
+	{
+		public IMemoryPool Pool { get => pool; protected set => pool = value; }
+		private IMemoryPool pool;
+
+		public virtual void Hide(bool despawnIt = true, UnityAction callback = null)
+		{
+			Hide(() =>
+			{
+				callback?.Invoke();
+				if (despawnIt)
+				{
+					DespawnIt();
+				}
+			});
+		}
+
+		public void DespawnIt()
+		{
+			pool?.Despawn(this);
+		}
+
+		public virtual void OnSpawned(IMemoryPool pool)
+		{
+			this.pool = pool;
+		}
+
+		public virtual void OnDespawned()
+		{
+			pool = null;
+		}
+	}
+
+
+
+	public interface IShowable
+	{
+		bool IsShowing { get; }
+		bool IsInProcess { get; }
+
+		void Enable(bool trigger);
+		void Show(UnityAction callback = null);
+		void Hide(UnityAction callback = null);
+	}
+
+	public abstract class ShowHideFadeBehavior : MonoBehaviour, IShowable
 	{
 		public bool IsShowing { get; protected set; }
 		public bool IsInProcess { get; protected set; }
@@ -70,39 +117,6 @@ namespace Game.UI
 		private void OpenClose()
 		{
 			Enable(CanvasGroup.alpha == 0f ? true : false);
-		}
-	}
-
-	public abstract class WindowBasePoolable : WindowBase, IPoolable
-	{
-		public IMemoryPool Pool { get => pool; protected set => pool = value; }
-		private IMemoryPool pool;
-
-		public virtual void Hide(bool despawnIt = true, UnityAction callback = null)
-		{
-			Hide(() =>
-			{
-				callback?.Invoke();
-				if (despawnIt)
-				{
-					DespawnIt();
-				}
-			});
-		}
-
-		public void DespawnIt()
-		{
-			pool?.Despawn(this);
-		}
-
-		public virtual void OnSpawned(IMemoryPool pool)
-		{
-			this.pool = pool;
-		}
-
-		public virtual void OnDespawned()
-		{
-			pool = null;
 		}
 	}
 }
