@@ -13,6 +13,7 @@ namespace Game.Managers.ClickManager
 {
 	public abstract partial class ClickableObject : MonoBehaviour
 	{
+		public UnityAction onPunched;
 		public UnityAction onDead;
 
 		public bool IsInitialized { get; private set; } = false;
@@ -117,6 +118,7 @@ namespace Game.Managers.ClickManager
 		public void SmallPunch()
 		{
 			CustomPunch(smallPunch);
+			onPunched?.Invoke();
 		}
 
 		public Tween Flip()

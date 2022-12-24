@@ -13,14 +13,16 @@ using Zenject;
 
 namespace Game.Managers.ClickManager
 {
-	public class TargetHandler : IInitializable
+	public partial class TargetHandler : IInitializable
 	{
 		public ClickableObject CurrentTarget { get; private set; }
 		public ClickableObject LastClickableObject { get; private set; }
 
 		private Coroutine awardCoinsCoroutine = null;
+		private Coroutine targetIdleAnimation = null;
 
 		private SignalBus signalBus;
+		private TargetSettings targetSettings;
 		private ClickerConveyor conveyor;
 		private FloatingSystem floatingSystem;
 		private FloatingAwards floatingAwards;
@@ -28,6 +30,7 @@ namespace Game.Managers.ClickManager
 		private AsyncManager.AsyncManager asyncManager;
 
 		public TargetHandler(SignalBus signalBus,
+			TargetSettings targetSettings,
 			ClickerConveyor clickerConveyor,
 			FloatingSystem floatingSystem,
 			FloatingAwards floatingAwards,
@@ -35,6 +38,7 @@ namespace Game.Managers.ClickManager
 			AsyncManager.AsyncManager asyncManager)
 		{
 			this.signalBus = signalBus;
+			this.targetSettings = targetSettings;
 			this.conveyor = clickerConveyor;
 			this.floatingSystem = floatingSystem;
 			this.floatingAwards = floatingAwards;
@@ -52,6 +56,7 @@ namespace Game.Managers.ClickManager
 			SpawnTarget();
 			yield return new WaitForSeconds(1f);
 			MoveTargetIn().Play();
+			targetIdleAnimation = asyncManager.StartCoroutine(TargetIdleAnimatinPingPong());
 		}
 
 		private void SpawnTarget()
@@ -74,8 +79,9 @@ namespace Game.Managers.ClickManager
 				{
 					obj.Enable(true);
 				}
+				obj.onPunched += OnTargetPunched;
 				obj.onDead += OnTargetDead;
-				obj.transform.SetParent(conveyor.ClickableContent);
+				obj.transform.SetParent(conveyor.TargetContent);
 				obj.transform.position = conveyor.GetRandomStartPosition();
 				
 				return obj;
@@ -85,6 +91,7 @@ namespace Game.Managers.ClickManager
 			{
 				if (obj != null)
 				{
+					obj.onPunched -= OnTargetPunched;
 					obj.onDead -= OnTargetDead;
 					obj.Enable(false);
 					obj.transform.SetParent(conveyor.ClickableConveyor);
@@ -103,7 +110,7 @@ namespace Game.Managers.ClickManager
 		private Tween MoveTargetIn()
 		{
 			return CurrentTarget.transform
-				.DOMove(Vector3.zero, 0.35f)
+				.DOLocalMove(new Vector3(0, 1, 0), 0.35f)
 				.SetEase(Ease.OutBounce)
 				.OnComplete(() =>
 				{
@@ -151,5 +158,67 @@ namespace Game.Managers.ClickManager
 			}
 			Next();
 		}
+	}
+
+	public partial class TargetHandler
+	{
+		private bool resetIdleAnimation = false;
+
+		private IEnumerator TargetIdleAnimatinPingPong()
+		{
+			var targetContent = conveyor.TargetContent;
+
+			bool direction = true;
+			float t = 0;
+			var left = Quaternion.Euler(targetSettings.left);
+			var right = Quaternion.Euler(targetSettings.right);
+
+			while (true)
+			{
+				if (resetIdleAnimation)
+				{
+					t = 0.5f;
+					resetIdleAnimation = false;
+				}
+
+				targetContent.rotation = Quaternion.Lerp(left, right, targetSettings.curve.Evaluate(t));
+
+				if (direction)
+				{
+					t += Time.deltaTime * targetSettings.speed;
+				}
+				else
+				{
+					t -= Time.deltaTime * targetSettings.speed;
+				}
+
+				if (t >= 1)
+				{
+					direction = false;
+				}
+				else if( t <= 0)
+				{
+					direction = true;
+				}
+
+				yield return null;
+			}
+		}
+		
+		private void OnTargetPunched()
+		{
+			resetIdleAnimation = true;
+		}
+	}
+
+	[System.Serializable]
+	public class TargetSettings
+	{
+		[Min(0.01f)]
+		public float speed = 1f;
+		public AnimationCurve curve;
+
+		public Vector3 left = new Vector3(0, 0, -15);
+		public Vector3 right = new Vector3(0, 0, 15);
 	}
 }

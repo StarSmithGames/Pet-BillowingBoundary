@@ -154,8 +154,6 @@ namespace Game.Systems.FloatingSystem
 						.Append(floatingObject.transform.DOMove(position, 0.5f).SetEase(Ease.OutQuint))
 						.Append(floatingObject.Fade(0f, 0.7f))
 						.AppendCallback(floatingObject.DespawnIt);
-
-					Debug.LogError("HERER");
 					break;
 				}
 				default:

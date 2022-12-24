@@ -12,3 +12,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84575f5df380a8f46a336ba3fe4030dc, type: 3}
   m_Name: ClickManagerInstaller
   m_EditorClassIdentifier: 
+  targetSettings:
+    speed: 1.75
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1.8095714
+        outSlope: 1.8095714
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.25425434
+        value: 0.46009138
+        inSlope: -0.06289833
+        outSlope: -0.06289833
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.39774135
+        outWeight: 0.10210929
+      - serializedVersion: 3
+        time: 0.69219106
+        value: 0.5063448
+        inSlope: 0.9255847
+        outSlope: 0.9255847
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.12830935
+        outWeight: 0.24070902
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1.6037716
+        outSlope: 1.6037716
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    left: {x: 0, y: 0, z: -13}
+    right: {x: 0, y: 0, z: 13}

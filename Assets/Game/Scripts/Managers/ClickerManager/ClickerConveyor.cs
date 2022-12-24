@@ -1,22 +1,20 @@
 using DG.Tweening;
 
 using Game.Entities;
-using Game.Managers.ClickManager;
 
 using Sirenix.OdinInspector;
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
 
 using Zenject;
+
 using Unity.VisualScripting;
+
 using Game.Managers.GameManager;
-using UnityEngine.Assertions;
-using Game.Systems.FloatingSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -26,18 +24,18 @@ namespace Game.Managers.ClickManager
 {
 	public class ClickerConveyor : MonoBehaviour
 	{
-		public Transform ClickableContent => clickableContent;
+		public Transform TargetContent => targetContent;
 		public Transform ClickableConveyor => clickableConveyor;
 
-		public ClickerHand CurrentLeftHand => clickerLeftHand;
-		public ClickerHand CurrentRightHand => clickerRightHand;
+		public ClickerHand CurrentLeftHand => leftHand;
+		public ClickerHand CurrentRightHand => rightHand;
 
 		[Header("Components")]
-		[SerializeField] private Transform clickableContent;
+		[SerializeField] private Transform targetContent;
 		[SerializeField] private Transform clickableConveyor;
 		[Space]
-		[SerializeField] private ClickerHand clickerLeftHand;
-		[SerializeField] private ClickerHand clickerRightHand;
+		[SerializeField] private ClickerHand leftHand;
+		[SerializeField] private ClickerHand rightHand;
 		[Header("Vars")]
 		[OnValueChanged("Refresh", true)]
 		[SerializeField] private ConveyorSettings settings;
@@ -91,24 +89,24 @@ namespace Game.Managers.ClickManager
 			{
 				if (touch.phase == TouchPhase.Began)
 				{
-					clickerLeftHand.Punch();
+					leftHand.Punch();
 				}
 				else if (touch.phase == TouchPhase.Ended)
 				{
-					clickerLeftHand.Back();
-					clickerRightHand.Back();
+					leftHand.Back();
+					rightHand.Back();
 				}
 			}
 			else
 			{
 				if (touch.phase == TouchPhase.Began)
 				{
-					clickerRightHand.Punch();
+					rightHand.Punch();
 				}
 				else if (touch.phase == TouchPhase.Ended)
 				{
-					clickerLeftHand.Back();
-					clickerRightHand.Back();
+					leftHand.Back();
+					rightHand.Back();
 				}
 			}
 		}
@@ -117,10 +115,10 @@ namespace Game.Managers.ClickManager
 		[Button(DirtyOnClick = true)]
 		private void Refresh()
 		{
-			if (settings.nextEnemies.Count == 0 || clickableContent == null) return;
+			if (settings.nextEnemies.Count == 0 || targetContent == null) return;
 
 			clickableObjects.Clear();
-			clickableContent.DestroyChildren(true);
+			targetContent.DestroyChildren(true);
 			clickableConveyor.DestroyChildren(true);
 			for (int i = 0; i < settings.nextEnemies.Count; i++)
 			{
