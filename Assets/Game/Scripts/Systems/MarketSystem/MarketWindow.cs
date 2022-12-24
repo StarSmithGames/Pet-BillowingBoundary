@@ -12,20 +12,23 @@ using UnityEngine.UI;
 
 using Zenject;
 
-using static UnityEditor.Progress;
-
 namespace Game.Systems.MarketSystem
 {
 	public class MarketWindow : WindowBase
 	{
 		[field: SerializeField] public Button Blank { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
+		[field: Header("Components")]
 		[field: SerializeField] public RectTransform WindowUp { get; private set; }
 		[field: SerializeField] public RectTransform WindowDown { get; private set; }
 		[field: Space]
+		[field: SerializeField] public ScrollRect ScrollRectTop0 { get; private set; }
 		[field: SerializeField] public Transform ContentTop0 { get; private set; }
+		[field: SerializeField] public ScrollRect ScrollRectTop1 { get; private set; }
 		[field: SerializeField] public Transform ContentTop1 { get; private set; }
+		[field: SerializeField] public TabsSystem TabsSystemTop { get; private set; }
 		[field: Space]
+		[field: SerializeField] public TabsSystem TabsSystemBottom { get; private set; }
 		[field: SerializeField] public UIMarkertSkill MarkertSkill { get; private set; }
 
 		private List<UIMarketBonusItem> marketItems0 = new List<UIMarketBonusItem>();
@@ -184,7 +187,13 @@ namespace Game.Systems.MarketSystem
 
 		private void OnClosed()
 		{
-			Hide();
+			Hide(() =>
+			{
+				ScrollRectTop0.ScrollToTop();
+				ScrollRectTop1.ScrollToTop();
+				TabsSystemTop.SelectFirst();
+				TabsSystemBottom.SelectFirst();
+			});
 		}
 	}
 }

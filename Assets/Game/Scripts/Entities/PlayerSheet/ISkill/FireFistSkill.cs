@@ -1,11 +1,7 @@
 using Game.Managers.ClickManager;
-using Game.Systems.LocalizationSystem;
 using Game.UI;
-
 using System;
 using System.Collections.Generic;
-
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 using UnityEngine;
 

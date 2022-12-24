@@ -1417,8 +1417,12 @@ MonoBehaviour:
   <Close>k__BackingField: {fileID: 7554555059790166505}
   <WindowUp>k__BackingField: {fileID: 8403786614795843433}
   <WindowDown>k__BackingField: {fileID: 3753123139873288027}
+  <ScrollRectTop0>k__BackingField: {fileID: 802809763257596377}
   <ContentTop0>k__BackingField: {fileID: 2255816832382194580}
+  <ScrollRectTop1>k__BackingField: {fileID: 7156628046876638507}
   <ContentTop1>k__BackingField: {fileID: 536890364255182490}
+  <TabsSystemTop>k__BackingField: {fileID: 7504602317872287577}
+  <TabsSystemBottom>k__BackingField: {fileID: 2399908251963760920}
   <MarkertSkill>k__BackingField: {fileID: 339053663229806747}
 --- !u!1 &4698759269941841946
 GameObject:

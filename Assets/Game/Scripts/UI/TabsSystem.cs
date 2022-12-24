@@ -2,6 +2,8 @@ using Sirenix.OdinInspector;
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -52,6 +54,10 @@ namespace Game.UI
 			tabs[index].Enable(true);
 		}
 
+		public void SelectFirst()
+		{
+			OnTabClicked(tabs.First());
+		}
 
 		private void OnTabClicked(Tab tab)
 		{
