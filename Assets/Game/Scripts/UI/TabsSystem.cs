@@ -56,7 +56,8 @@ namespace Game.UI
 
 		public void SelectFirst()
 		{
-			OnTabClicked(tabs.First());
+			Open(0);
+			initIndex = 0;
 		}
 
 		private void OnTabClicked(Tab tab)

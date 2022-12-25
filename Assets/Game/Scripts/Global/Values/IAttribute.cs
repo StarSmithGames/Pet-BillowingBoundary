@@ -76,6 +76,8 @@ public abstract class AttributeModifiableFloat : Attribute<float>, IModifiable<A
 {
 	public event UnityAction onModifiersChanged;
 
+	public override string Output => $"{Math.Round(CurrentValue)}";
+
 	public virtual float TotalValue => (CurrentValue + ModifyAddValue) * (1f + (ModifyPercentValue / 100f));
 
 	public virtual float ModifyAddValue
@@ -207,6 +209,8 @@ public abstract class AttributeBFNBar : Attribute<BFN>, IBar<BFN>
 public abstract class AttributeModifiableBFN : Attribute<BFN>, IModifiable<AttributeModifierBFN, BFN>, IModifiablePercent
 {
 	public event UnityAction onModifiersChanged;
+
+	public override string Output => $"{TotalValue.ToStringPritty()}";
 
 	public virtual BFN TotalValue => (CurrentValue + ModifyAddValue) * (1f + (ModifyPercentValue / 100f));
 

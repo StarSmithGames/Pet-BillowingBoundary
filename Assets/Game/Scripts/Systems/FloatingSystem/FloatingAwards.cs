@@ -21,7 +21,6 @@ namespace Game.Systems.FloatingSystem
 			this.player = player;
 		}
 
-		///Count min 5
 		///Time required 0.05 * count
 		public Coroutine StartAwardCoins(Vector3 startPosition, int count, BFN addCoins, UnityAction callback = null)
 		{
@@ -31,19 +30,8 @@ namespace Game.Systems.FloatingSystem
 		
 		private IEnumerator Test(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
 		{
-			var wait = new WaitForSeconds(0.025f);
-
-			for (int i = 0; i < 5; i++)
-			{
-				floatingSystem.CreateCoin2D(startPosition, target);
-
-				yield return wait;
-			}
-
-			count = count - 5;
-
 			asyncManager.StartCoroutine(LerpGoldTo(player.Gold.CurrentValue + addCoins, count * 0.05f));
-
+			var wait = new WaitForSeconds(0.05f);
 			for (int i = 0; i < count; i++)
 			{
 				floatingSystem.CreateCoin2D(startPosition, target);
@@ -56,6 +44,8 @@ namespace Game.Systems.FloatingSystem
 
 		private IEnumerator LerpGoldTo(BFN end, float duration)
 		{
+			yield return new WaitForSeconds(Random.Range(0.15f, 0.25f));//Wait first floatingSystem.CreateCoin2D
+
 			var start = player.Gold.CurrentValue;
 
 			float t = 0;

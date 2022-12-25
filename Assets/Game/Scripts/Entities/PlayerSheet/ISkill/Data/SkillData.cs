@@ -9,18 +9,13 @@ namespace Game.Entities
 {
 	public abstract class SkillData : ScriptableObject
 	{
+		public Information information;
 	}
 
-	public abstract class PassiveSkillData : SkillData
-	{
-	}
+	public abstract class PassiveSkillData : SkillData { }
 
 	public abstract class ActiveSkillData : SkillData
 	{
-		public string propertyId0;
-		public string propertyId1;
-		public string propertyId2;
-		[Space]
 		public SkillLimitations limitations;
 	}
 

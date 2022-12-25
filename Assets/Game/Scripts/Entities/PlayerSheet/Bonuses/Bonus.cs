@@ -29,7 +29,7 @@ public abstract class Bonus : MonoBehaviour
 
 	public virtual string GetName()
 	{
-		return BonusData.information.GetName(localizationSystem);
+		return BonusData.information.GetName(localizationSystem) + $" <color=#00DF60FF>lvl {Level}</color>";
 	}
 
 	public virtual string GetDescription()

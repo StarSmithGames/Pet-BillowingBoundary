@@ -69,7 +69,7 @@ namespace Game.Systems.MarketSystem
 				player.Gold.onChanged -= GoldCheck;
 			}
 
-			signalBus?.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
+			signalBus?.TryUnsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
 		public void SetBonus(Bonus bonus)

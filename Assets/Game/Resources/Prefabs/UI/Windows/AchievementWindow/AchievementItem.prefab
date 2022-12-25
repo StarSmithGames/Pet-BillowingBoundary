@@ -69,8 +69,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Achievement Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: f65db542e6e8de84098596d93dd91f99, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4f361a3dccae2ba47b148ebbe7e48151, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 74104068661cc7d4294ab4c436749a73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

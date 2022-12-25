@@ -27,7 +27,7 @@ namespace Game.Entities
 		{
 			PlayerSheet = new PlayerSheet();
 
-			Gold = new Gold(new BFN(100000, 0).compressed);
+			Gold = new Gold(new BFN(1000000, 0).compressed);
 			TapGold = new TapGold(BFN.Zero);
 			TapGoldMultiplier = new TapGoldMultiplier(1f);
 			TapGoldChance = new TapGoldChance(0f);

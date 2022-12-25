@@ -95,7 +95,7 @@ namespace Game.Systems.FloatingSystem
 			var obj = Create();
 
 			sequence
-				.Append(obj.transform.DOMove(target.position, 0.25f))
+				.Append(obj.transform.DOMove(target.position, Random.Range(0.15f, 0.25f)))
 				.Append(obj.Fade(0, 0.1f))
 				.OnComplete(obj.DespawnIt);
 

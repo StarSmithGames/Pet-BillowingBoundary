@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c1490079afb5c429807a9e3a2fd8b8, type: 3}
   m_Name: FireFist
   m_EditorClassIdentifier: 
-  propertyId0: ui.skills.fire_fist.chance
-  propertyId1: ui.skills.fire_fist.duration
-  propertyId2: ui.skills.fire_fist.power
+  information:
+    portrait: {fileID: 21300000, guid: e14cee83027b31f4cb93f233b2735304, type: 3}
+    name: 
+    isNameId: 1
+    description: 
+    isDescriptionId: 1
   limitations:
     isHasCooldown: 0
     baseCooldown: 0
