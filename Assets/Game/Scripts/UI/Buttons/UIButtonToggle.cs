@@ -1,45 +1,25 @@
 using Sirenix.OdinInspector;
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game.UI
 {
-	public class UIButtonToggle : MonoBehaviour
+	public class UIButtonToggle : UIButton
 	{
-		public bool IsEnable { get; private set; } = true;
-
-		[field: SerializeField] public Button Button { get; private set; }
 		[field: SerializeField] public Image Image { get; private set; }
 		[field: SerializeField] public Image Shadow { get; private set; }
 		[SerializeField] private Sprite on;
 		[SerializeField] private Sprite off;
 
-		protected virtual void Start()
+		public override void Enable(bool trigger)
 		{
-			Button.onClick.AddListener(OnClick);
-		}
-
-		private void OnDestroy()
-		{
-			Button.onClick.RemoveAllListeners();
-		}
-
-		public void Enable(bool trigger)
-		{
-			IsEnable = trigger;
 			Image.sprite = IsEnable ? on : off;
 			if (Shadow != null)
 			{
 				Shadow.sprite = IsEnable ? on : off;
 			}
-		}
 
-		protected virtual void OnClick()
-		{
-			Enable(!IsEnable);
+			base.Enable(trigger);
 		}
 
 		[Button(DirtyOnClick = true)]
