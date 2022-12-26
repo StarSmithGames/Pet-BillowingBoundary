@@ -165,12 +165,12 @@ namespace Game.Systems.MarketSystem
 		{
 			var property = MarkertSkill.CurrentSkill.GetProperty(skillPropertyIndex);
 
-			if (player.Gold.CurrentValue < property.cost)
+			if (player.Gold.CurrentValue < property.GetCost())
 			{
 				return;
 			}
 
-			player.Gold.CurrentValue -= property.cost;
+			player.Gold.CurrentValue -= property.GetCost();
 			MarkertSkill.CurrentSkill.PurchaseProperty(skillPropertyIndex);
 		}
 

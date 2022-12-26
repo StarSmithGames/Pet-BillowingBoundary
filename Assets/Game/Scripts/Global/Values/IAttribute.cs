@@ -76,7 +76,7 @@ public abstract class AttributeModifiableFloat : Attribute<float>, IModifiable<A
 {
 	public event UnityAction onModifiersChanged;
 
-	public override string Output => $"{Math.Round(CurrentValue)}";
+	public override string Output => $"{TotalValue}";
 
 	public virtual float TotalValue => (CurrentValue + ModifyAddValue) * (1f + (ModifyPercentValue / 100f));
 

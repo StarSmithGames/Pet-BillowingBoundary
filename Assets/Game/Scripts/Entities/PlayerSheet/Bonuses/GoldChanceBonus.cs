@@ -35,7 +35,7 @@ public class GoldChanceBonus : Bonus
 
 	public override string GetDescription()
 	{
-		return string.Format(base.GetDescription(), tapModifier.CurrentValue * 100f);
+		return string.Format(base.GetDescription(), Math.Round(tapModifier.CurrentValue * 100f));
 	}
 
 	public override void Purchase()

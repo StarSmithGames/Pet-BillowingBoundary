@@ -39,12 +39,14 @@ public class CriticalPowerBonus : Bonus
 	{
 		BuyType = buyType;
 
+		tapModifier.SetValue(0.01f);//1% by level
+
 		onChanged?.Invoke(this);
 	}
 
 	public override string GetDescription()
 	{
-		return string.Format(base.GetDescription(), player.TapCriticalPower.TotalValue);
+		return string.Format(base.GetDescription(), Math.Round(player.TapCriticalPower.TotalValue, 2));
 	}
 
 	public override void Purchase()
@@ -56,7 +58,7 @@ public class CriticalPowerBonus : Bonus
 		}
 
 		Level++;
-		tapModifier.SetValue(0.01f * Level);//1% by level
+		tapModifier.SetValue(0.01f * (Level + 1));//1% by level
 
 		UpdateCost();
 

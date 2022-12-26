@@ -1,4 +1,5 @@
 using Game.Entities;
+using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,11 +13,13 @@ public class UISkillProperty : MonoBehaviour
 	[field: SerializeField] public TMPro.TextMeshProUGUI Title { get; private set; }
 	[field: SerializeField] public UIBuyButton BuyButton { get; private set; }
 
+	private LocalizationSystem localizationSystem;
 	private MarketHandler marketHandler;
 
 	[Inject]
-	private void Construct(MarketHandler marketHandler)
+	private void Construct(LocalizationSystem localizationSystem, MarketHandler marketHandler)
 	{
+		this.localizationSystem = localizationSystem;
 		this.marketHandler = marketHandler;
 	}
 
@@ -27,9 +30,9 @@ public class UISkillProperty : MonoBehaviour
 
 	public void SetProperty(SkillProperty property)
 	{
-		Title.text = property.text;
-		BuyButton.Enable(marketHandler.IsPlayerCanBuy(property.cost));
-		BuyButton.SetText(property.cost.ToStringPritty());
+		Title.text = property.GetOutput(localizationSystem);
+		BuyButton.Enable(marketHandler.IsPlayerCanBuy(property.GetCost()));
+		BuyButton.SetText(property.GetCost().ToStringPritty());
 	}
 
 	private void OnBuyClick()

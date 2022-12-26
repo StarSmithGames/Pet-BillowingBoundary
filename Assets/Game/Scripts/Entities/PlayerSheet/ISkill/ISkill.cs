@@ -76,11 +76,4 @@ namespace Game.Entities
 			isCooldown = false;
 		}
 	}
-
-	public struct SkillProperty
-	{
-		public int level;
-		public string text;
-		public BFN cost;
-	}
 }

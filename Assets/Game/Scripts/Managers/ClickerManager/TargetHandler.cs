@@ -82,6 +82,7 @@ namespace Game.Managers.ClickManager
 				obj.onPunched += OnTargetPunched;
 				obj.onDead += OnTargetDead;
 				obj.transform.SetParent(conveyor.TargetContent);
+				obj.transform.localScale = Vector3.one;
 				obj.transform.position = conveyor.GetRandomStartPosition();
 				
 				return obj;
@@ -95,6 +96,7 @@ namespace Game.Managers.ClickManager
 					obj.onDead -= OnTargetDead;
 					obj.Enable(false);
 					obj.transform.SetParent(conveyor.ClickableConveyor);
+					obj.transform.localScale = Vector3.one;
 					obj.Refresh();
 				}
 			}

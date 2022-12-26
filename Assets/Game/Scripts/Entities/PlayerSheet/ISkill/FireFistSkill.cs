@@ -1,4 +1,5 @@
 using Game.Managers.ClickManager;
+using Game.Systems.LocalizationSystem;
 using Game.UI;
 using System;
 using System.Collections.Generic;
@@ -38,10 +39,8 @@ namespace Game.Entities
 		{
 			base.Start();
 
-			if (!isInitialized)
-			{
-				Initialization();
-			}
+			Init();
+
 			x2Modifier = new PercentModifier(100f);//Add 100% == x2
 
 			tapBar = player.PlayerSheet.TapBar;
@@ -72,66 +71,33 @@ namespace Game.Entities
 			}
 		}
 
-		public void Initialization()
-		{
-			Chance = new FireFistChanceProperty(0f);
-			Duration = new FireFistDurationProperty(data.releaseDuration);
-			Power = new FireFistPowerProperty(2f);
-			isInitialized = true;
-		}
-
 		public override SkillProperty GetProperty(int index)
 		{
-			RefreshProperties();
+			Init();
+
 			return properties[index];
 		}
 
 		public override void PurchaseProperty(int index)
 		{
-			if (index == 0)
-			{
-				Chance.LevelUp();
-			}
-			else if(index == 1)
-			{
-				Duration.LevelUp();
-			}
-			else if (index == 2)
-			{
-				Power.LevelUp();
-			}
-
-			RefreshProperties();
-
+			properties[index].LevelUp();
 			onChanged?.Invoke(this);
 		}
 
-		private void RefreshProperties()
+		private void Init()
 		{
 			if (!isInitialized)
 			{
-				Initialization();
-			}
+				Chance = new FireFistChanceProperty(0f);
+				Duration = new FireFistDurationProperty(data.releaseDuration);
+				Power = new FireFistPowerProperty(2f);
 
-			properties.Clear();
-			properties.Add(new SkillProperty()
-			{
-				level = Chance.Level,
-				text = string.Format(localizationSystem.Translate(Chance.LocalizationKey), Chance.TotalValue * 100),
-				cost = Chance.GetCost(),
-			});
-			properties.Add(new SkillProperty()
-			{
-				level = Duration.Level,
-				text = string.Format(localizationSystem.Translate(Duration.LocalizationKey), Duration.TotalValue),
-				cost = Duration.GetCost(),
-			});
-			properties.Add(new SkillProperty()
-			{
-				level = Power.Level,
-				text = string.Format(localizationSystem.Translate(Power.LocalizationKey), Power.TotalValue),
-				cost = Power.GetCost(),
-			});
+				properties.Add(Chance);
+				properties.Add(Duration);
+				properties.Add(Power);
+
+				isInitialized = true;
+			}
 		}
 
 		private void OnStartAccumulation()
@@ -171,63 +137,100 @@ namespace Game.Entities
 		}
 	}
 
-	public class FireFistChanceProperty : AttributeModifiableFloat
+
+	public abstract class SkillProperty : AttributeModifiableFloat
 	{
 		public int Level { get; private set; } = 0;
 
+		protected bool isInitialized = false;
+		protected BFN currentCost;
+
+		public SkillProperty(float value) : base(value) { }
+
+		public virtual void LevelUp()
+		{
+			Level++;
+
+			currentCost = Formule();
+		}
+
+		public virtual string GetOutput(LocalizationSystem localizationSystem)
+		{
+			return localizationSystem.Translate(LocalizationKey);
+		}
+
+		public BFN GetCost()
+		{
+			if (!isInitialized)
+			{
+				currentCost = Formule();
+				isInitialized = true;
+			}
+
+			return currentCost;
+		}
+
+		protected abstract BFN Formule();
+	}
+
+
+	public class FireFistChanceProperty : SkillProperty
+	{
 		public override string LocalizationKey => "ui.skills.fire_fist.chance";
 
 		public FireFistChanceProperty(float value) : base(value) { }
 
-		public void LevelUp()
+		public override void LevelUp()
 		{
-			Level++;
+			base.LevelUp();
 			CurrentValue += 0.01f;
 		}
 
-		public BFN GetCost()
+		public override string GetOutput(LocalizationSystem localizationSystem)
 		{
-			return Level == 0 ? new BFN(200, 0) : new BFN(Math.Ceiling(200 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+			return string.Format(base.GetOutput(localizationSystem), Math.Round(TotalValue * 100f));
 		}
+
+		protected override BFN Formule() => Level == 0 ? new BFN(200, 0) : new BFN(Math.Ceiling(200 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
 	}
 
-	public class FireFistDurationProperty : AttributeModifiableFloat
+	public class FireFistDurationProperty : SkillProperty
 	{
-		public int Level { get; private set; } = 0;
-
 		public override string LocalizationKey => "ui.skills.fire_fist.duration";
 
 		public FireFistDurationProperty(float value) : base(value) { }
 
-		public void LevelUp()
+		public override void LevelUp()
 		{
-			Level++;
+			base.LevelUp();
 			CurrentValue += 0.5f;
 		}
 
-		public BFN GetCost()
+		public override string GetOutput(LocalizationSystem localizationSystem)
 		{
-			return Level == 0 ? new BFN(300, 0) : new BFN(Math.Ceiling(300 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+			return string.Format(base.GetOutput(localizationSystem), Math.Round(TotalValue, 2));
 		}
+
+		protected override BFN Formule() => Level == 0 ? new BFN(300, 0) : new BFN(Math.Ceiling(300 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
 	}
 
-	public class FireFistPowerProperty : AttributeModifiableFloat
+	public class FireFistPowerProperty : SkillProperty
 	{
-		public int Level { get; private set; } = 0;
-
 		public override string LocalizationKey => "ui.skills.fire_fist.power";
 
 		public FireFistPowerProperty(float value) : base(value) { }
 
-		public void LevelUp()
+		public override void LevelUp()
 		{
-			Level++;
+			base.LevelUp();
 			CurrentValue += 0.01f;
 		}
 
-		public BFN GetCost()
+		public override string GetOutput(LocalizationSystem localizationSystem)
 		{
-			return Level == 0 ? new BFN(450, 0) : new BFN(Math.Ceiling(450 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+			return string.Format(base.GetOutput(localizationSystem), Output);
 		}
+
+		protected override BFN Formule() => Level == 0 ? new BFN(450, 0) : new BFN(Math.Ceiling(450 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
 	}
 }
