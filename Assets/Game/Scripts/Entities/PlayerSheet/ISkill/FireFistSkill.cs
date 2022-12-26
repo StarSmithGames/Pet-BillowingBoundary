@@ -25,7 +25,6 @@ namespace Game.Entities
 		private float t = 0;
 
 		private List<SkillProperty> properties = new List<SkillProperty>();
-		private PercentModifier x2Modifier;
 
 		private ClickerConveyor conveyor;
 
@@ -40,8 +39,6 @@ namespace Game.Entities
 			base.Start();
 
 			Init();
-
-			x2Modifier = new PercentModifier(100f);//Add 100% == x2
 
 			tapBar = player.PlayerSheet.TapBar;
 			tapBar.Resize(0, 0, 100);//100 hits
@@ -60,7 +57,7 @@ namespace Game.Entities
 			if (tapBar.TapPhase == TapPhase.Release)
 			{
 				t += Time.deltaTime;
-				tapBar.CurrentValue = Mathf.Lerp(tapBar.MinValue, tapBar.MaxValue, 1f - (t / data.releaseDuration));
+				tapBar.CurrentValue = Mathf.Lerp(tapBar.MinValue, tapBar.MaxValue, 1f - (t / Duration.TotalValue));
 
 				if (tapBar.CurrentValue == 0)
 				{
@@ -81,6 +78,7 @@ namespace Game.Entities
 		public override void PurchaseProperty(int index)
 		{
 			properties[index].LevelUp();
+
 			onChanged?.Invoke(this);
 		}
 
@@ -90,7 +88,7 @@ namespace Game.Entities
 			{
 				Chance = new FireFistChanceProperty(0f);
 				Duration = new FireFistDurationProperty(data.releaseDuration);
-				Power = new FireFistPowerProperty(2f);
+				Power = new FireFistPowerProperty(1f);//100% x2
 
 				properties.Add(Chance);
 				properties.Add(Duration);
@@ -106,8 +104,12 @@ namespace Game.Entities
 			conveyor.CurrentRightHand.EnableFireFist(false);
 			effect.Hide();
 
-			player.TapGoldMultiplier.RemoveModifier(x2Modifier);
-			player.TapCriticalPower.RemoveModifier(x2Modifier);
+			player.TapGoldMultiplier.RemoveModifier(Power.XModifier);
+			player.TapCriticalPower.RemoveModifier(Power.XModifier);
+			player.TapDamage.RemoveModifier(Power.XModifier);
+
+			player.TapGoldChance.RemoveModifier(Chance.XModifier);
+			player.TapCriticalChance.RemoveModifier(Chance.XModifier);
 		}
 
 		private void OnStartRelease()
@@ -116,8 +118,12 @@ namespace Game.Entities
 			conveyor.CurrentRightHand.EnableFireFist(true);
 			effect.Show();
 
-			player.TapGoldMultiplier.AddModifier(x2Modifier);
-			player.TapCriticalPower.AddModifier(x2Modifier);
+			player.TapGoldMultiplier.AddModifier(Power.XModifier);
+			player.TapCriticalPower.AddModifier(Power.XModifier);
+			player.TapDamage.AddModifier(Power.XModifier);
+
+			player.TapGoldChance.AddModifier(Chance.XModifier);
+			player.TapCriticalChance.AddModifier(Chance.XModifier);
 		}
 
 		private void OnTapsChanged()
@@ -137,53 +143,32 @@ namespace Game.Entities
 		}
 	}
 
-
-	public abstract class SkillProperty : AttributeModifiableFloat
-	{
-		public int Level { get; private set; } = 0;
-
-		protected bool isInitialized = false;
-		protected BFN currentCost;
-
-		public SkillProperty(float value) : base(value) { }
-
-		public virtual void LevelUp()
-		{
-			Level++;
-
-			currentCost = Formule();
-		}
-
-		public virtual string GetOutput(LocalizationSystem localizationSystem)
-		{
-			return localizationSystem.Translate(LocalizationKey);
-		}
-
-		public BFN GetCost()
-		{
-			if (!isInitialized)
-			{
-				currentCost = Formule();
-				isInitialized = true;
-			}
-
-			return currentCost;
-		}
-
-		protected abstract BFN Formule();
-	}
-
-
 	public class FireFistChanceProperty : SkillProperty
 	{
 		public override string LocalizationKey => "ui.skills.fire_fist.chance";
+
+		public PercentModifier XModifier
+		{
+			get
+			{
+				if (xModifier == null)
+				{
+					xModifier = new PercentModifier(TotalValue * 100f);
+				}
+
+				return xModifier;
+			}
+		}
+		private PercentModifier xModifier;
 
 		public FireFistChanceProperty(float value) : base(value) { }
 
 		public override void LevelUp()
 		{
-			base.LevelUp();
 			CurrentValue += 0.01f;
+			base.LevelUp();
+
+			XModifier.SetValue(TotalValue * 100f);//xTotalValue
 		}
 
 		public override string GetOutput(LocalizationSystem localizationSystem)
@@ -202,8 +187,8 @@ namespace Game.Entities
 
 		public override void LevelUp()
 		{
-			base.LevelUp();
 			CurrentValue += 0.5f;
+			base.LevelUp();
 		}
 
 		public override string GetOutput(LocalizationSystem localizationSystem)
@@ -218,17 +203,33 @@ namespace Game.Entities
 	{
 		public override string LocalizationKey => "ui.skills.fire_fist.power";
 
+		public PercentModifier XModifier
+		{
+			get
+			{
+				if(xModifier == null)
+				{
+					xModifier = new PercentModifier(TotalValue * 100f);
+				}
+
+				return xModifier;
+			}
+		}
+		private PercentModifier xModifier;
+
 		public FireFistPowerProperty(float value) : base(value) { }
 
 		public override void LevelUp()
 		{
-			base.LevelUp();
 			CurrentValue += 0.01f;
+			base.LevelUp();
+
+			XModifier.SetValue(TotalValue * 100f);
 		}
 
 		public override string GetOutput(LocalizationSystem localizationSystem)
 		{
-			return string.Format(base.GetOutput(localizationSystem), Output);
+			return string.Format(base.GetOutput(localizationSystem), Math.Round(TotalValue + 1f, 2));
 		}
 
 		protected override BFN Formule() => Level == 0 ? new BFN(450, 0) : new BFN(Math.Ceiling(450 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;

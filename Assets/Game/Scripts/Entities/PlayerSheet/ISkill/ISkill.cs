@@ -1,8 +1,4 @@
 using Game.Systems.LocalizationSystem;
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -75,5 +71,45 @@ namespace Game.Entities
 		{
 			isCooldown = false;
 		}
+	}
+
+	public abstract class SkillProperty : AttributeModifiableFloat
+	{
+		public override float TotalValue => cachedTotalValue;
+
+		public int Level { get; private set; } = 0;
+
+		protected bool isInitialized = false;
+		protected BFN currentCost;
+		private float cachedTotalValue;
+
+		public SkillProperty(float value) : base(value) { }
+
+		public virtual void LevelUp()
+		{
+			Level++;
+
+			currentCost = Formule();
+			cachedTotalValue = base.TotalValue;
+		}
+
+		public virtual string GetOutput(LocalizationSystem localizationSystem)
+		{
+			return localizationSystem.Translate(LocalizationKey);
+		}
+
+		public BFN GetCost()
+		{
+			if (!isInitialized)
+			{
+				currentCost = Formule();
+				cachedTotalValue = base.TotalValue;
+				isInitialized = true;
+			}
+
+			return currentCost;
+		}
+
+		protected abstract BFN Formule();
 	}
 }
