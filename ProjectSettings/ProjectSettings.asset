@@ -251,7 +251,7 @@ PlayerSettings:
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: C:/UnityProjects/Pets/Pet-BillowingBondary-Data/user.keystore
-  AndroidKeyaliasName: muda muda destroyer
+  AndroidKeyaliasName: muda muda - tap clicker
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
