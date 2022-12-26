@@ -1,30 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AdSystem : MonoBehaviour
+using Zenject;
+
+namespace Game.Systems.AdSystem
 {
-	private IEnumerator Start()
+	public class AdSystem
 	{
-		IronSource.Agent.validateIntegration();
-		IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
-		IronSource.Agent.init("17f0b51a5", IronSourceAdUnits.REWARDED_VIDEO, IronSourceAdUnits.INTERSTITIAL, IronSourceAdUnits.BANNER);
+		public AdBanner AdBanner { get; private set; }
+		public AdInterstitial AdInterstitial { get; private set; }
+		public AdRewarded AdRewarded { get; private set; }
 
-		yield return new WaitForSeconds(1f);
-		IronSource.Agent.loadInterstitial();
-		IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
-		yield return new WaitForSeconds(1f);
-		IronSource.Agent.displayBanner();
-	}
+		public AdSystem(string appId, AdBanner adBanner, AdInterstitial adInterstitial, AdRewarded adRewarded)
+		{
+			AdBanner = adBanner;
+			AdInterstitial = adInterstitial;
+			AdRewarded = adRewarded;
 
-	public void ShowInterstitial()
-	{
-		IronSource.Agent.showInterstitial();
-	}
+			IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
+			IronSource.Agent.init(appId, IronSourceAdUnits.REWARDED_VIDEO, IronSourceAdUnits.INTERSTITIAL, IronSourceAdUnits.BANNER);
+		}
 
-
-	private void SdkInitializationCompletedEvent()
-	{
-		Debug.LogError("SdkInitializationCompletedEvent");
+		private void SdkInitializationCompletedEvent()
+		{
+			
+		}
 	}
 }
