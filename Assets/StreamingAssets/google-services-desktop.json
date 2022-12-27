@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "146215063275",
+    "project_id": "pet-billowingboundary",
+    "storage_bucket": "pet-billowingboundary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146215063275:android:e49655bfde8c621ab078ae",
+        "android_client_info": {
+          "package_name": "com.StarSmithGames.MudaMudaTapClicker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146215063275-qrd65gbk2nago4eot0m7vbiq322j8pd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNCL-b23__2y0HZRryOYubU1EYFFslRBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146215063275-qrd65gbk2nago4eot0m7vbiq322j8pd1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
