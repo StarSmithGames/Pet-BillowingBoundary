@@ -7,8 +7,9 @@ namespace Game.Systems.AdSystem
 {
 	public class AdBanner : IInitializable
 	{
-		public event UnityAction onBannerShowed;
-		public event UnityAction onBannerHided;
+		public event UnityAction<bool> onBannerVisibleChanged;
+
+		public bool IsShowing { get; private set; } = false;
 
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
@@ -35,10 +36,12 @@ namespace Game.Systems.AdSystem
 		private void OnBannerAdLoaded()
 		{
 			IronSource.Agent.displayBanner();
+			
+			IsShowing = true;
 
 			analyticsSystem.LogEvent_ad_banner_showed();
 
-			onBannerShowed?.Invoke();
+			onBannerVisibleChanged?.Invoke(IsShowing);
 			//IronSource.Agent.hideBanner();
 			//IronSource.Agent.destroyBanner();
 		}

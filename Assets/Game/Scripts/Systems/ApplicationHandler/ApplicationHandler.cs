@@ -16,12 +16,12 @@ namespace Game.Systems.ApplicationHandler
 
 		private void OnApplicationFocus(bool focus)
 		{
-			
+			signalBus?.Fire(new SignalApplicationFocus() { trigger = focus });
 		}
 
 		private void OnApplicationPause(bool pause)
 		{
-			
+			signalBus?.Fire(new SignalApplicationPause() { trigger = pause });
 		}
 
 		private void OnApplicationQuit()

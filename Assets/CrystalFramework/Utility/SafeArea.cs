@@ -2,6 +2,10 @@ using DG.Tweening;
 
 using Game.Systems.AdSystem;
 
+using Sirenix.OdinInspector;
+
+using System.Collections;
+
 using UnityEngine;
 
 using Zenject;
@@ -120,18 +124,16 @@ namespace Crystal
             this.adSystem = adSystem;
 		}
 
-		private void Start ()
+		private IEnumerator Start ()
         {
-            adSystem.AdBanner.onBannerShowed += ShowBanner;
-            adSystem.AdBanner.onBannerHided += HideBanner;
-
-			Refresh();
+            adSystem.AdBanner.onBannerVisibleChanged += OnBannerVisibleChanged;
+            yield return new WaitForSeconds(1f);
+            OnBannerVisibleChanged(adSystem.AdBanner.IsShowing);
         }
 
 		private void OnDestroy()
 		{
-			adSystem.AdBanner.onBannerShowed -= ShowBanner;
-			adSystem.AdBanner.onBannerHided -= HideBanner;
+			adSystem.AdBanner.onBannerVisibleChanged -= OnBannerVisibleChanged;
 		}
 
 		private void Update ()
@@ -139,18 +141,19 @@ namespace Crystal
             Refresh();
         }
 
-        private void ShowBanner()
+        private void OnBannerVisibleChanged(bool trigger)
         {
-            int endValue = (Screen.width <= 720 ? 50 : 90) + 30;
-			Vector2Int size = Vector2Int.zero;
-			DOTween.To(() => bannerSize.y, (value) => bannerSize.y = value, endValue, 0.25f)
-			.OnUpdate(RefreshForce);
-		}
-
-        private void HideBanner()
-        {
-			DOTween.To(() => bannerSize.y, (value) => bannerSize.y = value, 0, 0.2f)
-			.OnUpdate(RefreshForce);
+            if (trigger)
+            {
+                int endValue = (Screen.width <= 720 ? 50 : 90) + 30;
+                DOTween.To(() => bannerSize.y, (value) => bannerSize.y = value, endValue, 0.25f)
+                .OnUpdate(RefreshForce);
+            }
+            else
+            {
+                DOTween.To(() => bannerSize.y, (value) => bannerSize.y = value, 0, 0.2f)
+                .OnUpdate(RefreshForce);
+            }
 		}
 
 		private void Refresh ()
