@@ -13,13 +13,13 @@ namespace Game.UI
 
 		public override void Enable(bool trigger)
 		{
+			base.Enable(trigger);
+
 			Image.sprite = IsEnable ? on : off;
 			if (Shadow != null)
 			{
 				Shadow.sprite = IsEnable ? on : off;
 			}
-
-			base.Enable(trigger);
 		}
 
 		[Button(DirtyOnClick = true)]
