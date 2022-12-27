@@ -1,8 +1,3 @@
-using Game.Managers.AsyncManager;
-
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 
 using Zenject;
@@ -11,6 +6,13 @@ namespace Game.Systems.AdSystem
 {
 	public class AdBanner : IInitializable
 	{
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
+
+		public AdBanner(AnalyticsSystem.AnalyticsSystem analyticsSystem)
+		{
+			this.analyticsSystem = analyticsSystem;
+		}
+
 		public void Initialize()
 		{
 			IronSourceEvents.onBannerAdLoadedEvent += OnBannerAdLoaded;
@@ -22,12 +24,16 @@ namespace Game.Systems.AdSystem
 
 			IronSource.Agent.loadBanner(IronSourceBannerSize.SMART, IronSourceBannerPosition.BOTTOM);
 
+			Debug.Log("[AdSystem] Banner Load!");
 		}
 
 		//Invoked once the banner has loaded
 		private void OnBannerAdLoaded()
 		{
 			IronSource.Agent.displayBanner();
+
+			analyticsSystem.LogEvent_ad_banner_showed();
+
 			//IronSource.Agent.hideBanner();
 			//IronSource.Agent.destroyBanner();
 		}
@@ -35,6 +41,7 @@ namespace Game.Systems.AdSystem
 		// Invoked when end user clicks on the banner ad
 		private void OnBannerAdClicked()
 		{
+			analyticsSystem.LogEvent_ad_banner_clicked();
 		}
 
 		//Notifies the presentation of a full screen content following user click
@@ -56,6 +63,9 @@ namespace Game.Systems.AdSystem
 		//@param description - string - contains information about the failure.
 		private void OnBannerAdLoadFailed(IronSourceError error)
 		{
+			analyticsSystem.LogEvent_ad_banner_failed();
+
+			Debug.Log($"[AdSystem] Banner Failed {error.getDescription()}");
 		}
 	}
 }

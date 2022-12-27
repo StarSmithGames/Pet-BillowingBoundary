@@ -8,6 +8,15 @@ namespace Game.Systems.AdSystem
 {
 	public class AdRewarded : IInitializable
 	{
+		private bool isClosed = false;
+
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
+
+		public AdRewarded(AnalyticsSystem.AnalyticsSystem analyticsSystem)
+		{
+			this.analyticsSystem = analyticsSystem;
+		}
+
 		public void Initialize()
 		{
 			IronSourceRewardedVideoEvents.onAdOpenedEvent += OnRewardedAdOpened;
@@ -20,7 +29,7 @@ namespace Game.Systems.AdSystem
 
 			IronSource.Agent.loadRewardedVideo();
 
-			Debug.LogError("Rewarded Load");
+			Debug.Log("[AdSystem] Rewarded Load!");
 		}
 
 		public bool Show()
@@ -28,7 +37,9 @@ namespace Game.Systems.AdSystem
 			if (IronSource.Agent.isRewardedVideoAvailable())
 			{
 				IronSource.Agent.showRewardedVideo();
-				
+
+				Debug.Log("[AdSystem] Rewarded Show.");
+
 				return true;
 			}
 
@@ -39,44 +50,68 @@ namespace Game.Systems.AdSystem
 		// Indicates that there’s an available ad.
 		// The adInfo object includes information about the ad that was loaded successfully
 		// This replaces the RewardedVideoAvailabilityChangedEvent(true) event
-		void OnRewardedAdAvailable(IronSourceAdInfo adInfo)
+		private void OnRewardedAdAvailable(IronSourceAdInfo adInfo)
 		{
 		}
 
 		// The Rewarded Video ad view has opened. Your activity will loose focus.
-		void OnRewardedAdOpened(IronSourceAdInfo adInfo)
+		private void OnRewardedAdOpened(IronSourceAdInfo adInfo)
 		{
+			analyticsSystem.LogEvent_ad_rewarded_showed();
 		}
 		// The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
-		void OnRewardedAdClosed(IronSourceAdInfo adInfo)
+		private void OnRewardedAdClosed(IronSourceAdInfo adInfo)
 		{
 			IronSource.Agent.loadRewardedVideo();
+
+			if (!isClosed)
+			{
+				analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Simple);
+			}
+
+			isClosed = false;
 		}
 		// The user completed to watch the video, and should be rewarded.
 		// The placement parameter will include the reward data.
 		// When using server-to-server callbacks, you may ignore this event and wait for the ironSource server callback.
-		void OnRewardedAdRewarded(IronSourcePlacement placement, IronSourceAdInfo adInfo)
+		private void OnRewardedAdRewarded(IronSourcePlacement placement, IronSourceAdInfo adInfo)
 		{
+			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Rewarded);
+			isClosed = true;
 		}
 
 		// Invoked when the video ad was clicked.
 		// This callback is not supported by all networks, and we recommend using it only if
 		// it’s supported by all networks you included in your build.
-		void OnRewardedAdClicked(IronSourcePlacement placement, IronSourceAdInfo adInfo)
+		private void OnRewardedAdClicked(IronSourcePlacement placement, IronSourceAdInfo adInfo)
 		{
+			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Clicked);
+			isClosed = true;
 		}
 
 
 		// Indicates that no ads are available to be displayed
 		// This replaces the RewardedVideoAvailabilityChangedEvent(false) event
-		void OnRewardedAdUnavailable()
+		private void OnRewardedAdUnavailable()
 		{
+			analyticsSystem.LogEvent_ad_rewarded_failed();
+
+			Debug.LogError($"[AdSystem] Rewarded Unavailable.");
 		}
 
 		// The rewarded video ad was failed to show.
-		void OnRewardedAdShowFailed(IronSourceError error, IronSourceAdInfo adInfo)
+		private void OnRewardedAdShowFailed(IronSourceError error, IronSourceAdInfo adInfo)
 		{
+			analyticsSystem.LogEvent_ad_rewarded_failed();
 
+			Debug.LogError($"[AdSystem] Rewarded Failed {error.getDescription()}");
 		}
+	}
+
+	public enum RewardedClosedType
+	{
+		Simple,
+		Clicked,
+		Rewarded,
 	}
 }

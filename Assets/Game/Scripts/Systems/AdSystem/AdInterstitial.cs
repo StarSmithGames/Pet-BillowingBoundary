@@ -11,6 +11,15 @@ namespace Game.Systems.AdSystem
 	{
 		public event UnityAction onInterstitialClosed;
 
+		private bool isClicked = false;
+
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
+
+		public AdInterstitial(AnalyticsSystem.AnalyticsSystem analyticsSystem)
+		{
+			this.analyticsSystem = analyticsSystem;
+		}
+
 		public void Initialize()
 		{
 			IronSourceInterstitialEvents.onAdReadyEvent += OnInterstitialAdReady;
@@ -23,7 +32,7 @@ namespace Game.Systems.AdSystem
 
 			IronSource.Agent.loadInterstitial();
 
-			Debug.LogError("Interstitial Load");
+			Debug.Log("[AdSystem] Interstitial Load!");
 		}
 
 		public bool Show()
@@ -31,7 +40,7 @@ namespace Game.Systems.AdSystem
 			if (IronSource.Agent.isInterstitialReady())
 			{
 				IronSource.Agent.showInterstitial();
-
+				Debug.Log("[AdSystem] Interstitial Show.");
 				return true;
 			}
 
@@ -49,6 +58,7 @@ namespace Game.Systems.AdSystem
 		// it's supported by all networks you included in your build. 
 		private void OnInterstitialAdShowSucceeded(IronSourceAdInfo adInfo)
 		{
+			analyticsSystem.LogEvent_ad_interstitial_showed();
 		}
 
 		// Invoked when the Interstitial Ad Unit has opened. This is the impression indication. 
@@ -59,12 +69,17 @@ namespace Game.Systems.AdSystem
 		// Invoked when end user clicked on the interstitial ad
 		private void OnInterstitialAdClicked(IronSourceAdInfo adInfo)
 		{
+			isClicked = true;
 		}
 
 		// Invoked when the interstitial ad closed and the user went back to the application screen.
 		private void OnInterstitialAdClosed(IronSourceAdInfo adInfo)
 		{
 			IronSource.Agent.loadInterstitial();
+			Debug.Log("[AdSystem] Interstitial Load!");
+
+			analyticsSystem.LogEvent_ad_interstitial_closed(isClicked ? InterstitialClosedType.Click : InterstitialClosedType.Simple);
+			isClicked = false;
 
 			onInterstitialClosed?.Invoke();
 		}
@@ -73,11 +88,23 @@ namespace Game.Systems.AdSystem
 		// Invoked when the ad failed to show.
 		private void OnInterstitialAdShowFailed(IronSourceError ironSourceError, IronSourceAdInfo adInfo)
 		{
+			analyticsSystem.LogEvent_ad_interstitial_failed();
+
+			Debug.LogError($"[AdSystem] Interstitial Failed {ironSourceError.getDescription()}");
 		}
 
 		// Invoked when the initialization process has failed.
 		private void OnInterstitialonAdLoadFailed(IronSourceError ironSourceError)
 		{
+			analyticsSystem.LogEvent_ad_interstitial_failed();
+
+			Debug.LogError($"[AdSystem] Interstitial Failed {ironSourceError.getDescription()}");
 		}
+	}
+
+	public enum InterstitialClosedType
+	{
+		Simple,
+		Click,
 	}
 }

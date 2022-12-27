@@ -9,6 +9,7 @@ namespace Game.Systems.AnalyticsSystem
 	{
 		public override void InstallBindings()
 		{
+			Container.BindInterfacesAndSelfTo<FirebaseAnalyticsGroup>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<AnalyticsSystem>().AsSingle().NonLazy();
 		}
 	}

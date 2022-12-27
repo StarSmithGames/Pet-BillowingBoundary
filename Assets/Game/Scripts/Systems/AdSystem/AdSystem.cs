@@ -18,11 +18,13 @@ namespace Game.Systems.AdSystem
 
 			IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
 			IronSource.Agent.init(appId, IronSourceAdUnits.REWARDED_VIDEO, IronSourceAdUnits.INTERSTITIAL, IronSourceAdUnits.BANNER);
+
+			Debug.Log("[AdSystem] Initialization!");
 		}
 
 		private void SdkInitializationCompletedEvent()
 		{
-			
+			Debug.Log("[AdSystem] Initialization Completed!");
 		}
 	}
 }
