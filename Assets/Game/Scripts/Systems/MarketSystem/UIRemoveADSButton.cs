@@ -17,7 +17,7 @@ namespace Game.Systems.MarketSystem
 
 		protected override void OnClick()
 		{
-			iapManager.BuyProductID(iapManager.removeADS);
+			//iapManager.BuyProductID(iapManager.removeADS);
 
 			base.OnClick();
 		}

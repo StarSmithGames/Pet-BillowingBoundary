@@ -1,24 +1,24 @@
 using System;
-using UnityEngine.Purchasing;
+//using UnityEngine.Purchasing;
 
 namespace Game.Managers.IAPManager
 {
 	public static class InAppExceptions
 	{
-		public static Exception GetInitializeFailedException(InitializationFailureReason failureReason)
-		{
-			switch (failureReason)
-			{
-				case InitializationFailureReason.PurchasingUnavailable:
-					return new InitializePurchasingUnavailableException(failureReason.ToString());
-				case InitializationFailureReason.AppNotKnown:
-					return new AppNotKnownException(failureReason.ToString());
-				case InitializationFailureReason.NoProductsAvailable:
-					return new NoProductsAvailableException(failureReason.ToString());
-				default:
-					return new UnknownInitializeException(failureReason.ToString());
-			}
-		}
+		//public static Exception GetInitializeFailedException(InitializationFailureReason failureReason)
+		//{
+		//	switch (failureReason)
+		//	{
+		//		case InitializationFailureReason.PurchasingUnavailable:
+		//			return new InitializePurchasingUnavailableException(failureReason.ToString());
+		//		case InitializationFailureReason.AppNotKnown:
+		//			return new AppNotKnownException(failureReason.ToString());
+		//		case InitializationFailureReason.NoProductsAvailable:
+		//			return new NoProductsAvailableException(failureReason.ToString());
+		//		default:
+		//			return new UnknownInitializeException(failureReason.ToString());
+		//	}
+		//}
 
 
 		#region Exceptions
