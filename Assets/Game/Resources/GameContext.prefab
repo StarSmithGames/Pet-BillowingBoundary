@@ -3290,6 +3290,7 @@ MonoBehaviour:
   ConformX: 1
   ConformY: 1
   Logging: 0
+  bannerHeight: 0
 --- !u!1 &7357229036135471725
 GameObject:
   m_ObjectHideFlags: 0

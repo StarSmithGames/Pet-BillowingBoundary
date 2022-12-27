@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 using Zenject;
 
@@ -6,6 +7,9 @@ namespace Game.Systems.AdSystem
 {
 	public class AdBanner : IInitializable
 	{
+		public event UnityAction onBannerShowed;
+		public event UnityAction onBannerHided;
+
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
 		public AdBanner(AnalyticsSystem.AnalyticsSystem analyticsSystem)
@@ -34,6 +38,7 @@ namespace Game.Systems.AdSystem
 
 			analyticsSystem.LogEvent_ad_banner_showed();
 
+			onBannerShowed?.Invoke();
 			//IronSource.Agent.hideBanner();
 			//IronSource.Agent.destroyBanner();
 		}

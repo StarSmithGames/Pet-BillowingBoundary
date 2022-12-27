@@ -1,4 +1,10 @@
+using DG.Tweening;
+
+using Game.Systems.AdSystem;
+
 using UnityEngine;
+
+using Zenject;
 
 namespace Crystal
 {
@@ -96,7 +102,7 @@ namespace Crystal
         };
         #endregion
 
-        RectTransform Panel;
+        [SerializeField] private RectTransform Panel;
         Rect LastSafeArea = new Rect (0, 0, 0, 0);
         Vector2Int LastScreenSize = new Vector2Int (0, 0);
         ScreenOrientation LastOrientation = ScreenOrientation.AutoRotation;
@@ -104,25 +110,50 @@ namespace Crystal
         [SerializeField] bool ConformY = true;  // Conform to screen safe area on Y-axis (default true, disable to ignore)
         [SerializeField] bool Logging = false;  // Conform to screen safe area on Y-axis (default true, disable to ignore)
 
-        void Awake ()
+        private Vector2Int bannerSize = Vector2Int.zero;
+
+        private AdSystem adSystem;
+
+		[Inject]
+        private void Construct(AdSystem adSystem)
         {
-            Panel = GetComponent<RectTransform> ();
+            this.adSystem = adSystem;
+		}
 
-            if (Panel == null)
-            {
-                Debug.LogError ("Cannot apply safe area - no RectTransform found on " + name);
-                Destroy (gameObject);
-            }
+		private void Start ()
+        {
+            adSystem.AdBanner.onBannerShowed += ShowBanner;
+            adSystem.AdBanner.onBannerHided += HideBanner;
 
-            Refresh ();
+			Refresh();
         }
 
-        void Update ()
+		private void OnDestroy()
+		{
+			adSystem.AdBanner.onBannerShowed -= ShowBanner;
+			adSystem.AdBanner.onBannerHided -= HideBanner;
+		}
+
+		private void Update ()
         {
-            Refresh ();
+            Refresh();
         }
 
-        void Refresh ()
+        private void ShowBanner()
+        {
+            int endValue = (Screen.width <= 720 ? 50 : 90) + 30;
+			Vector2Int size = Vector2Int.zero;
+			DOTween.To(() => bannerSize.y, (value) => bannerSize.y = value, endValue, 0.25f)
+			.OnUpdate(RefreshForce);
+		}
+
+        private void HideBanner()
+        {
+			DOTween.To(() => bannerSize.y, (value) => bannerSize.y = value, 0, 0.2f)
+			.OnUpdate(RefreshForce);
+		}
+
+		private void Refresh ()
         {
             Rect safeArea = GetSafeArea ();
 
@@ -141,7 +172,13 @@ namespace Crystal
             }
         }
 
-        Rect GetSafeArea ()
+        private void RefreshForce()
+        {
+			Rect safeArea = GetSafeArea();
+            ApplySafeArea(safeArea);
+		}
+
+		private Rect GetSafeArea ()
         {
             Rect safeArea = Screen.safeArea;
 
@@ -185,7 +222,7 @@ namespace Crystal
             return safeArea;
         }
 
-        void ApplySafeArea (Rect r)
+        private void ApplySafeArea (Rect r)
         {
             LastSafeArea = r;
 
@@ -207,7 +244,7 @@ namespace Crystal
             if (Screen.width > 0 && Screen.height > 0)
             {
                 // Convert safe area rectangle from absolute pixels to normalised anchor coordinates
-                Vector2 anchorMin = r.position;
+                Vector2 anchorMin = r.position + bannerSize;
                 Vector2 anchorMax = r.position + r.size;
                 anchorMin.x /= Screen.width;
                 anchorMin.y /= Screen.height;
