@@ -1,15 +1,13 @@
 using Game.HUD;
 using Game.UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 using Zenject;
 
 namespace Game.Systems.MarketSystem
 {
-	public class UIMarketButton : MonoBehaviour
+	public class UIMarketButton : UIButton
 	{
-		[field: SerializeField] public Button Button { get; private set; }
 		[field: SerializeField] public UIAlert Alert { get; private set; }
 
 		private MarketWindow MarketWindow
@@ -35,17 +33,15 @@ namespace Game.Systems.MarketSystem
 			this.marketHandler = marketHandler;
 		}
 
-		private void Start()
+		protected override void Start()
 		{
-
-			Button.onClick.AddListener(OnClick);
+			base.Start();
 			marketHandler.onValuableChanged += OnValuableChanged;
 		}
 
-		private void OnDestroy()
+		protected override void OnDestroy()
 		{
-			Button.onClick.RemoveAllListeners();
-
+			base.OnDestroy();
 			if(marketHandler != null)
 			{
 				marketHandler.onValuableChanged -= OnValuableChanged;
@@ -66,7 +62,7 @@ namespace Game.Systems.MarketSystem
 			}
 		}
 
-		private void OnClick()
+		protected override void OnClick()
 		{
 			MarketWindow.Show();
 
@@ -74,6 +70,8 @@ namespace Game.Systems.MarketSystem
 			{
 				Alert.Hide();
 			}
+
+			base.OnClick();
 		}
 	}
 }

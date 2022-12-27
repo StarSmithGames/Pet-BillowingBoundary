@@ -1,7 +1,10 @@
 using DG.Tweening;
 
 using Game.Entities;
+using Game.Managers.VibrationManager;
 using Game.UI;
+
+using MoreMountains.NiceVibrations;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -38,14 +41,17 @@ namespace Game.Systems.MarketSystem
 		private UISubCanvas subCanvas;
 		private Player player;
 		private UIMarketBonusItem.Factory marketItemFactory;
+		private VibrationManager vibrationManager;
 
 		[Inject]
 		private void Construct(UISubCanvas subCanvas, Player player,
-			UIMarketBonusItem.Factory marketItemFactory)
+			UIMarketBonusItem.Factory marketItemFactory,
+			VibrationManager vibrationManager)
 		{
 			this.subCanvas = subCanvas;
 			this.player = player;
 			this.marketItemFactory = marketItemFactory;
+			this.vibrationManager = vibrationManager;
 		}
 		
 		private void Start()
@@ -163,6 +169,8 @@ namespace Game.Systems.MarketSystem
 
 		private void OnBuyClicked(int skillPropertyIndex)
 		{
+			vibrationManager.Vibrate();
+
 			var property = MarkertSkill.CurrentSkill.GetProperty(skillPropertyIndex);
 
 			if (player.Gold.CurrentValue < property.GetCost())
@@ -176,7 +184,9 @@ namespace Game.Systems.MarketSystem
 
 		private void OnBuyClicked(UIMarketBonusItem marketItem)
 		{
-			if(player.Gold.CurrentValue < marketItem.CurrentBonus.GetCost())
+			vibrationManager.Vibrate();
+
+			if (player.Gold.CurrentValue < marketItem.CurrentBonus.GetCost())
 			{
 				return;
 			}
@@ -194,6 +204,8 @@ namespace Game.Systems.MarketSystem
 				TabsSystemTop.SelectFirst();
 				TabsSystemBottom.SelectFirst();
 			});
+
+			vibrationManager.Vibrate();
 		}
 	}
 }

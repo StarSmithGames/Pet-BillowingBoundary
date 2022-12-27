@@ -1,5 +1,8 @@
+using Game.Managers.VibrationManager;
 using UnityEngine;
 using UnityEngine.UI;
+
+using Zenject;
 
 namespace Game.UI
 {
@@ -9,12 +12,20 @@ namespace Game.UI
 
 		[field: SerializeField] public Button Button { get; private set; }
 
+		protected VibrationManager vibrationManager;
+
+		[Inject]
+		private void Construct(VibrationManager vibrationManager)
+		{
+			this.vibrationManager = vibrationManager;
+		}
+
 		protected virtual void Start()
 		{
 			Button.onClick.AddListener(OnClick);
 		}
 
-		private void OnDestroy()
+		protected virtual void OnDestroy()
 		{
 			Button.onClick.RemoveAllListeners();
 		}
@@ -26,7 +37,7 @@ namespace Game.UI
 
 		protected virtual void OnClick()
 		{
-			Enable(!IsEnable);
+			vibrationManager.Vibrate();
 		}
 	}
 }

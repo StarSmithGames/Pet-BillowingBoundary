@@ -1,5 +1,6 @@
 using DG.Tweening;
 
+using Game.Managers.VibrationManager;
 using Game.UI;
 
 using System.Collections;
@@ -22,11 +23,13 @@ namespace Game.Systems.SettingsSystem
 		private bool isOpenned = false;
 
 		private UISubCanvas subCanvas;
+		private VibrationManager vibrationManager;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas)
+		private void Construct(UISubCanvas subCanvas, VibrationManager vibrationManager)
 		{
 			this.subCanvas = subCanvas;
+			this.vibrationManager = vibrationManager;
 		}
 
 		private void Start()
@@ -101,6 +104,8 @@ namespace Game.Systems.SettingsSystem
 			{
 				Show();
 			}
+
+			vibrationManager.Vibrate();
 		}
 	}
 }

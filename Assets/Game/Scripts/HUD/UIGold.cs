@@ -9,10 +9,9 @@ using Zenject;
 
 namespace Game.HUD
 {
-	public class UIGold : MonoBehaviour
+	public class UIGold : UIButton
 	{
 		[field: SerializeField] public TMPro.TextMeshProUGUI Count { get; private set; }
-		[field: SerializeField] public Button Button { get; private set; }
 
 		private UISubCanvas subCanvas;
 		private Gold gold;
@@ -24,18 +23,16 @@ namespace Game.HUD
 			this.gold = player.Gold;
 		}
 
-		private void Start()
+		protected override void Start()
 		{
-			Button.onClick.AddListener(OnClick);
-
+			base.Start();
 			gold.onChanged += OnTapCountChanged;
 			Count.text = gold.Output;
 		}
 
-		private void OnDestroy()
+		protected override void OnDestroy()
 		{
-			Button?.onClick.RemoveAllListeners();
-
+			base.OnDestroy();
 			if (gold != null)
 			{
 				gold.onChanged -= OnTapCountChanged;
@@ -47,9 +44,11 @@ namespace Game.HUD
 			Count.text = gold.Output;
 		}
 
-		private void OnClick()
+		protected override void OnClick()
 		{
 			subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
+
+			base.OnClick();
 		}
 	}
 }

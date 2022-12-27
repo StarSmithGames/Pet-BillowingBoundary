@@ -23,9 +23,10 @@ namespace Game.Systems.SettingsSystem
 
 		protected override void OnClick()
 		{
-			base.OnClick();
-
+			Enable(!IsEnable);
 			saveLoad.GetStorage().IsSound.SetData(IsEnable);
+
+			base.OnClick();
 		}
 	}
 }

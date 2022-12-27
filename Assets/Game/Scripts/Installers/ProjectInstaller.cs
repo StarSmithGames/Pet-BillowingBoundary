@@ -1,6 +1,7 @@
 using Game.Managers.AsyncManager;
 using Game.Managers.GameManager;
 using Game.Managers.NetworkTimeManager;
+using Game.Managers.VibrationManager;
 using Game.Systems.ApplicationHandler;
 using Game.Systems.LocalizationSystem;
 
@@ -20,6 +21,7 @@ namespace Game.Installers
 			NetworkTimeInstaller.Install(Container);
 			GameManagerInstaller.Install(Container);
 			LocalizationSystemInstaller.Install(Container);
+			VibrationManagerInstaller.Install(Container);
 		}
 	}
 }

@@ -1,7 +1,5 @@
 using Game.Managers.IAPManager;
 using Game.UI;
-
-using UnityEngine;
 using UnityEngine.Monetization;
 
 using Zenject;
@@ -21,6 +19,8 @@ namespace Game.Systems.MarketSystem
 		protected override void OnClick()
 		{
 			iapManager.BuyProductID(iapManager.removeADS);
+
+			base.OnClick();
 		}
 	}
 }

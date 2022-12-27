@@ -1,3 +1,5 @@
+using Game.Managers.VibrationManager;
+
 using Sirenix.OdinInspector;
 
 using System.Collections;
@@ -8,6 +10,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+using Zenject;
+
 namespace Game.UI
 {
 	public class TabsSystem : MonoBehaviour
@@ -17,6 +21,14 @@ namespace Game.UI
 		[SerializeField] private List<Tab> tabs = new List<Tab>();
 		[ShowIf("tabBehavior", TabBehavior.Next)]
 		[SerializeField] private Button next;
+
+		private VibrationManager vibrationManager;
+
+		[Inject]
+		private void Construct(VibrationManager vibrationManager)
+		{
+			this.vibrationManager = vibrationManager;
+		}
 
 		private void Start()
 		{
@@ -70,6 +82,8 @@ namespace Game.UI
 			{
 				Next();
 			}
+
+			vibrationManager.Vibrate();
 		}
 
 		[Button(DirtyOnClick = true)]
@@ -78,6 +92,8 @@ namespace Game.UI
 			initIndex = (initIndex + 1) % tabs.Count;
 
 			Open(initIndex);
+
+			vibrationManager.Vibrate();
 		}
 	}
 

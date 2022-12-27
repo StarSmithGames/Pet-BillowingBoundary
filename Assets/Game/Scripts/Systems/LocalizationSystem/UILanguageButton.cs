@@ -30,6 +30,7 @@ namespace Game.Systems.LocalizationSystem
 		{
 			if (IsEnable) return;
 
+			Enable(!IsEnable);
 			base.OnClick();
 
 			onClicked?.Invoke(this);
