@@ -24,15 +24,12 @@ namespace Game.Managers.ClickManager
 		private SignalBus signalBus;
 		private Player player;
 		private GameManager.GameManager gameManager;
-		private VibrationManager.VibrationManager vibrationManager;
 
-		public ClickHandler(SignalBus signalBus, Player player, GameManager.GameManager gameManager,
-			VibrationManager.VibrationManager vibrationManager)
+		public ClickHandler(SignalBus signalBus, Player player, GameManager.GameManager gameManager)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
 			this.gameManager = gameManager;
-			this.vibrationManager = vibrationManager;
 		}
 
 		public void Initialize()
@@ -55,8 +52,6 @@ namespace Game.Managers.ClickManager
 
 			if (Input.touchCount > 0)
 			{
-				vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
-
 				for (int i = 0; i < Input.touchCount; i++)
 				{
 					var touch = Input.GetTouch(i);

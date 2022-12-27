@@ -3,6 +3,7 @@ using DG.Tweening;
 using Game.Entities;
 using Game.HUD;
 using Game.Managers.GameManager;
+using Game.Managers.VibrationManager;
 using Game.Systems.CameraSystem;
 using Game.Systems.FloatingSystem;
 
@@ -36,6 +37,7 @@ namespace Game.Managers.ClickManager
 		private TargetHandler targetHandler;
 		private FloatingSystem floatingSystem;
 		private CameraSystem cameraSystem;
+		private VibrationManager.VibrationManager vibrationManager;
 
 		[Inject]
 		private void Construct(
@@ -43,13 +45,15 @@ namespace Game.Managers.ClickManager
 			Player player,
 			TargetHandler targetHandler,
 			FloatingSystem floatingTextSystem,
-			CameraSystem cameraSystem)
+			CameraSystem cameraSystem,
+			VibrationManager.VibrationManager vibrationManager)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
 			this.targetHandler = targetHandler;
 			this.floatingSystem = floatingTextSystem;
 			this.cameraSystem = cameraSystem;
+			this.vibrationManager = vibrationManager;
 		}
 
 		private void Start()
@@ -125,6 +129,8 @@ namespace Game.Managers.ClickManager
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();
+
+					vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.LightImpact);
 				});
 		}
 
