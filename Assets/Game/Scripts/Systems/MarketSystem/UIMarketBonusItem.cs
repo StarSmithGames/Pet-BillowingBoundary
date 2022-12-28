@@ -1,13 +1,8 @@
 using Game.Entities;
 using Game.Systems.LocalizationSystem;
-using System;
-
-using Unity.VisualScripting;
+using Game.UI;
 
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
-using UnityEngine.XR;
 
 using Zenject;
 
@@ -15,7 +10,7 @@ namespace Game.Systems.MarketSystem
 {
 	public class UIMarketBonusItem : PoolableObject
 	{
-		public UnityAction<UIMarketBonusItem> onBuyClick;
+		public UnityEngine.Events.UnityAction<UIMarketBonusItem> onBuyClick;
 
 		[field: SerializeField] public TMPro.TextMeshProUGUI Title { get; private set; }
 		[field: SerializeField] public TMPro.TextMeshProUGUI Description { get; private set; }
@@ -38,13 +33,15 @@ namespace Game.Systems.MarketSystem
 		private SignalBus signalBus;
 		private Player player;
 		private MarketHandler marketHandler;
+		private FastMessageWindow.Factory fastMessagesFactory;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, Player player, MarketHandler marketHandler)
+		private void Construct(SignalBus signalBus, Player player, MarketHandler marketHandler, FastMessageWindow.Factory fastMessagesFactory)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
 			this.marketHandler = marketHandler;
+			this.fastMessagesFactory = fastMessagesFactory;
 		}
 
 		private void Start()
@@ -52,6 +49,7 @@ namespace Game.Systems.MarketSystem
 			Buy.Button.onClick.AddListener(OnBuyClick);
 			Get.Button.onClick.AddListener(OnBuyClick);
 			Upgrade.Button.onClick.AddListener(OnBuyClick);
+			Lock.Button.onClick.AddListener(OnLockClick);
 
 			player.Gold.onChanged += GoldCheck;
 
@@ -63,8 +61,9 @@ namespace Game.Systems.MarketSystem
 			Buy?.Button.onClick.RemoveAllListeners();
 			Get?.Button.onClick.RemoveAllListeners();
 			Upgrade?.Button.onClick.RemoveAllListeners();
+			Lock?.Button.onClick.RemoveAllListeners();
 
-			if(player != null)
+			if (player != null)
 			{
 				player.Gold.onChanged -= GoldCheck;
 			}
@@ -176,6 +175,12 @@ namespace Game.Systems.MarketSystem
 		private void OnBuyClick()
 		{
 			onBuyClick?.Invoke(this);
+		}
+
+		private void OnLockClick()
+		{
+			var window = fastMessagesFactory.Create();
+			window.Show(FastMessageType.LockedBonus);
 		}
 
 		private void OnLocalizationChanged()

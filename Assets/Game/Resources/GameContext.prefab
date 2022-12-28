@@ -1967,6 +1967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSystem: {fileID: 7217618759996723291}
   subCanvas: {fileID: 1558576401}
+  fastMessageWindowPrefab: {fileID: 3538383396561010641, guid: 8200e8419593c2244b4dc701cf338ece, type: 3}
   conveyor: {fileID: 0}
 --- !u!1 &1908472914045469998
 GameObject:

@@ -2,6 +2,8 @@ using Game.Entities;
 using Game.Managers.ClickManager;
 using Game.Systems.CameraSystem;
 using Game.UI;
+using System.Transactions;
+
 using UnityEngine;
 
 using Zenject;
@@ -12,6 +14,8 @@ namespace Game.Installers
 	{
 		[SerializeField] private CameraSystem cameraSystem;
 		[SerializeField] private UISubCanvas subCanvas;
+		[SerializeField] private FastMessageWindow fastMessageWindowPrefab;
+		[Header("Out")]
 		[SerializeField] private ClickerConveyor conveyor;
 
 		public override void InstallBindings()
@@ -21,6 +25,12 @@ namespace Game.Installers
 			Container.BindInstance(conveyor);
 
 			Container.Bind<Player>().AsSingle().NonLazy();
+
+			//FastMessageWindow 1
+			Container.BindFactory<FastMessageWindow, FastMessageWindow.Factory>()
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(1)
+				.FromComponentInNewPrefab(fastMessageWindowPrefab)
+				.UnderTransform((x) => x.Container.Resolve<UISubCanvas>().Windows));
 		}
 	}
 }

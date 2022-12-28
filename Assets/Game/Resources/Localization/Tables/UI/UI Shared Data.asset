@@ -23,6 +23,14 @@ MonoBehaviour:
     m_Key: ui.daily_reward_window.title
     m_Metadata:
       m_Items: []
+  - m_Id: 2181301600325632
+    m_Key: ui.fast_message_window.locked_bonus.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181524800212992
+    m_Key: ui.fast_message_window.locked_bonus.message
+    m_Metadata:
+      m_Items: []
   - m_Id: 30908304920577
     m_Key: ui.button.upgrade
     m_Metadata:
@@ -77,6 +85,62 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 784520790478849
     m_Key: ui.skills.fire_fist.power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851584
+    m_Key: ui.achievements.tap_thousand.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851585
+    m_Key: ui.achievements.tap_thousand.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851586
+    m_Key: ui.achievements.overkill.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851587
+    m_Key: ui.achievements.overkill.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851588
+    m_Key: ui.achievements.rapid_fire.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851589
+    m_Key: ui.achievements.rapid_fire.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851590
+    m_Key: ui.achievements.monster.tittle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851591
+    m_Key: ui.achievements.monster.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851592
+    m_Key: ui.achievements.receive_million.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851593
+    m_Key: ui.achievements.receive_million.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851594
+    m_Key: ui.achievements.receive_billion.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851595
+    m_Key: ui.achievements.receive_billion.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851596
+    m_Key: ui.achievements.receive_trillion.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851597
+    m_Key: ui.achievements.receive_trillion.description
     m_Metadata:
       m_Items: []
   m_Metadata:

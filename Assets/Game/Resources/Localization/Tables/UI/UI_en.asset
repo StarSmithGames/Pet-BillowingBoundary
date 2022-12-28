@@ -92,6 +92,70 @@ MonoBehaviour:
     m_Localized: Increase the power of skill tap on <color=red>x{0}</color>.
     m_Metadata:
       m_Items: []
+  - m_Id: 2181301600325632
+    m_Localized: Ooops!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851584
+    m_Localized: 1000 times!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851585
+    m_Localized: Tap 1000 times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851586
+    m_Localized: Overkill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851587
+    m_Localized: Kill 100 monsters.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851588
+    m_Localized: Rapid Fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851589
+    m_Localized: Tap 12 times in one second.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851590
+    m_Localized: Monster
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851591
+    m_Localized: Get 2 critical taps in one second.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851592
+    m_Localized: It's Okay.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851593
+    m_Localized: Receive 1M gold.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851594
+    m_Localized: I'am a rich now!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851595
+    m_Localized: Receive 1B gold.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851596
+    m_Localized: The richest man on the planet!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301654851597
+    m_Localized: Receive 1T gold.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181524800212992
+    m_Localized: You haven't unlocked this bonus yet.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

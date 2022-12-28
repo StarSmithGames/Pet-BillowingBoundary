@@ -24,7 +24,7 @@ MonoBehaviour:
   incrementForTap: 1
   releaseDuration: 5
   waitingTime: 5
-  decreaseSpeed: 5
+  decreaseSpeed: 15
   decreaseCurve:
     serializedVersion: 2
     m_Curve:
