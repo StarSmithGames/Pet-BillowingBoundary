@@ -60,44 +60,13 @@ namespace Game.Entities
 		}
 	}
 
-	public class BonusRegistrator : Registrator<Bonus>
-	{
-		public event UnityAction<Bonus> onBonusChanged;
-
-		public BonusRegistrator()
-		{
-			onItemAdded += OnBonusAdded;
-			onItemRemoved += OnBonusRemoved;
-		}
-
-		private void OnBonusChanged(Bonus bonus)
-		{
-			onBonusChanged?.Invoke(bonus);
-		}
-
-		private void OnBonusAdded(Bonus bonus)
-		{
-			bonus.onChanged += OnBonusChanged;
-		}
-
-		private void OnBonusRemoved(Bonus bonus)
-		{
-			bonus.onChanged -= OnBonusChanged;
-		}
-	}
+	public class BonusRegistrator : Registrator<Bonus> { }
 
 	public class SkillRegistrator : Registrator<ActiveSkill>
 	{
-		public event UnityAction<ActiveSkill> onSkillChanged;
 		public event UnityAction<ActiveSkill> onSelectedSkillChanged;
 
 		public ActiveSkill CurrentSkill { get; private set; }
-
-		public SkillRegistrator()
-		{
-			onItemAdded += OnSkillAdded;
-			onItemRemoved += OnSkillRemoved;
-		}
 
 		public void SelectSkill(ActiveSkill skill)
 		{
@@ -105,21 +74,6 @@ namespace Game.Entities
 
 			CurrentSkill = skill;
 			onSelectedSkillChanged?.Invoke(CurrentSkill);
-		}
-
-		private void OnSkillChanged(ActiveSkill skill)
-		{
-			onSkillChanged?.Invoke(skill);
-		}
-
-		private void OnSkillAdded(ActiveSkill skill)
-		{
-			skill.onChanged += OnSkillChanged;
-		}
-
-		private void OnSkillRemoved(ActiveSkill skill)
-		{
-			skill.onChanged -= OnSkillChanged;
 		}
 	}
 

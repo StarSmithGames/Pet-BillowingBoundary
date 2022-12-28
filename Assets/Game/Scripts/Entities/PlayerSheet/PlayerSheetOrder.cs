@@ -22,8 +22,8 @@ public class PlayerSheetOrder : MonoBehaviour
 
 	private void Start()
 	{
-		player.BonusRegistrator.Registrate(bonuses);
-		player.SkillRegistrator.Registrate(skills);
+		player.BonusRegistrator.SetCollection(bonuses);
+		player.SkillRegistrator.SetCollection(skills);
 
 		player.SkillRegistrator.SelectSkill(skills.First());
 	}

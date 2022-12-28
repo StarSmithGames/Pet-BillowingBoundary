@@ -59,7 +59,7 @@ namespace Game.Systems.MarketSystem
 			this.vibrationManager = vibrationManager;
 		}
 		
-		private IEnumerator Start()
+		private void Start()
 		{
 			Enable(false);
 
@@ -73,12 +73,7 @@ namespace Game.Systems.MarketSystem
 
 			player.BonusRegistrator.onCollectionChanged += OnMarketCollectionChanged0;
 			player.SkillRegistrator.onCollectionChanged += OnMarketCollectionChanged1;
-
-			MarkertSkill.onBuyClick += OnBuyClicked;
-
-			yield return new WaitForSeconds(0.25f);
-			
-			if(marketItems0.Count == 0)
+			if (marketItems0.Count == 0)
 			{
 				OnMarketCollectionChanged0();
 			}
@@ -87,6 +82,8 @@ namespace Game.Systems.MarketSystem
 			{
 				OnMarketCollectionChanged1();
 			}
+			
+			MarkertSkill.onBuyClick += OnBuyClicked;
 		}
 
 		private void OnDestroy()
@@ -207,8 +204,6 @@ namespace Game.Systems.MarketSystem
 
 			for (int i = 0; i < marketItems1.Count; i++)
 			{
-				Debug.LogError(player.SkillRegistrator.registers[i].GetType());
-
 				marketItems1[i].SetPurchasing(player.SkillRegistrator.registers[i]);
 				marketItems1[i].Separator.SetActive(i < marketItems1.Count - 1);
 			}

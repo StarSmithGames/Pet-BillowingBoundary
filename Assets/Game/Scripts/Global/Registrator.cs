@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
 using UnityEngine.Events;
 
 public class Registrator<T>
@@ -14,6 +15,13 @@ public class Registrator<T>
 	public Registrator()
 	{
 		registers = new List<T>();
+	}
+
+	public void SetCollection(IEnumerable<T> items)
+	{
+		registers = new List<T>(items);
+
+		onCollectionChanged?.Invoke();
 	}
 
 	public virtual bool Registrate(T register)
