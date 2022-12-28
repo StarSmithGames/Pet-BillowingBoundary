@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f1995ba4f9222243825ace9981da7fb, type: 3}
-  m_Name: Pinata
+  m_Name: PinataGreen0
   m_EditorClassIdentifier: 
   information:
     portrait: {fileID: 0}
-    name: Pinata
+    isIconSimple: 1
+    name: Spinata
     isNameId: 0
     description: 
     isDescriptionId: 1
@@ -45,4 +46,4 @@ MonoBehaviour:
     exponent: 0
   coinsOnPunchType: 0
   mod: 2
-  prefab: {fileID: 8542254346796454498, guid: 2591d5a3ab64e2e428b866ab498db4c2, type: 3}
+  prefab: {fileID: 2525087381885001913, guid: 0112ce54839d9cf478f624fb031e8049, type: 3}

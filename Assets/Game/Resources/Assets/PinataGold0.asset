@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f1995ba4f9222243825ace9981da7fb, type: 3}
+  m_Name: PinataGold0
+  m_EditorClassIdentifier: 
+  information:
+    portrait: {fileID: 0}
+    isIconSimple: 1
+    name: Goldnata
+    isNameId: 0
+    description: 
+    isDescriptionId: 1
+  baseHealthPoints:
+    coefficient: 100
+    exponent: 0
+  isHasCoinsAfterDefeat: 1
+  baseCoinsAfterDefeat:
+    coefficient: 100
+    exponent: 0
+  isCoinsRandomAfterDefeat: 0
+  baseMinCoinsAfterDefeat:
+    coefficient: 0
+    exponent: 0
+  baseMaxCoinsAfterDefeat:
+    coefficient: 0
+    exponent: 0
+  isHasCoinsOnPunch: 1
+  baseCoinsOnPunch:
+    coefficient: 100
+    exponent: 0
+  isCoinsRandomOnPunch: 0
+  baseMinCoinsOnPunch:
+    coefficient: 0
+    exponent: 0
+  baseMaxCoinsOnPunch:
+    coefficient: 0
+    exponent: 0
+  coinsOnPunchType: 0
+  mod: 1
+  prefab: {fileID: 3648428273499882869, guid: 5715d3b6ec9bc0749b6e9ab1351075ca, type: 3}
