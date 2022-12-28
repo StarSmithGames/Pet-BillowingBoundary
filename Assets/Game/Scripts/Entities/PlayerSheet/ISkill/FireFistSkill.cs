@@ -66,6 +66,29 @@ namespace Game.Entities
 					t = 0;
 				}
 			}
+			else if(tapBar.TapPhase == TapPhase.Accumulation)
+			{
+				t += Time.deltaTime;
+
+				if(t >= data.waitingTime)
+				{
+					tapBar.SetTapPhase(TapPhase.Decrease);
+					OnStartDecrease();
+					t = 0;
+				}
+			}
+			else if(tapBar.TapPhase == TapPhase.Decrease)
+			{
+				if(tapBar.CurrentValue != tapBar.MinValue)
+				{
+					t += Time.deltaTime;
+					tapBar.CurrentValue -= Time.deltaTime * data.decreaseCurve.Evaluate(t / data.waitingTime) * data.decreaseSpeed;
+				}
+				else
+				{
+					t = 0;
+				}
+			}
 		}
 
 		public override SkillProperty GetProperty(int index)
@@ -112,6 +135,11 @@ namespace Game.Entities
 			player.TapCriticalChance.RemoveModifier(Chance.XModifier);
 		}
 
+		private void OnStartDecrease()
+		{
+
+		}
+
 		private void OnStartRelease()
 		{
 			conveyor.CurrentLeftHand.EnableFireFist(true);
@@ -130,8 +158,17 @@ namespace Game.Entities
 		{
 			if (isHasCooldown && isCooldown) return;
 
+			if (tapBar.TapPhase == TapPhase.Decrease)
+			{
+				t = 0;
+
+				tapBar.SetTapPhase(TapPhase.Accumulation);
+			}
+
 			if (tapBar.TapPhase == TapPhase.Accumulation)
 			{
+				t = 0;//reset waitingTime
+
 				tapBar.CurrentValue += data.incrementForTap;
 
 				if (tapBar.CurrentValue == tapBar.MaxValue)
@@ -234,4 +271,11 @@ namespace Game.Entities
 
 		protected override BFN Formule() => Level == 0 ? new BFN(450, 0) : new BFN(Math.Ceiling(450 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
 	}
+}
+
+public enum TapPhase
+{
+	Accumulation,
+	Decrease,
+	Release,
 }

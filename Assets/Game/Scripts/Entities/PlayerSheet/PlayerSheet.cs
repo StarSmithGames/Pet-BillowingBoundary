@@ -48,10 +48,4 @@ namespace Game.Entities
 			TapPhase = tapPhase;
 		}
 	}
-
-	public enum TapPhase
-	{
-		Accumulation,
-		Release,
-	}
 }
