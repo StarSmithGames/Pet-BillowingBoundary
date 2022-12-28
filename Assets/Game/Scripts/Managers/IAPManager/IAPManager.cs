@@ -6,6 +6,7 @@ using Zenject;
 using Game.Systems.AdSystem;
 using UnityEngine.Events;
 using Game.Managers.StorageManager;
+using Game.Systems.AnalyticsSystem;
 
 namespace Game.Managers.IAPManager
 {
@@ -20,14 +21,16 @@ namespace Game.Managers.IAPManager
 		private IStoreController storeController;
 		private IExtensionProvider storeExtensionProvider;
 
-		private AdSystem adSystem;
 		private ISaveLoad saveLoad;
+		private AnalyticsSystem analyticsSystem;
+		private AdSystem adSystem;
 
 		[Inject]
-		private void Construct(ISaveLoad saveLoad, AdSystem adSystem)
+		private void Construct(ISaveLoad saveLoad, AnalyticsSystem analyticsSystem, AdSystem adSystem)
 		{
-			this.adSystem = adSystem;
 			this.saveLoad = saveLoad;
+			this.analyticsSystem = analyticsSystem;
+			this.adSystem = adSystem;
 		}
 
 		private void Start()
@@ -84,6 +87,8 @@ namespace Game.Managers.IAPManager
 			if (string.Equals(args.purchasedProduct.definition.id, removeADS, StringComparison.Ordinal))
 			{
 				adSystem.Enable(false);
+
+				analyticsSystem.LogEvent_iap_remove_ads();
 
 				Debug.Log($"[IAPManager] ProcessPurchase: PASS. Product: '{args.purchasedProduct.definition.id}'");
 			}
