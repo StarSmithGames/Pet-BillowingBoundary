@@ -19,7 +19,6 @@ namespace Game.Systems.MarketSystem
 				(CurrentPurchase as Bonus).onChanged += OnPurchasableChanged;
 
 				OnPurchasableChanged(CurrentPurchase);
-				OnLocalizationChanged();
 			}
 			else
 			{

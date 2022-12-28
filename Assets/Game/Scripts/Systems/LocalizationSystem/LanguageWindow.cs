@@ -21,12 +21,14 @@ namespace Game.Systems.LocalizationSystem
 		[Space]
 		[SerializeField] private List<UILanguageButton> langs = new List<UILanguageButton>();
 
+		private SignalBus signalBus;
 		private UISubCanvas subCanvas;
 		private LocalizationSystem localizationSystem;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas, LocalizationSystem localizationSystem)
+		private void Construct(SignalBus signalBus, UISubCanvas subCanvas, LocalizationSystem localizationSystem)
 		{
+			this.signalBus = signalBus;
 			this.subCanvas = subCanvas;
 			this.localizationSystem = localizationSystem;
 		}
@@ -40,14 +42,13 @@ namespace Game.Systems.LocalizationSystem
 
 			subCanvas.WindowsRegistrator.Registrate(this);
 
-			var names = localizationSystem.GetAllLanguageNativeNames();
-			var index = localizationSystem.CurrentLocaleIndex;
 			for (int i = 0; i < langs.Count; i++)
 			{
-				langs[i].SetText(names[i]);
-				langs[i].Enable(i == index);
 				langs[i].onClicked += OnLangClicked;
 			}
+
+			signalBus.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
+			OnLocalizationChanged();
 		}
 
 		private void OnDestroy()
@@ -60,7 +61,21 @@ namespace Game.Systems.LocalizationSystem
 				langs[i].onClicked -= OnLangClicked;
 			}
 
+			signalBus.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
+
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
+		}
+
+
+		private void OnLocalizationChanged()
+		{
+			var names = localizationSystem.GetAllLanguageNativeNames();
+			var index = localizationSystem.CurrentLocaleIndex;
+			for (int i = 0; i < langs.Count; i++)
+			{
+				langs[i].SetText(names[i]);
+				langs[i].Enable(i == index);
+			}
 		}
 
 		private void OnLangClicked(UILanguageButton lang)

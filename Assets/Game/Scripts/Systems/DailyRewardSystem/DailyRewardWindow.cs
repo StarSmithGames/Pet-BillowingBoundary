@@ -65,7 +65,7 @@ namespace Game.Systems.DailyRewardSystem
 
 			subCanvas.WindowsRegistrator.Registrate(this);
 
-			if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime show
+			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
 			{
 				Show();
 			}

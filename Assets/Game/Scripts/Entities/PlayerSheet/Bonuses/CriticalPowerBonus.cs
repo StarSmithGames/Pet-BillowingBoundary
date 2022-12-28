@@ -41,7 +41,7 @@ public class CriticalPowerBonus : Bonus
 
 		tapModifier.SetValue(0.01f);//1% by level
 
-		Invoke();
+		onChanged?.Invoke(this);
 	}
 
 	public override string GetDescription(bool isReach = true)

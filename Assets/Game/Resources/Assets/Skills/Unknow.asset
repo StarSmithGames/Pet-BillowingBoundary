@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56c1490079afb5c429807a9e3a2fd8b8, type: 3}
-  m_Name: FireFist
+  m_Name: Unknow
   m_EditorClassIdentifier: 
   information:
-    portrait: {fileID: 21300000, guid: e14cee83027b31f4cb93f233b2735304, type: 3}
+    portrait: {fileID: 0}
     isIconSimple: 0
-    name: ui.skill.fire_fist.title
+    name: ui.bonus.muda_muda.title
     isNameId: 1
-    description: ui.skill.fire_fist.description
+    description: ui.bonus.gold_chance.description
     isDescriptionId: 1
   limitations:
     isHasCooldown: 0

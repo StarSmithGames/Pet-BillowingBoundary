@@ -75,16 +75,24 @@ MonoBehaviour:
     m_Key: ui.bonus.critical_power.description
     m_Metadata:
       m_Items: []
-  - m_Id: 784520761118720
-    m_Key: ui.skills.fire_fist.chance
+  - m_Id: 2231996198227968
+    m_Key: ui.skill.fire_fist.title
     m_Metadata:
       m_Items: []
-  - m_Id: 784520790478848
-    m_Key: ui.skills.fire_fist.duration
+  - m_Id: 2231996227588096
+    m_Key: ui.skill.fire_fist.description
     m_Metadata:
       m_Items: []
-  - m_Id: 784520790478849
-    m_Key: ui.skills.fire_fist.power
+  - m_Id: 2231996227588097
+    m_Key: ui.skill.fire_fist.chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588098
+    m_Key: ui.skill.fire_fist.duration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588099
+    m_Key: ui.skill.fire_fist.power
     m_Metadata:
       m_Items: []
   - m_Id: 2181301654851584

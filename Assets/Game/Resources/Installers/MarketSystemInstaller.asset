@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9994affd15beebf47a98b8925113c05e, type: 3}
   m_Name: MarketSystemInstaller
   m_EditorClassIdentifier: 
-  marketPrefab: {fileID: 4064169485871923057, guid: 049ced3f5a756f944a1b2ebca089d905, type: 3}
+  marketBonusPrefab: {fileID: 4064169485871923057, guid: 049ced3f5a756f944a1b2ebca089d905, type: 3}
+  marketSkillPrefab: {fileID: 1167990829529834260, guid: 196cc5d61c370a64881861f254bbc375, type: 3}

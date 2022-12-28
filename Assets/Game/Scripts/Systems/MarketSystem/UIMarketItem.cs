@@ -172,8 +172,8 @@ namespace Game.Systems.MarketSystem
 
 				SetState(purchasable.BuyType);
 
-				currentButton.Enable(marketHandler.IsPlayerCanBuy(purchasable));
-				currentButton.SetText(purchasable.GetCost().ToStringPritty());
+				currentButton?.Enable(marketHandler.IsPlayerCanBuy(purchasable));
+				currentButton?.SetText(purchasable.GetCost().ToStringPritty());
 			}
 
 			OnLocalizationChanged();

@@ -1,5 +1,6 @@
 using Game.Managers.ClickManager;
 using Game.Systems.LocalizationSystem;
+using Game.Systems.MarketSystem;
 using Game.UI;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,12 @@ namespace Game.Entities
 {
 	public class FireFistSkill : ActiveSkill
 	{
-		public override SkillData Data => data;
+		public override SkillData SkillData => data;
 		[SerializeField] private FireFistSkillData data;
 		[SerializeField] private UIGradienRageEffect effect;
+
+		public override bool IsUnknow { get; protected set; } = false;
+		public override BuyType BuyType { get; protected set; } = BuyType.None;
 
 		public FireFistChanceProperty Chance { get; private set; }
 		public FireFistDurationProperty Duration { get; private set; }
@@ -182,7 +186,7 @@ namespace Game.Entities
 
 	public class FireFistChanceProperty : SkillProperty
 	{
-		public override string LocalizationKey => "ui.skills.fire_fist.chance";
+		public override string LocalizationKey => "ui.skill.fire_fist.chance";
 
 		public PercentModifier XModifier
 		{
@@ -218,7 +222,7 @@ namespace Game.Entities
 
 	public class FireFistDurationProperty : SkillProperty
 	{
-		public override string LocalizationKey => "ui.skills.fire_fist.duration";
+		public override string LocalizationKey => "ui.skill.fire_fist.duration";
 
 		public FireFistDurationProperty(float value) : base(value) { }
 
@@ -238,7 +242,7 @@ namespace Game.Entities
 
 	public class FireFistPowerProperty : SkillProperty
 	{
-		public override string LocalizationKey => "ui.skills.fire_fist.power";
+		public override string LocalizationKey => "ui.skill.fire_fist.power";
 
 		public PercentModifier XModifier
 		{

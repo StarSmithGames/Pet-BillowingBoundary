@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StartupSelectors:
   - rid: 5811916715731451904
-  - rid: 5811916715731451968
+  - rid: 5811916855348559874
   m_AvailableLocales:
     rid: 5811916715731451907
   m_AssetDatabase:
@@ -177,5 +177,8 @@ MonoBehaviour:
         - default
         - d
         - 
-    - rid: 5811916715731451968
-      type: {class: SystemLocaleSelector, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
+    - rid: 5811916855348559874
+      type: {class: SpecificLocaleSelector, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
+      data:
+        m_LocaleId:
+          m_Code: en

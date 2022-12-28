@@ -8,13 +8,13 @@ using Zenject;
 
 public abstract class Bonus : MonoBehaviour, IPurchasable
 {
-	public event UnityAction<Bonus> onChanged;
+	public UnityAction<Bonus> onChanged;
 
 	public abstract BonusData BonusData { get; }
+	public Information Information => BonusData.information;
 	public abstract bool IsUnknow { get; protected set; }
 	public abstract int Level { get; protected set; }
 	public abstract BuyType BuyType { get; protected set; }
-	public Information Information => BonusData.information;
 
 	protected bool isInitialized = false;
 	protected BFN currentCost;
@@ -44,7 +44,7 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 
 	public virtual void Purchase()
 	{
-		Invoke();
+		onChanged?.Invoke(this);
 	}
 
 	public BFN GetCost()
@@ -60,10 +60,5 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	protected virtual void UpdateCost()
 	{
 		isInitialized = true;
-	}
-
-	protected void Invoke()
-	{
-		onChanged?.Invoke(this);
 	}
 }

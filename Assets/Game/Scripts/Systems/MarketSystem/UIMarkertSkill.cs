@@ -44,8 +44,8 @@ namespace Game.Systems.MarketSystem
 				properties[i].onBuyClicked += OnBuyClick;
 			}
 
-			player.SkillRegistrator.onSkillChanged += OnSkillChanged;
-			OnSkillChanged(player.SkillRegistrator.CurrentSkill);
+			player.SkillRegistrator.onSelectedSkillChanged += OnSelectedSkillChanged;
+			OnSelectedSkillChanged(player.SkillRegistrator.CurrentSkill);
 			signalBus?.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 			OnLocalizationChanged();
 		}
@@ -59,12 +59,12 @@ namespace Game.Systems.MarketSystem
 				properties[i].onBuyClicked -= OnBuyClick;
 			}
 
-			player.SkillRegistrator.onSkillChanged -= OnSkillChanged;
+			player.SkillRegistrator.onSelectedSkillChanged -= OnSelectedSkillChanged;
 		}
 
 		private void UpdateUI()
 		{
-			if (CurrentSkill == null) return;
+			if (CurrentSkill == null || CurrentSkill.IsUnknow) return;
 
 			for (int i = 0; i < properties.Count; i++)
 			{
@@ -77,7 +77,7 @@ namespace Game.Systems.MarketSystem
 			onBuyClick?.Invoke(properties.IndexOf(property));
 		}
 
-		private void OnSkillChanged(ActiveSkill skill)
+		private void OnSelectedSkillChanged(ActiveSkill skill)
 		{
 			CurrentSkill = skill;
 			UpdateUI();

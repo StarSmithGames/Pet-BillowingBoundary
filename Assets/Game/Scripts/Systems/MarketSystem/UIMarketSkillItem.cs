@@ -24,7 +24,6 @@ namespace Game.Systems.MarketSystem
 				(CurrentPurchase as ActiveSkill).onChanged += OnPurchasableChanged;
 
 				OnPurchasableChanged(CurrentPurchase);
-				OnLocalizationChanged();
 			}
 			else
 			{

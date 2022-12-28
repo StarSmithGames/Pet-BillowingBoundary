@@ -31,12 +31,17 @@ public class Registrator<T>
 		return false;
 	}
 
-	public virtual void Registrate(IEnumerable<T> registers)
+	public virtual void Registrate(IEnumerable<T> items)
 	{
-		foreach (var register in registers)
+		foreach (var register in items)
 		{
-			Registrate(register);
+			if (!registers.Contains(register))
+			{
+				registers.Add(register);
+			}
 		}
+
+		onCollectionChanged?.Invoke();
 	}
 
 	public virtual bool UnRegistrate(T register)

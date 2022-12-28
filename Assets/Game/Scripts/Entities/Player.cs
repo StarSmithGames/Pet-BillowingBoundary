@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 
@@ -88,6 +89,7 @@ namespace Game.Entities
 	public class SkillRegistrator : Registrator<ActiveSkill>
 	{
 		public event UnityAction<ActiveSkill> onSkillChanged;
+		public event UnityAction<ActiveSkill> onSelectedSkillChanged;
 
 		public ActiveSkill CurrentSkill { get; private set; }
 
@@ -97,10 +99,12 @@ namespace Game.Entities
 			onItemRemoved += OnSkillRemoved;
 		}
 
-		public void SelectSkill(int selectedSkill)
+		public void SelectSkill(ActiveSkill skill)
 		{
-			CurrentSkill = registers[selectedSkill];
-			onSkillChanged?.Invoke(CurrentSkill);
+			Assert.IsTrue(registers.Contains(skill));
+
+			CurrentSkill = skill;
+			onSelectedSkillChanged?.Invoke(CurrentSkill);
 		}
 
 		private void OnSkillChanged(ActiveSkill skill)

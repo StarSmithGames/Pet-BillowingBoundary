@@ -44,7 +44,6 @@ namespace Game.Managers.StorageManager
 
 		public IStorageData<bool> IsFirstTime { get; private set; }
 
-		public IStorageData<LocalizationSystem.Data> LocalizationData { get; private set; }
 		public IStorageData<DailyRewardSystem.Data> DailyRewardData { get; private set; }
 
 		public IStorageData<bool> IsPayUser { get; private set; }
@@ -54,6 +53,7 @@ namespace Game.Managers.StorageManager
 		public IStorageData<bool> IsSound { get; private set; }
 		public IStorageData<bool> IsMusic { get; private set; }
 		public IStorageData<bool> IsVibration { get; private set; }
+		public IStorageData<int> LanguageIndex { get; private set; }
 
 
 		/// <summary>
@@ -87,7 +87,6 @@ namespace Game.Managers.StorageManager
 		{
 			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
 
-			LocalizationData = new StorageData<LocalizationSystem.Data>(Database, "localization_data", new LocalizationSystem.Data());
 			DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
 
 			IsPayUser = new StorageData<bool>(Database, "is_pay_user", false);
@@ -96,6 +95,7 @@ namespace Game.Managers.StorageManager
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);
 			IsVibration = new StorageData<bool>(Database, "is_vibration", true);
+			LanguageIndex = new StorageData<int>(Database, "language_index", 0);
 		}
 
 		[System.Serializable]

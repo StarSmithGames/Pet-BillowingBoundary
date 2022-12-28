@@ -10,21 +10,22 @@ namespace Game.Entities
 {
     public interface ISkill
     {
-		SkillData Data { get; }
+		SkillData SkillData { get; }
 	}
 
     public abstract class PassiveSkill : ISkill
     {
-		public SkillData Data => data;
+		public SkillData SkillData => data;
 		private PassiveSkillData data;
 	}
     public abstract class ActiveSkill : MonoBehaviour, ISkill, IPurchasable
 	{
 		public UnityAction<ActiveSkill> onChanged;
-		public abstract SkillData Data { get; }
-		public Information Information => Data.information;
-		public bool IsUnknow { get; private set; } = false;
-		public BuyType BuyType { get; private set; } = BuyType.BUY;
+
+		public abstract SkillData SkillData { get; }
+		public Information Information => SkillData.information;
+		public abstract bool IsUnknow { get; protected set; }
+		public abstract BuyType BuyType { get; protected set; }
 
 		public Cooldown Cooldown { get; private set; }
 
@@ -45,7 +46,7 @@ namespace Game.Entities
 		{
 			player.SkillRegistrator.Registrate(this);
 
-			isHasCooldown = (Data as ActiveSkillData).limitations.isHasCooldown;
+			isHasCooldown = (SkillData as ActiveSkillData).limitations.isHasCooldown;
 			if (isHasCooldown)
 			{
 				Cooldown = new Cooldown();
@@ -75,12 +76,12 @@ namespace Game.Entities
 
 		public string GetName(bool isRich = true)
 		{
-			return localizationSystem.Translate(Information.name);
+			return Information.GetName(localizationSystem);
 		}
 
 		public string GetDescription(bool isRich = true)
 		{
-			return localizationSystem.Translate(Information.description);
+			return Information.GetDescription(localizationSystem);
 		}
 
 		public BFN GetCost()

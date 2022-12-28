@@ -22,16 +22,10 @@ public class PlayerSheetOrder : MonoBehaviour
 
 	private void Start()
 	{
-		for (int i = 0; i < bonuses.Count; i++)
-		{
-			player.BonusRegistrator.Registrate(bonuses[i]);
-		}
+		player.BonusRegistrator.Registrate(bonuses);
+		player.SkillRegistrator.Registrate(skills);
 
-		for (int i = 0; i < skills.Count; i++)
-		{
-			player.SkillRegistrator.Registrate(skills[i]);
-		}
-		player.SkillRegistrator.SelectSkill(0);
+		player.SkillRegistrator.SelectSkill(skills.First());
 	}
 
 	private void OnDestroy()
@@ -41,6 +35,11 @@ public class PlayerSheetOrder : MonoBehaviour
 		for (int i = 0; i < bonuses.Count; i++)
 		{
 			player.BonusRegistrator.UnRegistrate(bonuses[i]);
+		}
+
+		for (int i = 0; i < skills.Count; i++)
+		{
+			player.SkillRegistrator.UnRegistrate(skills[i]);
 		}
 	}
 

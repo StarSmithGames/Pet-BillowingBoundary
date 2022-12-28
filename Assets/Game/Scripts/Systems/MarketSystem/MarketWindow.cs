@@ -6,6 +6,7 @@ using Game.UI;
 
 using MoreMountains.NiceVibrations;
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,26 +36,30 @@ namespace Game.Systems.MarketSystem
 		[field: SerializeField] public UIMarkertSkill MarkertSkill { get; private set; }
 
 		private List<UIMarketBonusItem> marketItems0 = new List<UIMarketBonusItem>();
+		private List<UIMarketSkillItem> marketItems1 = new List<UIMarketSkillItem>();
 
 		private bool isOpenned = false;
 
 		private UISubCanvas subCanvas;
 		private Player player;
-		private UIMarketBonusItem.Factory marketItemFactory;
+		private UIMarketBonusItem.Factory marketItemBonusFactory;
+		private UIMarketSkillItem.Factory marketItemSkillFactory;
 		private VibrationManager vibrationManager;
 
 		[Inject]
 		private void Construct(UISubCanvas subCanvas, Player player,
-			UIMarketBonusItem.Factory marketItemFactory,
+			UIMarketBonusItem.Factory marketItemBonusFactory,
+			UIMarketSkillItem.Factory marketItemSkillFactory,
 			VibrationManager vibrationManager)
 		{
 			this.subCanvas = subCanvas;
 			this.player = player;
-			this.marketItemFactory = marketItemFactory;
+			this.marketItemBonusFactory = marketItemBonusFactory;
+			this.marketItemSkillFactory = marketItemSkillFactory;
 			this.vibrationManager = vibrationManager;
 		}
 		
-		private void Start()
+		private IEnumerator Start()
 		{
 			Enable(false);
 
@@ -66,13 +71,22 @@ namespace Game.Systems.MarketSystem
 
 			subCanvas.WindowsRegistrator.Registrate(this);
 
-			player.BonusRegistrator.onCollectionChanged += OnBonusCollectionChanged;
-			if(player.BonusRegistrator.registers.Count != 0)
-			{
-				OnBonusCollectionChanged();
-			}
+			player.BonusRegistrator.onCollectionChanged += OnMarketCollectionChanged0;
+			player.SkillRegistrator.onCollectionChanged += OnMarketCollectionChanged1;
 
 			MarkertSkill.onBuyClick += OnBuyClicked;
+
+			yield return new WaitForSeconds(0.25f);
+			
+			if(marketItems0.Count == 0)
+			{
+				OnMarketCollectionChanged0();
+			}
+
+			if (marketItems1.Count == 0)
+			{
+				OnMarketCollectionChanged1();
+			}
 		}
 
 		private void OnDestroy()
@@ -84,7 +98,8 @@ namespace Game.Systems.MarketSystem
 
 			if(player != null)
 			{
-				player.BonusRegistrator.onCollectionChanged -= OnBonusCollectionChanged;
+				player.BonusRegistrator.onCollectionChanged -= OnMarketCollectionChanged0;
+				player.SkillRegistrator.onCollectionChanged -= OnMarketCollectionChanged1;
 			}
 
 			MarkertSkill.onBuyClick += OnBuyClicked;
@@ -135,12 +150,13 @@ namespace Game.Systems.MarketSystem
 				});
 		}
 
-		private void OnBonusCollectionChanged()
+		private void OnMarketCollectionChanged0()
 		{
+			//Resize
 			CollectionExtensions.Resize(player.BonusRegistrator.registers, marketItems0,
 			() =>
 			{
-				var item = marketItemFactory.Create();
+				var item = marketItemBonusFactory.Create();
 				item.transform.SetParent(ContentTop0);
 				item.transform.localScale = Vector3.one;
 
@@ -158,13 +174,44 @@ namespace Game.Systems.MarketSystem
 				return last;
 			});
 
+			//Update UI
 			for (int i = 0; i < marketItems0.Count; i++)
 			{
 				marketItems0[i].SetPurchasing(player.BonusRegistrator.registers[i]);
 				marketItems0[i].Separator.SetActive(i < marketItems0.Count - 1);
 			}
+		}
 
-			Debug.LogError("OnBonusCollectionChanged");
+		private void OnMarketCollectionChanged1()
+		{
+			CollectionExtensions.Resize(player.SkillRegistrator.registers, marketItems1,
+			() =>
+			{
+				var item = marketItemSkillFactory.Create();
+				item.transform.SetParent(ContentTop1);
+				item.transform.localScale = Vector3.one;
+
+				item.onBuyClick += OnBuyClicked;
+
+				return item;
+			},
+			() =>
+			{
+				var last = marketItems1.Last();
+				last.SetPurchasing(null);
+				last.onBuyClick -= OnBuyClicked;
+				last.DespawnIt();
+
+				return last;
+			});
+
+			for (int i = 0; i < marketItems1.Count; i++)
+			{
+				Debug.LogError(player.SkillRegistrator.registers[i].GetType());
+
+				marketItems1[i].SetPurchasing(player.SkillRegistrator.registers[i]);
+				marketItems1[i].Separator.SetActive(i < marketItems1.Count - 1);
+			}
 		}
 
 		private void OnBuyClicked(int skillPropertyIndex)
