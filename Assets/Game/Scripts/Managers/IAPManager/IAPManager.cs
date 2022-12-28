@@ -5,6 +5,7 @@ using System;
 using Zenject;
 using Game.Systems.AdSystem;
 using UnityEngine.Events;
+using Game.Managers.StorageManager;
 
 namespace Game.Managers.IAPManager
 {
@@ -20,11 +21,13 @@ namespace Game.Managers.IAPManager
 		private IExtensionProvider storeExtensionProvider;
 
 		private AdSystem adSystem;
+		private ISaveLoad saveLoad;
 
 		[Inject]
-		private void Construct(AdSystem adSystem)
+		private void Construct(ISaveLoad saveLoad, AdSystem adSystem)
 		{
 			this.adSystem = adSystem;
+			this.saveLoad = saveLoad;
 		}
 
 		private void Start()
@@ -47,35 +50,16 @@ namespace Game.Managers.IAPManager
 
 			if (product != null && product.availableToPurchase)
 			{
-				Debug.Log($"Purchasing product asychronously: '{product.definition.id}'");
+				Debug.Log($"[IAPManager] Purchasing product asychronously: '{product.definition.id}'");
 
 				storeController.InitiatePurchase(product);
 			}
 			else
 			{
-				Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
+				Debug.Log($"[IAPManager] BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase {(product != null)} {(product?.availableToPurchase)}");
 			}
 		}
 
-		public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
-		{
-			if (string.Equals(args.purchasedProduct.definition.id, removeADS, StringComparison.Ordinal))
-			{
-				adSystem.Enable(false);
-
-				Debug.Log($"ProcessPurchase: PASS. Product: '{args.purchasedProduct.definition.id}'");
-			}
-			else if (string.Equals(args.purchasedProduct.definition.id, buyMillion, StringComparison.Ordinal))
-			{
-				Debug.Log($"ProcessPurchase: PASS. Product: '{args.purchasedProduct.definition.id}'");
-			}
-			else
-			{
-				Debug.Log($"ProcessPurchase: FAIL. Unrecognized product: '{args.purchasedProduct.definition.id}'");
-			}
-
-			return PurchaseProcessingResult.Complete;
-		}
 
 		/// <summary>
 		/// apple Only
@@ -93,6 +77,28 @@ namespace Game.Managers.IAPManager
 					Debug.Log("RestorePurchases continuing: " + result + ". If no further messages, no purchases available to restore.");
 				});
 			}
+		}
+
+		public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
+		{
+			if (string.Equals(args.purchasedProduct.definition.id, removeADS, StringComparison.Ordinal))
+			{
+				adSystem.Enable(false);
+
+				Debug.Log($"[IAPManager] ProcessPurchase: PASS. Product: '{args.purchasedProduct.definition.id}'");
+			}
+			else if (string.Equals(args.purchasedProduct.definition.id, buyMillion, StringComparison.Ordinal))
+			{
+				Debug.Log($"[IAPManager] ProcessPurchase: PASS. Product: '{args.purchasedProduct.definition.id}'");
+			}
+			else
+			{
+				Debug.LogError($"[IAPManager] ProcessPurchase: FAIL. Unrecognized product: '{args.purchasedProduct.definition.id}'");
+			}
+
+			saveLoad.GetStorage().IsPayUser.SetData(true);
+
+			return PurchaseProcessingResult.Complete;
 		}
 
 		public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
@@ -114,7 +120,7 @@ namespace Game.Managers.IAPManager
 
 		public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
 		{
-			Debug.Log($"OnPurchaseFailed: FAIL. Product: '{product.definition.storeSpecificId}', PurchaseFailureReason: {failureReason}");
+			Debug.Log($"[IAPManager] OnPurchaseFailed: FAIL. Product: '{product.definition.storeSpecificId}', PurchaseFailureReason: {failureReason}");
 
 			onPurchaseFailed?.Invoke();
 		}
