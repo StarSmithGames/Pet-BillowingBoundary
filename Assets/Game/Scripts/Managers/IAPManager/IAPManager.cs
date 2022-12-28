@@ -3,17 +3,29 @@ using UnityEngine.Purchasing;
 using System;
 
 using Zenject;
+using Game.Systems.AdSystem;
+using UnityEngine.Events;
 
 namespace Game.Managers.IAPManager
 {
 	public class IAPManager : MonoBehaviour, IStoreListener
 	{
+		public event UnityAction onPurchaseFailed;
+
 		public readonly string removeADS = "remove_ads";
 		public readonly string buyMillion = "one_milion";
 
 		private bool isInitialized = false;
 		private IStoreController storeController;
 		private IExtensionProvider storeExtensionProvider;
+
+		private AdSystem adSystem;
+
+		[Inject]
+		private void Construct(AdSystem adSystem)
+		{
+			this.adSystem = adSystem;
+		}
 
 		private void Start()
 		{
@@ -49,6 +61,8 @@ namespace Game.Managers.IAPManager
 		{
 			if (string.Equals(args.purchasedProduct.definition.id, removeADS, StringComparison.Ordinal))
 			{
+				adSystem.Enable(false);
+
 				Debug.Log($"ProcessPurchase: PASS. Product: '{args.purchasedProduct.definition.id}'");
 			}
 			else if (string.Equals(args.purchasedProduct.definition.id, buyMillion, StringComparison.Ordinal))
@@ -64,7 +78,7 @@ namespace Game.Managers.IAPManager
 		}
 
 		/// <summary>
-		/// Apply Only
+		/// apple Only
 		/// </summary>
 		public void RestorePurchases()
 		{
@@ -101,6 +115,8 @@ namespace Game.Managers.IAPManager
 		public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
 		{
 			Debug.Log($"OnPurchaseFailed: FAIL. Product: '{product.definition.storeSpecificId}', PurchaseFailureReason: {failureReason}");
+
+			onPurchaseFailed?.Invoke();
 		}
 	}
 }

@@ -11,6 +11,8 @@ namespace Game.Systems.AdSystem
 
 		public override void InstallBindings()
 		{
+			Container.DeclareSignal<SignalADSEnableChanged>();
+
 			Container.BindInstance(appId).WhenInjectedInto<AdSystem>();
 			Container.BindInterfacesAndSelfTo<AdSystem>().AsSingle().NonLazy();
 
@@ -20,5 +22,10 @@ namespace Game.Systems.AdSystem
 
 			Container.BindInterfacesTo<AdSystemHandler>().AsSingle().NonLazy();
 		}
+	}
+
+	public struct SignalADSEnableChanged
+	{
+		public bool trigger;
 	}
 }

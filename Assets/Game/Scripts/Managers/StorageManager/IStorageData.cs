@@ -47,6 +47,10 @@ namespace Game.Managers.StorageManager
 		public IStorageData<LocalizationSystem.Data> LocalizationData { get; private set; }
 		public IStorageData<DailyRewardSystem.Data> DailyRewardData { get; private set; }
 
+		public IStorageData<bool> IsPayUser { get; private set; }
+		public IStorageData<bool> IsBuyRemoveADS { get; private set; }
+
+		//settings
 		public IStorageData<bool> IsSound { get; private set; }
 		public IStorageData<bool> IsMusic { get; private set; }
 		public IStorageData<bool> IsVibration { get; private set; }
@@ -85,6 +89,9 @@ namespace Game.Managers.StorageManager
 
 			LocalizationData = new StorageData<LocalizationSystem.Data>(Database, "localization_data", new LocalizationSystem.Data());
 			DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
+
+			IsPayUser = new StorageData<bool>(Database, "is_pay_user", false);
+			IsBuyRemoveADS = new StorageData<bool>(Database, "is_buy_remove_ads", false);
 
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);

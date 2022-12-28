@@ -6,8 +6,11 @@ using Zenject;
 
 namespace Game.Systems.AdSystem
 {
-	public class AdRewarded : IInitializable
+	public class AdRewarded : IAdPlacement, IInitializable
 	{
+		public bool IsEnabled { get; private set; } = true;
+		public bool IsShowing { get; private set; } = false;
+
 		private bool isClosed = false;
 
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
@@ -32,6 +35,12 @@ namespace Game.Systems.AdSystem
 			Debug.Log("[AdSystem] Rewarded Load!");
 		}
 
+
+		public void Enable(bool trigger)
+		{
+			IsEnabled = true;
+		}
+
 		public bool Show()
 		{
 			if (IronSource.Agent.isRewardedVideoAvailable())
@@ -46,6 +55,8 @@ namespace Game.Systems.AdSystem
 			return false;
 		}
 
+		public void Hide() { }
+
 		/************* RewardedVideo AdInfo Delegates *************/
 		// Indicates that there’s an available ad.
 		// The adInfo object includes information about the ad that was loaded successfully
@@ -57,6 +68,7 @@ namespace Game.Systems.AdSystem
 		// The Rewarded Video ad view has opened. Your activity will loose focus.
 		private void OnRewardedAdOpened(IronSourceAdInfo adInfo)
 		{
+			IsShowing = true;
 			analyticsSystem.LogEvent_ad_rewarded_showed();
 		}
 		// The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
@@ -69,6 +81,7 @@ namespace Game.Systems.AdSystem
 				analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Simple);
 			}
 
+			IsShowing = false;
 			isClosed = false;
 		}
 		// The user completed to watch the video, and should be rewarded.

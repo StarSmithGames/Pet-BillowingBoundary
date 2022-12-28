@@ -5,11 +5,12 @@ using Zenject;
 
 namespace Game.Systems.AdSystem
 {
-	public class AdBanner : IInitializable
+	public class AdBanner : IAdPlacement, IInitializable
 	{
 		public event UnityAction<bool> onBannerVisibleChanged;
 
-		public bool IsShowing { get; private set; } = false;
+		public bool IsEnabled { get; private set; } = true;
+		public bool IsShowing { get; private set; } = true;
 
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
@@ -32,17 +33,53 @@ namespace Game.Systems.AdSystem
 			Debug.Log("[AdSystem] Banner Load!");
 		}
 
+
+		public void Enable(bool trigger)
+		{
+			if (trigger)
+			{
+				if (!IsShowing)
+				{
+					Show();
+				}
+			}
+			else
+			{
+				if (IsShowing)
+				{
+					Hide();
+				}
+			}
+
+			IsEnabled = trigger;
+		}
+
+		public bool Show()
+		{
+			IronSource.Agent.displayBanner();
+			analyticsSystem.LogEvent_ad_banner_showed();
+			IsShowing = true;
+			onBannerVisibleChanged?.Invoke(IsShowing);
+
+			return true;
+		}
+
+		public void Hide()
+		{
+			IronSource.Agent.hideBanner();
+			IsShowing = false;
+			onBannerVisibleChanged?.Invoke(IsShowing);
+		}
+
+
 		//Invoked once the banner has loaded
 		private void OnBannerAdLoaded()
 		{
-			IronSource.Agent.displayBanner();
-			
-			IsShowing = true;
+			if (IsEnabled)
+			{
+				Show();
+			}
 
-			analyticsSystem.LogEvent_ad_banner_showed();
-
-			onBannerVisibleChanged?.Invoke(IsShowing);
-			//IronSource.Agent.hideBanner();
 			//IronSource.Agent.destroyBanner();
 		}
 

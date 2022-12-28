@@ -7,9 +7,12 @@ using Zenject;
 
 namespace Game.Systems.AdSystem
 {
-	public class AdInterstitial : IInitializable
+	public class AdInterstitial : IAdPlacement, IInitializable
 	{
 		public event UnityAction onInterstitialClosed;
+
+		public bool IsEnabled { get; private set; } = true;
+		public bool IsShowing { get; private set; } = false;
 
 		private bool isClicked = false;
 
@@ -35,17 +38,28 @@ namespace Game.Systems.AdSystem
 			Debug.Log("[AdSystem] Interstitial Load!");
 		}
 
+		public void Enable(bool trigger)
+		{
+			IsEnabled = trigger;
+		}
+
+
 		public bool Show()
 		{
-			if (IronSource.Agent.isInterstitialReady())
+			if (IsEnabled)
 			{
-				IronSource.Agent.showInterstitial();
-				Debug.Log("[AdSystem] Interstitial Show.");
-				return true;
+				if (IronSource.Agent.isInterstitialReady())
+				{
+					IronSource.Agent.showInterstitial();
+					Debug.Log("[AdSystem] Interstitial Show.");
+					return true;
+				}
 			}
 
 			return false;
 		}
+
+		public void Hide() { }
 
 		/************* Interstitial AdInfo Delegates *************/
 		// Invoked when the interstitial ad was loaded succesfully.
