@@ -1,3 +1,4 @@
+using Game.Managers.StorageManager;
 using Game.Systems.AdSystem;
 
 using System.Collections.Generic;
@@ -8,11 +9,20 @@ namespace Game.Systems.AnalyticsSystem
 	{
 
 		private FirebaseAnalyticsGroup firebaseAnalyticsGroup;
+		private ISaveLoad saveLoad;
 
-		public AnalyticsSystem(FirebaseAnalyticsGroup firebaseAnalyticsGroup)
+		public AnalyticsSystem(FirebaseAnalyticsGroup firebaseAnalyticsGroup, ISaveLoad saveLoad)
 		{
 			this.firebaseAnalyticsGroup = firebaseAnalyticsGroup;
+			this.saveLoad = saveLoad;
 		}
+
+		#region IAP
+		public void LogEvent_iap_remove_ads()
+		{
+			LogEvent("iap_remove_ads");
+		}
+		#endregion
 
 		#region ADS
 		public void LogEvent_ad_banner_showed()
