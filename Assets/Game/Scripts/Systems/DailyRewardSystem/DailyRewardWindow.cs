@@ -22,11 +22,10 @@ using Zenject;
 
 namespace Game.Systems.DailyRewardSystem
 {
-	public class DailyRewardWindow : WindowBase
+	public class DailyRewardWindow : WindowQuartBase
 	{
 		[field: SerializeField] public Button Blank { get; private set; }
 		[field: SerializeField] public Button Close { get; private set; }
-		[field: SerializeField] public Transform Window { get; private set; }
 		
 		[SerializeField] private List<UIRewardItem> rewards = new List<UIRewardItem>();
 
@@ -90,44 +89,7 @@ namespace Game.Systems.DailyRewardSystem
 			var data = saveLoad.GetStorage().DailyRewardData.GetData();
 			SelectDay(data.currentDay, data.currentState);
 
-			Window.localScale = Vector3.zero;
-
-			IsInProcess = true;
-			CanvasGroup.alpha = 0f;
-			CanvasGroup.Enable(true, false);
-			IsShowing = true;
-
-			Sequence sequence = DOTween.Sequence();
-
-			sequence
-				.Append(CanvasGroup.DOFade(1f, 0.2f))
-				.Join(Window.DOScale(1, 0.35f).SetEase(Ease.OutQuart))
-				.AppendCallback(() =>
-				{
-					callback?.Invoke();
-					IsInProcess = false;
-				});
-
-		}
-		public override void Hide(UnityAction callback = null)
-		{
-			Window.localScale = Vector3.one;
-
-			IsInProcess = true;
-
-			Sequence sequence = DOTween.Sequence();
-
-			sequence
-				.Append(CanvasGroup.DOFade(0f, 0.15f))
-				.Join(Window.DOScale(0, 0.25f).SetEase(Ease.InBounce))
-				.AppendCallback(() =>
-				{
-					CanvasGroup.Enable(false);
-					IsShowing = false;
-					callback?.Invoke();
-
-					IsInProcess = false;
-				});
+			base.Show(callback);
 		}
 
 		private void SelectDay(DayType day, DailyRewardState state)

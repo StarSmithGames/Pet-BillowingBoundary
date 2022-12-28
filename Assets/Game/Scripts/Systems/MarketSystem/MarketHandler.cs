@@ -41,9 +41,9 @@ namespace Game.Systems.MarketSystem
 			IsCanBoughtSomething = false;
 		}
 
-		public bool IsPlayerCanBuy(Bonus bonus)
+		public bool IsPlayerCanBuy(IPurchasable purchasable)
 		{
-			return IsPlayerCanBuy(bonus.GetCost());
+			return IsPlayerCanBuy(purchasable.GetCost());
 		}
 
 		public bool IsPlayerCanBuy(BFN bfn)

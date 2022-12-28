@@ -1,4 +1,8 @@
+using DG.Tweening;
+
 using Game.Systems.LocalizationSystem;
+
+using UnityEditor.PackageManager.UI;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,7 +12,7 @@ using Zenject;
 
 namespace Game.UI
 {
-    public class FastMessageWindow : WindowBasePoolable
+    public class FastMessageWindow : WindowPopupBasePoolable
 	{
 		private UnityAction<FastMessageResult> result;
 
@@ -31,15 +35,12 @@ namespace Game.UI
 		{
 			Close.onClick.AddListener(OnClick);
 			Blank.onClick.AddListener(OnClick);
-
-			//signalBus?.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
 		private void OnDestroy()
 		{
 			Close.onClick.RemoveAllListeners();
 			Blank.onClick.RemoveAllListeners();
-			//signalBus?.Unsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
 
 		public void Show(FastMessageType type, UnityAction<FastMessageResult> callback = null)
@@ -54,6 +55,7 @@ namespace Game.UI
 
 			base.Show();
 		}
+
 
 		public override void OnSpawned(IMemoryPool pool)
 		{

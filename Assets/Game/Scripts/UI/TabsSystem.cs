@@ -93,7 +93,7 @@ namespace Game.UI
 
 			Open(initIndex);
 
-			vibrationManager.Vibrate();
+			vibrationManager?.Vibrate();
 		}
 	}
 

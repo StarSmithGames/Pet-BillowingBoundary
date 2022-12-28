@@ -7,7 +7,7 @@ public class BonusData : ScriptableObject
 	[HideLabel]
 	public Information information;
 
-	public bool isIconSimple = true;
+
 
 	[Space]
 	public int baseCost;

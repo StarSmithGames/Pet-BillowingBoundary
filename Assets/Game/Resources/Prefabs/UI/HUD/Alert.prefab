@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CanvasGroup>k__BackingField: {fileID: 330654089629128737}
+  <Window>k__BackingField: {fileID: 3376365518440257602}
 --- !u!1 &6245943364347369301
 GameObject:
   m_ObjectHideFlags: 0

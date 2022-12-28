@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   information:
     portrait: {fileID: 21300000, guid: 228ae7fa2073e664290d8636f88672c2, type: 3}
+    isIconSimple: 0
     name: ui.bonus.critical_chance.title
     isNameId: 1
     description: ui.bonus.critical_chance.description
     isDescriptionId: 1
-  isIconSimple: 0
   baseCost: 150
   isHasMaxLevel: 1
   maxLevel: 100

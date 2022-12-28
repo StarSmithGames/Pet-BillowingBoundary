@@ -15,6 +15,8 @@ public class Information
 	[HideLabel]
 	public Sprite portrait;
 
+	public bool isIconSimple = true;
+
 	[VerticalGroup("Information/Split/Right")]
 	[HorizontalGroup("Information/Split/Right/SplitName")]
 	[LabelText("@NameLabel")]

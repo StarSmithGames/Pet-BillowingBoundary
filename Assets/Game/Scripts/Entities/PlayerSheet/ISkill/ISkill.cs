@@ -1,4 +1,6 @@
 using Game.Systems.LocalizationSystem;
+using Game.Systems.MarketSystem;
+
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,12 +18,16 @@ namespace Game.Entities
 		public SkillData Data => data;
 		private PassiveSkillData data;
 	}
-    public abstract class ActiveSkill : MonoBehaviour, ISkill
+    public abstract class ActiveSkill : MonoBehaviour, ISkill, IPurchasable
 	{
 		public UnityAction<ActiveSkill> onChanged;
 		public abstract SkillData Data { get; }
+		public Information Information => Data.information;
+		public bool IsUnknow { get; private set; } = false;
+		public BuyType BuyType { get; private set; } = BuyType.BUY;
 
 		public Cooldown Cooldown { get; private set; }
+
 		protected bool isHasCooldown = true;
 		protected bool isCooldown = false;
 
@@ -66,6 +72,26 @@ namespace Game.Entities
 
 		public abstract void PurchaseProperty(int index);
 		public abstract SkillProperty GetProperty(int index);
+
+		public string GetName(bool isRich = true)
+		{
+			return localizationSystem.Translate(Information.name);
+		}
+
+		public string GetDescription(bool isRich = true)
+		{
+			return localizationSystem.Translate(Information.description);
+		}
+
+		public BFN GetCost()
+		{
+			return BFN.Zero;
+		}
+
+		public void Purchase()
+		{
+			onChanged?.Invoke(this);
+		}
 
 		protected virtual void ResetSkill()
 		{

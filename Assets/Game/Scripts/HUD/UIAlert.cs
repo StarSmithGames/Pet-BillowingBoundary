@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Game.HUD
 {
-	public class UIAlert : ShowHideFadeBehavior
+	public class UIAlert : WindowPopupBase
 	{
 		private void Start()
 		{
@@ -14,44 +14,18 @@ namespace Game.HUD
 		
 		public override void Show(UnityAction callback = null)
 		{
-			IsInProcess = true;
-			CanvasGroup.alpha = 0f;
-			CanvasGroup.Enable(true, false);
-			IsShowing = true;
-
-			Sequence sequence = DOTween.Sequence();
-
-			sequence
-				.Append(CanvasGroup.DOFade(1f, 0.2f))
-				.Join(transform.DOScale(1f, 0.2f))
-				.AppendCallback(() =>
-				{
-					callback?.Invoke();
-					IsInProcess = false;
-
-					IdleAnimation().Play();
-				});
+			base.Show(() =>
+			{
+				callback?.Invoke();
+				IdleAnimation().Play();
+			});
 		}
 		
 		public override void Hide(UnityAction callback = null)
 		{
 			transform.DOKill(true);
 
-			IsInProcess = true;
-
-			Sequence sequence = DOTween.Sequence();
-
-			sequence
-				.Append(CanvasGroup.DOFade(0f, 0.15f))
-				.Join(transform.DOScale(0f, 0.15f))
-				.AppendCallback(() =>
-				{
-					CanvasGroup.Enable(false);
-					IsShowing = false;
-					callback?.Invoke();
-
-					IsInProcess = false;
-				});
+			base.Hide(callback);
 		}
 
 		private Tween IdleAnimation()

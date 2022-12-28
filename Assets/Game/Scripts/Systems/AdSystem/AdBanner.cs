@@ -10,7 +10,7 @@ namespace Game.Systems.AdSystem
 		public event UnityAction<bool> onBannerVisibleChanged;
 
 		public bool IsEnabled { get; private set; } = true;
-		public bool IsShowing { get; private set; } = true;
+		public bool IsShowing { get; private set; } = false;
 
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 

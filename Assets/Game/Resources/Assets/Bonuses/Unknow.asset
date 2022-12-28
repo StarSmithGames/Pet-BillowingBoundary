@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c6d434316233a142a79cb6217b7ab0d, type: 3}
-  m_Name: Muda Muda
+  m_Name: Unknow
   m_EditorClassIdentifier: 
   information:
-    portrait: {fileID: 21300000, guid: ee8eeb2db664a5f428fb27832feae45a, type: 3}
+    portrait: {fileID: 0}
     isIconSimple: 0
-    name: ui.bonus.muda_muda.title
+    name: ui.bonus.gold_chance.title
     isNameId: 1
-    description: ui.bonus.muda_muda.description
+    description: ui.bonus.critical_power.description
     isDescriptionId: 1
-  baseCost: 50
+  baseCost: 150
   isHasMaxLevel: 1
   maxLevel: 100

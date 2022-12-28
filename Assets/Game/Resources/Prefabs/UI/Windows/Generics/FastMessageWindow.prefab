@@ -987,6 +987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CanvasGroup>k__BackingField: {fileID: 5413922637604474232}
+  <Window>k__BackingField: {fileID: 1260589527990942749}
   <Close>k__BackingField: {fileID: 5216765531556525087}
   <Blank>k__BackingField: {fileID: 5849019745368550505}
   <Title>k__BackingField: {fileID: 1027026183877263863}

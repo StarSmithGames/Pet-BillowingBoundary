@@ -40,7 +40,7 @@ public class CriticalChanceBonus : Bonus
 		player.TapCriticalChance.AddModifier(tapModifier);
 	}
 
-	public override string GetDescription()
+	public override string GetDescription(bool isReach = true)
 	{
 		return string.Format(base.GetDescription(), Math.Round(tapModifier.CurrentValue * 100f));
 	}

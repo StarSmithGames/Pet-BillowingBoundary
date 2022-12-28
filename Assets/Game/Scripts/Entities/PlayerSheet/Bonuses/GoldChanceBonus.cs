@@ -33,7 +33,7 @@ public class GoldChanceBonus : Bonus
 		player.TapGoldChance.AddModifier(tapModifier);
 	}
 
-	public override string GetDescription()
+	public override string GetDescription(bool isReach = true)
 	{
 		return string.Format(base.GetDescription(), Math.Round(tapModifier.CurrentValue * 100f));
 	}

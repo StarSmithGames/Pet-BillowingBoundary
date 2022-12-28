@@ -151,7 +151,7 @@ namespace Game.Systems.MarketSystem
 			() =>
 			{
 				var last = marketItems0.Last();
-				last.SetBonus(null);
+				last.SetPurchasing(null);
 				last.onBuyClick -= OnBuyClicked;
 				last.DespawnIt();
 
@@ -160,7 +160,7 @@ namespace Game.Systems.MarketSystem
 
 			for (int i = 0; i < marketItems0.Count; i++)
 			{
-				marketItems0[i].SetBonus(player.BonusRegistrator.registers[i]);
+				marketItems0[i].SetPurchasing(player.BonusRegistrator.registers[i]);
 				marketItems0[i].Separator.SetActive(i < marketItems0.Count - 1);
 			}
 
@@ -182,17 +182,17 @@ namespace Game.Systems.MarketSystem
 			MarkertSkill.CurrentSkill.PurchaseProperty(skillPropertyIndex);
 		}
 
-		private void OnBuyClicked(UIMarketBonusItem marketItem)
+		private void OnBuyClicked(UIMarketItem marketItem)
 		{
 			vibrationManager.Vibrate();
 
-			if (player.Gold.CurrentValue < marketItem.CurrentBonus.GetCost())
+			if (player.Gold.CurrentValue < marketItem.CurrentPurchase.GetCost())
 			{
 				return;
 			}
 
-			player.Gold.CurrentValue -= marketItem.CurrentBonus.GetCost();
-			marketItem.CurrentBonus.Purchase();
+			player.Gold.CurrentValue -= marketItem.CurrentPurchase.GetCost();
+			marketItem.CurrentPurchase.Purchase();
 		}
 
 		private void OnClosed()
