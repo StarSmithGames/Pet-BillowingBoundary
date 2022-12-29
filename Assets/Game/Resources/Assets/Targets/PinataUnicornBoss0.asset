@@ -19,9 +19,7 @@ MonoBehaviour:
     isNameId: 0
     description: 
     isDescriptionId: 1
-  baseHealthPoints:
-    coefficient: 1000
-    exponent: 0
+  baseHealthPoints: 1000
   isHasCoinsAfterDefeat: 1
   baseCoinsAfterDefeat:
     coefficient: 1

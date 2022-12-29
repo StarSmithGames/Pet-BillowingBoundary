@@ -1,19 +1,7 @@
-using DG.Tweening;
-
 using Game.Entities;
-
-using Sirenix.OdinInspector;
-
-using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
-using UnityEngine.UIElements;
-
 using Zenject;
-
-using Unity.VisualScripting;
-
 using Game.Managers.GameManager;
 using Game.Systems.WaveRoadSystem;
 
@@ -23,7 +11,7 @@ using UnityEditor;
 
 namespace Game.Managers.ClickManager
 {
-	public class ClickerConveyor : MonoBehaviour
+	public class ClickStarter : MonoBehaviour
 	{
 		public Transform TargetContent => targetContent;
 
@@ -32,12 +20,11 @@ namespace Game.Managers.ClickManager
 
 		[Header("Components")]
 		[SerializeField] private Transform targetContent;
-		[SerializeField] private Transform clickableConveyor;
 		[Space]
 		[SerializeField] private ClickerHand leftHand;
 		[SerializeField] private ClickerHand rightHand;
 		[Header("Vars")]
-		[SerializeField] private ConveyorSettings settings;
+		[SerializeField] private List<Vector3> startPositions = new List<Vector3>();
 
 		private int currentIndex = -1;
 
@@ -57,6 +44,11 @@ namespace Game.Managers.ClickManager
 			this.gameManager = gameManager;
 		}
 
+		private void Awake()
+		{
+			TargetContent.DestroyChildren();
+		}
+
 		private void Start()
 		{
 			signalBus?.Subscribe<SignalTouchChanged>(OnTouchChanged);
@@ -69,7 +61,7 @@ namespace Game.Managers.ClickManager
 
 		public Vector3 GetRandomStartPosition()
 		{
-			return settings.startPositions.RandomItem();
+			return startPositions.RandomItem();
 		}
 
 		private void OnTouchChanged(SignalTouchChanged signal)
@@ -105,48 +97,15 @@ namespace Game.Managers.ClickManager
 		}
 
 #if UNITY_EDITOR
-		//[Button(DirtyOnClick = true)]
-		//private void Refresh()
-		//{
-		//	if (settings.nextEnemies.Count == 0 || targetContent == null) return;
-
-		//	clickableObjects.Clear();
-		//	targetContent.DestroyChildren(true);
-		//	clickableConveyor.DestroyChildren(true);
-		//	for (int i = 0; i < settings.nextEnemies.Count; i++)
-		//	{
-		//		var clickable = Create(settings.nextEnemies[i].prefab);
-		//		clickable.transform.position = new Vector3(settings.spacing, 0, 0) * i;
-		//		clickable.Collider.enabled = i == 0;
-
-		//		clickableObjects.Add(clickable);
-		//	}
-
-		//	ClickableObject Create(ClickableObject prefab)
-		//	{
-		//		var obj = PrefabUtility.InstantiatePrefab(prefab);
-		//		var clickable = obj.GetComponent<ClickableObject>();
-		//		clickable.transform.SetParent(clickableConveyor);
-		//		clickable.transform.localScale = Vector3.one;
-
-		//		return clickable;
-		//	}
-		//}
-
 		private void OnDrawGizmos()
 		{
-			for (int i = 0; i < settings.startPositions.Count; i++)
+			for (int i = 0; i < startPositions.Count; i++)
 			{
-				Gizmos.DrawSphere(settings.startPositions[i], 0.1f);
-				Handles.Label(settings.startPositions[i], $"p{i}");
+				Gizmos.DrawSphere(startPositions[i], 0.1f);
+				Handles.Label(startPositions[i], $"p{i}");
 			}
 		}
 #endif
 	}
 
-	[System.Serializable]
-	public class ConveyorSettings
-	{
-		public List<Vector3> startPositions = new List<Vector3>();
-	}
 }

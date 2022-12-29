@@ -19,12 +19,10 @@ MonoBehaviour:
     isNameId: 0
     description: 
     isDescriptionId: 1
-  baseHealthPoints:
-    coefficient: 100
-    exponent: 0
+  baseHealthPoints: 10
   isHasCoinsAfterDefeat: 1
   baseCoinsAfterDefeat:
-    coefficient: 100
+    coefficient: 10
     exponent: 0
   isCoinsRandomAfterDefeat: 0
   baseMinCoinsAfterDefeat:
@@ -34,6 +32,7 @@ MonoBehaviour:
     coefficient: 0
     exponent: 0
   isHasCoinsOnPunch: 1
+  isPlayerChance: 1
   baseCoinsOnPunch:
     coefficient: 1
     exponent: 0

@@ -12,7 +12,8 @@ namespace Game.Entities
 	{
 		public Information information;
 
-		public BFN baseHealthPoints;
+		public int baseHealthPoints;
+
 		[Space]
 		#region Coins After Defeat
 		[Header("Coins After Defeat")]

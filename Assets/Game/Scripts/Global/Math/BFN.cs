@@ -356,4 +356,14 @@ public struct BFN
 
 
 	#endregion
+
+
+	public static BFN FormuleExpoLevelLow(float baseValue, int level)
+	{
+		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.07f, level)), 0).compressed;
+	}
+	public static BFN FormuleExpoLevelHigh(float baseValue, int level)
+	{
+		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.15f, level)), 0).compressed;
+	}
 }

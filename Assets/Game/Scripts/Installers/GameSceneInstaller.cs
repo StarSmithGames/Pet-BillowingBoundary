@@ -3,6 +3,9 @@ using Game.Managers.ClickManager;
 using Game.Systems.CameraSystem;
 using Game.Systems.WaveRoadSystem;
 using Game.UI;
+
+using System.Collections.Generic;
+
 using UnityEngine;
 
 using Zenject;
@@ -19,14 +22,13 @@ namespace Game.Installers
 		[SerializeField] private FastMessageWindow fastMessageWindowPrefab;
 		[SerializeField] private UIPieceAnimatedBar pieceAnimatedBarPrefab;
 		[Header("Out")]
-		[SerializeField] private ClickerConveyor conveyor;
+		[SerializeField] private ClickStarter conveyor;
 
 		public override void InstallBindings()
 		{
 			Container.BindInstance(cameraSystem);
 			Container.BindInstance(subCanvas);
 			Container.BindInstance(conveyor);
-
 
 			Container.Bind<Player>().AsSingle().NonLazy();
 			Container.BindInstance(pattern).WhenInjectedInto<WaveRoad>();

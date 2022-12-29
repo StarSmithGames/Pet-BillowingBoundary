@@ -23,14 +23,17 @@ namespace Game.Systems.WaveRoadSystem
 
 		private WaveRoadPatternData data;
 		private Player player;
+		private Conveyor conveyor;
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
 		public WaveRoad(WaveRoadPatternData data,
 			Player player,
+			Conveyor conveyor,
 			AnalyticsSystem.AnalyticsSystem analyticsSystem)
         {
 			this.data = data;
 			this.player = player;
+			this.conveyor = conveyor;
 			this.analyticsSystem = analyticsSystem;
 
 			CurrentWave = new Wave(0);
@@ -56,7 +59,7 @@ namespace Game.Systems.WaveRoadSystem
 			}
 			else
 			{
-				CurrentTarget = CreateTarget(CurrentWave.CurrentTarget.prefab);
+				CurrentTarget = conveyor.objects.Find((x) => x.Data == CurrentWave.CurrentTarget);
 				poolTargets.Add(CurrentWave.CurrentTarget, CurrentTarget);
 			}
 

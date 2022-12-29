@@ -25,7 +25,7 @@ namespace Game.Managers.ClickManager
 		private SignalBus signalBus;
 		private TargetSettings targetSettings;
 		private WaveRoad waveRoad;
-		private ClickerConveyor conveyor;
+		private ClickStarter conveyor;
 		private FloatingSystem floatingSystem;
 		private FloatingAwards floatingAwards;
 		private GameManager.GameManager gameManager;
@@ -34,7 +34,7 @@ namespace Game.Managers.ClickManager
 		public TargetHandler(SignalBus signalBus,
 			TargetSettings targetSettings,
 			WaveRoad waveRoad,
-			ClickerConveyor clickerConveyor,
+			ClickStarter clickerConveyor,
 			FloatingSystem floatingSystem,
 			FloatingAwards floatingAwards,
 			GameManager.GameManager gameManager,

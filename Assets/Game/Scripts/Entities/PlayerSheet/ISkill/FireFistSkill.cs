@@ -30,10 +30,10 @@ namespace Game.Entities
 
 		private List<SkillProperty> properties = new List<SkillProperty>();
 
-		private ClickerConveyor conveyor;
+		private ClickStarter conveyor;
 
 		[Inject]
-		private void Construct(ClickerConveyor conveyor)
+		private void Construct(ClickStarter conveyor)
 		{
 			this.conveyor = conveyor;
 		}
@@ -217,7 +217,7 @@ namespace Game.Entities
 			return string.Format(base.GetOutput(localizationSystem), Math.Round(TotalValue * 100f));
 		}
 
-		protected override BFN Formule() => Level == 0 ? new BFN(200, 0) : new BFN(Math.Ceiling(200 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+		protected override BFN Formule() => Level == 0 ? new BFN(200, 0) : BFN.FormuleExpoLevelLow(200, Level + 1);
 	}
 
 	public class FireFistDurationProperty : SkillProperty
@@ -237,7 +237,7 @@ namespace Game.Entities
 			return string.Format(base.GetOutput(localizationSystem), Math.Round(TotalValue, 2));
 		}
 
-		protected override BFN Formule() => Level == 0 ? new BFN(300, 0) : new BFN(Math.Ceiling(300 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+		protected override BFN Formule() => Level == 0 ? new BFN(300, 0) : BFN.FormuleExpoLevelLow(300, Level + 1);
 	}
 
 	public class FireFistPowerProperty : SkillProperty
@@ -273,7 +273,7 @@ namespace Game.Entities
 			return string.Format(base.GetOutput(localizationSystem), Math.Round(TotalValue + 1f, 2));
 		}
 
-		protected override BFN Formule() => Level == 0 ? new BFN(450, 0) : new BFN(Math.Ceiling(450 * (Mathf.Pow(1.07f, Level + 1))), 0).compressed;
+		protected override BFN Formule() => Level == 0 ? new BFN(450, 0) : BFN.FormuleExpoLevelLow(450, Level + 1);
 	}
 }
 

@@ -73,7 +73,7 @@ public class CriticalPowerBonus : Bonus
 		}
 		else
 		{
-			currentCost = new BFN(Math.Ceiling(data.baseCost * (Mathf.Pow(1.15f, Level + 1))), 0).compressed;
+			currentCost = BFN.FormuleExpoLevelHigh(data.baseCost, Level + 1);
 		}
 
 		base.UpdateCost();

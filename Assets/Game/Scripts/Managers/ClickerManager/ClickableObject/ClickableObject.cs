@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
+using Game.Systems.WaveRoadSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -48,6 +50,14 @@ namespace Game.Managers.ClickManager
 		private bool isDead = false;
 		private Vector3 startRotation;
 
+		private WaveRoad waveRoad;
+
+		[Inject]
+		private void Construct(WaveRoad waveRoad)
+		{
+			this.waveRoad = waveRoad;
+		}
+
 		private void Start()
 		{
 			if(collider != null)
@@ -79,6 +89,14 @@ namespace Game.Managers.ClickManager
 
 		public void Enable(bool trigger)
 		{
+			if (trigger)
+			{
+				if(waveRoad.CurrentWave.CurrentValue != 0)
+				{
+					Sheet.HealthPointsBar.Resize(BFN.FormuleExpoLevelLow(data.baseHealthPoints, waveRoad.CurrentWave.CurrentValue + 1));
+				}
+			}
+
 			gameObject.SetActive(trigger);
 
 			IsEnabled = trigger;

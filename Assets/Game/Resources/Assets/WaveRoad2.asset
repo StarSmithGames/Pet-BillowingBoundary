@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae14e01669966de41ab5eb7b67a5177d, type: 3}
+  m_Name: WaveRoad2
+  m_EditorClassIdentifier: 
+  middleRoad:
+    countTargets: 4
+    style: 2
+    targets:
+    - {fileID: 11400000, guid: a1c8aa2f0039e6e4cbe7a15ab240ffe4, type: 2}
+    - {fileID: 11400000, guid: 7e3867ed173adb34da90303b32f63eca, type: 2}
+    - {fileID: 11400000, guid: 88608fe84523db44a83d93e257483e42, type: 2}
+    - {fileID: 11400000, guid: 6f68d154d89f2cc4e9c5fa34b91a1202, type: 2}
+  endRoad:
+    isHasBoss: 1
+    isRandomBoss: 1
+    boss: {fileID: 0}
+    bosses:
+    - {fileID: 11400000, guid: aef77dffb5b53844fbb0beb8b8914788, type: 2}
