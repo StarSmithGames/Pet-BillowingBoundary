@@ -2,8 +2,6 @@ using DG.Tweening;
 
 using Game.Systems.LocalizationSystem;
 
-using UnityEditor.PackageManager.UI;
-
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
