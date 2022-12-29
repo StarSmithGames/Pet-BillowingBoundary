@@ -91,33 +91,46 @@ namespace Game.Managers.ClickManager
 				{
 
 					//Coins
+					BFN totalGoldForPunch = BFN.Zero;
+
 					if (Random.value <= player.TapGoldChance.TotalValue)//isGoldChance
 					{
-						BFN totalGoldForPunch = goldForPunch;
+						totalGoldForPunch = goldForPunch;
 
 						if (clickable.Data.isHasCoinsOnPunch)
 						{
 							totalGoldForPunch += clickable.Data.GetCoinsOnPunch();
 						}
-
-						if (totalGoldForPunch != BFN.Zero)
+					}
+					else
+					{
+						if (clickable.Data.isHasCoinsOnPunch && !clickable.Data.isPlayerChance)
 						{
-							goldCount.CurrentValue += totalGoldForPunch;
-
-							floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch}", color: Color.yellow, type: AnimationType.BasicDamage);
-							floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
-							UIGoldHUD.Instance.Punch();
+							totalGoldForPunch += clickable.Data.GetCoinsOnPunch();
 						}
 					}
 
-					//Damage
-					if(Random.value <= player.TapCriticalChance.TotalValue)//isCriticalChance
+					if (totalGoldForPunch != BFN.Zero)
 					{
-						BFN totalGoldForPunch = damageForPunch * player.TapCriticalPower.TotalValue;
+						totalGoldForPunch.Compress();
+						goldCount.CurrentValue += totalGoldForPunch;
 
-						hpClickable.CurrentValue -= totalGoldForPunch;
+						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch}", color: Color.yellow, type: AnimationType.BasicDamage);
+						floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
+						UIGoldHUD.Instance.Punch();
+					}
+
+
+					//Damage
+					if (Random.value <= player.TapCriticalChance.TotalValue)//isCriticalChance
+					{
+						BFN totalDamageForPunch = damageForPunch * player.TapCriticalPower.TotalValue;
+
+						totalDamageForPunch.Compress();
+						hpClickable.CurrentValue -= totalDamageForPunch;
+
 						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"CRIT", color: Color.red, type: AnimationType.BasicDamage);
-						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{totalGoldForPunch}", color: Color.red, type: AnimationType.AdvanceDamage);
+						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{totalDamageForPunch}", color: Color.red, type: AnimationType.AdvanceDamage);
 					}
 					else
 					{
@@ -170,6 +183,9 @@ namespace Game.Managers.ClickManager
 		{
 			goldForPunch = (settings.goldForPunch + player.TapGold.TotalValue) * player.TapGoldMultiplier.TotalValue;
 			damageForPunch = (settings.damageForPunch + player.TapDamage.TotalValue);// * player.TapCriticalPower.TotalValue;
+
+			goldForPunch.Compress();
+			damageForPunch.Compress();
 		}
 
 		private void OnTargetChanged()

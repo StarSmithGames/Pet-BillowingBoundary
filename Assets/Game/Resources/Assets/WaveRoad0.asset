@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   middleRoad:
     countTargets: 3
-    isRandomOrQueue: 1
+    style: 2
     targets:
     - {fileID: 11400000, guid: a1c8aa2f0039e6e4cbe7a15ab240ffe4, type: 2}
     - {fileID: 11400000, guid: 7e3867ed173adb34da90303b32f63eca, type: 2}

@@ -3,8 +3,6 @@ using Game.Managers.ClickManager;
 using Game.Systems.CameraSystem;
 using Game.Systems.WaveRoadSystem;
 using Game.UI;
-using System.Transactions;
-
 using UnityEngine;
 
 using Zenject;
@@ -29,7 +27,10 @@ namespace Game.Installers
 			Container.BindInstance(subCanvas);
 			Container.BindInstance(conveyor);
 
+
 			Container.Bind<Player>().AsSingle().NonLazy();
+			Container.BindInstance(pattern).WhenInjectedInto<WaveRoad>();
+			Container.Bind<WaveRoad>().AsSingle().NonLazy();
 
 			//FastMessageWindow 1
 			Container.BindFactory<FastMessageWindow, FastMessageWindow.Factory>()

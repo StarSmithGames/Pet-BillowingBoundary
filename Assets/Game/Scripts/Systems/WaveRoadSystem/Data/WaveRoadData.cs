@@ -1,3 +1,4 @@
+using Game.Entities;
 using Game.Managers.ClickManager;
 
 using Sirenix.OdinInspector;
@@ -20,8 +21,8 @@ namespace Game.Systems.WaveRoadSystem
 	{
 		[Min(1)]
 		public int countTargets = 1;
-		public bool shuffle = true;
-		public List<EnemyData> targets = new();
+		public TargetStyle style = TargetStyle.Random;
+		public List<TargetData> targets = new();
 	}
 
 	[System.Serializable]
@@ -31,8 +32,15 @@ namespace Game.Systems.WaveRoadSystem
 		[ShowIf("isHasBoss")]
 		public bool isRandomBoss = true;
 		[ShowIf("@isHasBoss && !isRandomBoss")]
-		public EnemyData boss;
+		public TargetData boss;
 		[ShowIf("@isHasBoss && isRandomBoss")]
-		public List<EnemyData> bosses = new();
+		public List<TargetData> bosses = new();
+	}
+
+	public enum TargetStyle
+	{
+		Simple,
+		Random,
+		Shuffle,
 	}
 }

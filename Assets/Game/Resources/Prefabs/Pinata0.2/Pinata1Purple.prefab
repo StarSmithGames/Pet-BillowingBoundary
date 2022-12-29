@@ -46,16 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: a1c8aa2f0039e6e4cbe7a15ab240ffe4, type: 2}
-  smallPunch:
-    punch:
-      isPunchRandom: 0
-      punch: {x: 1, y: 1, z: 1}
-      randomXLimits: {x: 0, y: 0}
-      randomYLimits: {x: 0, y: 0}
-      randomZLimits: {x: 0, y: 0}
-    duration: 0.25
-    vibrato: 10
-    elasticity: 1
   points:
   - {fileID: 3131849409823632882}
   - {fileID: 2920375724416322229}
@@ -140,7 +130,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135054124592453407}
   m_LocalRotation: {x: -0.7010574, y: 0.09229593, z: 0.09229593, w: 0.7010574}
-  m_LocalPosition: {x: 0, y: 0.5, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:

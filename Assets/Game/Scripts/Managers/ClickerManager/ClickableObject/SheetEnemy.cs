@@ -1,10 +1,12 @@
+using Game.Entities;
+
 namespace Game.Managers.ClickManager
 {
 	public class SheetEnemy
 	{
 		public HealthPointsBar HealthPointsBar { get; }
 
-		public SheetEnemy(EnemyData data)
+		public SheetEnemy(TargetData data)
 		{
 			HealthPointsBar = new HealthPointsBar(data.baseHealthPoints.compressed, BFN.Zero, data.baseHealthPoints.compressed);
 		}

@@ -3,6 +3,7 @@ using DG.Tweening;
 using Game.HUD;
 using Game.Managers.GameManager;
 using Game.Systems.FloatingSystem;
+using Game.Systems.WaveRoadSystem;
 
 using System.Collections;
 
@@ -23,6 +24,7 @@ namespace Game.Managers.ClickManager
 
 		private SignalBus signalBus;
 		private TargetSettings targetSettings;
+		private WaveRoad waveRoad;
 		private ClickerConveyor conveyor;
 		private FloatingSystem floatingSystem;
 		private FloatingAwards floatingAwards;
@@ -31,6 +33,7 @@ namespace Game.Managers.ClickManager
 
 		public TargetHandler(SignalBus signalBus,
 			TargetSettings targetSettings,
+			WaveRoad waveRoad,
 			ClickerConveyor clickerConveyor,
 			FloatingSystem floatingSystem,
 			FloatingAwards floatingAwards,
@@ -39,6 +42,7 @@ namespace Game.Managers.ClickManager
 		{
 			this.signalBus = signalBus;
 			this.targetSettings = targetSettings;
+			this.waveRoad = waveRoad;
 			this.conveyor = clickerConveyor;
 			this.floatingSystem = floatingSystem;
 			this.floatingAwards = floatingAwards;
@@ -69,7 +73,7 @@ namespace Game.Managers.ClickManager
 
 			ClickableObject Create()
 			{
-				var obj = conveyor.CreateTarget();
+				var obj = waveRoad.CurrentTarget;
 				Assert.IsTrue(obj != null);
 				if (!obj.IsInitialized)
 				{
@@ -84,7 +88,8 @@ namespace Game.Managers.ClickManager
 				obj.transform.SetParent(conveyor.TargetContent);
 				obj.transform.localScale = Vector3.one;
 				obj.transform.position = conveyor.GetRandomStartPosition();
-				
+				obj.transform.rotation = obj.Data.initRotation;
+
 				return obj;
 			}
 
@@ -95,7 +100,7 @@ namespace Game.Managers.ClickManager
 					obj.onPunched -= OnTargetPunched;
 					obj.onDead -= OnTargetDead;
 					obj.Enable(false);
-					obj.transform.SetParent(conveyor.ClickableConveyor);
+					obj.transform.SetParent(null);
 					obj.transform.localScale = Vector3.one;
 					obj.Refresh();
 				}
@@ -105,6 +110,7 @@ namespace Game.Managers.ClickManager
 		private IEnumerator ReplaceTarget()
 		{
 			yield return MoveTargetOut().WaitForCompletion();
+			waveRoad.NextTarget();
 			SpawnTarget();
 			yield return MoveTargetIn().WaitForCompletion();
 		}
@@ -112,7 +118,7 @@ namespace Game.Managers.ClickManager
 		private Tween MoveTargetIn()
 		{
 			return CurrentTarget.transform
-				.DOLocalMove(new Vector3(0, 1, 0), 0.35f)
+				.DOLocalMove(CurrentTarget.Data.initPosition, 0.35f)
 				.SetEase(Ease.OutBounce)
 				.OnComplete(() =>
 				{
@@ -155,6 +161,7 @@ namespace Game.Managers.ClickManager
 					awardCoinsCoroutine = null;
 					asyncManager.StartCoroutine(ReplaceTarget());
 
+					totalCoins.Compress();
 					floatingSystem.CreateTextUI(UIGoldHUD.Instance.Count.transform.position, $"+{totalCoins.ToStringPritty()}", Color.green, AnimationType.AddGold);
 					UIGoldHUD.Instance.Punch();
 				});

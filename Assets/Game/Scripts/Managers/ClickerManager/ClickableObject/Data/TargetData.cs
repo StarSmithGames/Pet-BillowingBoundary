@@ -1,12 +1,14 @@
-﻿using Sirenix.OdinInspector;
+﻿using Game.Managers.ClickManager;
+
+using Sirenix.OdinInspector;
 
 using UnityEngine;
 
-namespace Game.Managers.ClickManager
+namespace Game.Entities
 {
 	[System.Serializable]
-	[CreateAssetMenu(fileName = "EnemyData", menuName = "Game/Enemy")]
-	public class EnemyData : ScriptableObject
+	[CreateAssetMenu(fileName = "TargetData", menuName = "Game/TargetData")]
+	public class TargetData : ScriptableObject
 	{
 		public Information information;
 
@@ -28,6 +30,8 @@ namespace Game.Managers.ClickManager
 		#region Coins On Punch
 		[Header("Coins On Punch")]
 		public bool isHasCoinsOnPunch = true;
+		[ShowIf("isHasCoinsOnPunch")]
+		public bool isPlayerChance = true;
 		[ShowIf("@isHasCoinsOnPunch && !isCoinsRandomOnPunch")]
 		public BFN baseCoinsOnPunch;
 		[ShowIf("isHasCoinsOnPunch")]
@@ -45,7 +49,11 @@ namespace Game.Managers.ClickManager
 		#endregion
 
 		[Space]
+		public PunchData smallPunch;
+		[Space]
 		public ClickableObject prefab;
+		public Vector3 initPosition;
+		public Quaternion initRotation;
 
 		public BFN GetCoinsAfterDefeat()
 		{

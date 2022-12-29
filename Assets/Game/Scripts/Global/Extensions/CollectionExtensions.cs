@@ -9,6 +9,23 @@ public static class CollectionExtensions
 		return list[UnityEngine.Random.Range(from, to == -1 ? list.Count : to)];
 	}
 
+	public static List<T> Shuffle<T>(this IList<T> list)
+	{
+		Random rnd = new Random();
+		var copy = new List<T>(list);
+		int n = copy.Count;
+		while (n > 1)
+		{
+			n--;
+			int k = rnd.Next(n + 1);
+			T value = copy[k];
+			copy[k] = copy[n];
+			copy[n] = value;
+		}
+
+		return copy;
+	}
+
 	/// <summary>
 	/// Resize for listB by listA
 	/// </summary>

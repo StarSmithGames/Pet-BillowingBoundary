@@ -1,13 +1,15 @@
 using DG.Tweening;
-
+using Game.Entities;
 using Game.Systems.FloatingSystem;
 using Game.Systems.VFX;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Game.Managers.ClickManager
 {
@@ -19,9 +21,8 @@ namespace Game.Managers.ClickManager
 		public bool IsInitialized { get; private set; } = false;
 		public bool IsEnabled { get; private set; } = true;
 
-		public EnemyData Data => data;
-		[SerializeField] private EnemyData data;
-		[SerializeField] private PunchSettings smallPunch;
+		public TargetData Data => data;
+		[SerializeField] private TargetData data;
 		[Header("Vars")]
 		[ReadOnly]
 		[SerializeField] public List<FloatingPoint> points = new List<FloatingPoint>();
@@ -97,6 +98,7 @@ namespace Game.Managers.ClickManager
 			}
 		}
 
+#if UNITY_EDITOR
 		[Button(DirtyOnClick = true)]
 		private void Fill()
 		{
@@ -104,6 +106,17 @@ namespace Game.Managers.ClickManager
 			particles = GetComponentsInChildren<ParticleVFX>().ToList();
 			collider = GetComponentInChildren<Collider>();
 		}
+
+		[Button(DirtyOnClick = true)]
+		private void SaveTransform()
+		{
+			Data.initRotation = transform.localRotation;
+			Data.initPosition = transform.localPosition;
+
+			EditorUtility.SetDirty(Data);
+			AssetDatabase.SaveAssets();
+		}
+#endif
 	}
 
 	public partial class ClickableObject
@@ -112,12 +125,13 @@ namespace Game.Managers.ClickManager
 		public void CustomPunch(PunchSettings settings)
 		{
 			transform.DORewind();
+			transform.DOKill(true);
 			transform.DOPunchScale(settings.GetPunch(), settings.duration, settings.vibrato, settings.elasticity);
 		}
 
 		public void SmallPunch()
 		{
-			CustomPunch(smallPunch);
+			CustomPunch(Data.smallPunch.settings);
 			onPunched?.Invoke();
 		}
 
@@ -139,38 +153,5 @@ namespace Game.Managers.ClickManager
 		{
 			return particles.RandomItem();
 		}
-	}
-}
-
-[System.Serializable]
-public class PunchSettings
-{
-	public Punch punch;
-	public float duration = 0.25f;
-	public int vibrato = 10;
-	public float elasticity = 1f;
-
-	public Vector3 GetPunch()
-	{
-		if (punch.isPunchRandom)
-		{
-			return new Vector3(punch.randomXLimits.RandomBtw(), punch.randomYLimits.RandomBtw(), punch.randomZLimits.RandomBtw());
-		}
-
-		return punch.punch;
-	}
-
-	[System.Serializable]
-	public class Punch
-	{
-		public bool isPunchRandom = false;
-		[HideIf("isPunchRandom")]
-		public Vector3 punch = Vector3.one;
-		[ShowIf("isPunchRandom")]
-		public Vector2 randomXLimits;
-		[ShowIf("isPunchRandom")]
-		public Vector2 randomYLimits;
-		[ShowIf("isPunchRandom")]
-		public Vector2 randomZLimits;
 	}
 }

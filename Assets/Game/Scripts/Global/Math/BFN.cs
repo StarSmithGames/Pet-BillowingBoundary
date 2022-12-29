@@ -144,52 +144,32 @@ public struct BFN
 		return new BFN(RandomCustom.GetRandomNumber(min.coefficient, max.coefficient), RandomCustom.GetRandomNumber(min.exponent, max.exponent));
 	}
 
-	public static BFN Lerp(BFN a, BFN b, float t)
+	public static BFN Lerp(BFN a, BFN b, double t)
 	{
-		return new BFN(a.coefficient * (1 - t) + b.coefficient * t, Max(a, b).exponent);
+		//return new BFN(a.coefficient * (1 - t) + b.coefficient * t, Max(a, b).exponent);
+		return (a * (1f - t)) + (b * t);
+	}
+
+	public static float Percent(BFN a, BFN b)
+	{
+		return (float)(a / b);
 	}
 
 	public static BFN Clamp(BFN value, BFN min, BFN max)
 	{
-		value = Min(value, min);
-		value = Max(value, max);
+		value = Max(value, min);
+		value = Min(value, max);
 		return value.compressed;
 	}
 
 	public static BFN Min(BFN value, BFN min)
 	{
-		value.Compress();
-		min.Compress();
-
-		if (value.coefficient < min.coefficient)
-		{
-			value.coefficient = min.coefficient;
-		}
-
-		if (value.exponent < min.exponent)
-		{
-			value.exponent = min.exponent;
-		}
-
-		return value.compressed;
+		return value.compressed < min.compressed ? value.compressed : min.compressed;
 	}
 
 	public static BFN Max(BFN value, BFN max)
 	{
-		value.Compress();
-		max.Compress();
-
-		if (value.coefficient > max.coefficient)
-		{
-			value.coefficient = max.coefficient;
-		}
-
-		if (value.exponent > max.exponent)
-		{
-			value.exponent = max.exponent;
-		}
-
-		return value.compressed;
+		return value.compressed > max.compressed ?  value.compressed : max.compressed;
 	}
 
 	public static bool Equals(BFN a, BFN b)

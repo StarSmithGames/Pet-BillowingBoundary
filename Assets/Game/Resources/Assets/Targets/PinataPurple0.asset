@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f1995ba4f9222243825ace9981da7fb, type: 3}
+  m_Script: {fileID: 11500000, guid: dff03c2a77603f44f839d4f72265212b, type: 3}
   m_Name: PinataPurple0
   m_EditorClassIdentifier: 
   information:
@@ -24,7 +24,7 @@ MonoBehaviour:
     exponent: 0
   isHasCoinsAfterDefeat: 1
   baseCoinsAfterDefeat:
-    coefficient: 100
+    coefficient: 10
     exponent: 0
   isCoinsRandomAfterDefeat: 0
   baseMinCoinsAfterDefeat:
@@ -34,6 +34,7 @@ MonoBehaviour:
     coefficient: 0
     exponent: 0
   isHasCoinsOnPunch: 1
+  isPlayerChance: 1
   baseCoinsOnPunch:
     coefficient: 1
     exponent: 0
@@ -46,4 +47,7 @@ MonoBehaviour:
     exponent: 0
   coinsOnPunchType: 0
   mod: 2
+  smallPunch: {fileID: 11400000, guid: 505afc3d5df378b42bb2d5e2a2def48d, type: 2}
   prefab: {fileID: 216714187892939472, guid: d7c7821645e10584c80f17853b5d1aea, type: 3}
+  initPosition: {x: 0.5, y: 2, z: 0}
+  initRotation: {x: 0, y: 0, z: 0, w: 0}

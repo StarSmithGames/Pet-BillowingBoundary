@@ -172,14 +172,15 @@ public abstract class AtributeBFN : Attribute<BFN>
 
 public abstract class AttributeBFNBar : Attribute<BFN>, IBar<BFN>
 {
-	public override string Output => $"{CurrentValue.ToStringPritty()} / {CurrentValue.ToStringPritty()}";
+	public override string Output => $"{CurrentValue.ToStringPritty()} / {MaxValue.ToStringPritty()}";
 
 	public override BFN CurrentValue
 	{
 		get => currentValue;
 		set
 		{
-			base.CurrentValue = BFN.Clamp(value, MinValue, MaxValue);
+			currentValue = value;
+			base.CurrentValue = BFN.Clamp(currentValue, MinValue, MaxValue);
 		}
 	}
 
@@ -196,7 +197,7 @@ public abstract class AttributeBFNBar : Attribute<BFN>, IBar<BFN>
 
 	public virtual BFN MinValue { get; protected set; }
 
-	public float PercentValue => (float) (CurrentValue.coefficient / MaxValue.coefficient);
+	public float PercentValue => BFN.Percent(CurrentValue, MaxValue);
 
 	protected AttributeBFNBar(BFN value, BFN min, BFN max) : base(value)
 	{

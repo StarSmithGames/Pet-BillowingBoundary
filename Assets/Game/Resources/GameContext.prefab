@@ -1966,6 +1966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8b8c5229461cd40be265afd5a73f3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pattern: {fileID: 11400000, guid: 1963a86bc1c21824fbf76b17888ff479, type: 2}
   cameraSystem: {fileID: 7217618759996723291}
   subCanvas: {fileID: 1558576401}
   fastMessageWindowPrefab: {fileID: 3538383396561010641, guid: 8200e8419593c2244b4dc701cf338ece, type: 3}
