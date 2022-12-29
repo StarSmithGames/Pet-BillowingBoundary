@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee65a668f2570645a933ffa62f9144f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Bar>k__BackingField: {fileID: 3434669987329973147}
+  <Rect>k__BackingField: {fileID: 3434669987329973147}
 --- !u!114 &5074570628921144911
 MonoBehaviour:
   m_ObjectHideFlags: 0

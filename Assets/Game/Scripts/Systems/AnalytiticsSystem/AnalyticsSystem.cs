@@ -17,6 +17,10 @@ namespace Game.Systems.AnalyticsSystem
 			this.saveLoad = saveLoad;
 		}
 
+		#region Market
+
+		#endregion
+
 		#region IAP
 		public void LogEvent_iap_remove_ads()
 		{
@@ -68,6 +72,23 @@ namespace Game.Systems.AnalyticsSystem
 		public void LogEvent_ad_rewarded_failed()
 		{
 			LogEvent("ad_rewarded_failed");
+		}
+		#endregion
+
+		#region Statistics
+		public void LogEvent_wave_completed()
+		{
+			LogEvent("wave_completed");
+		}
+
+		public void LogEvent_target_defeat()
+		{
+			LogEvent("target_defeat");
+		}
+
+		public void LogEvent_boss_defeat()
+		{
+			LogEvent("boss_defeat");
 		}
 		#endregion
 

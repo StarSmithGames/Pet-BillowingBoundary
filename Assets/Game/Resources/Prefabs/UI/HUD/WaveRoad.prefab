@@ -456,6 +456,7 @@ MonoBehaviour:
   <LeftWaveLevel>k__BackingField: {fileID: 459027425957769639}
   <RightWaveLevel>k__BackingField: {fileID: 2550466623171298127}
   <Content>k__BackingField: {fileID: 3887513020269362166}
+  <Rect>k__BackingField: {fileID: 3887513020269362166}
 --- !u!1 &3160374935238298140
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,10 +493,10 @@ RectTransform:
   m_Father: {fileID: 3772686238143400637}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7828538968518038829
 CanvasRenderer:

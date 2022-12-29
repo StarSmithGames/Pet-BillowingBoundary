@@ -10,8 +10,10 @@ using UnityEngine.Events;
 
 namespace Game.Systems.WaveRoadSystem
 {
-    public class WaveRoad
+    public sealed class WaveRoad
     {
+		public event UnityAction onChanged;
+
 		public ClickableObject CurrentTarget { get; private set; }
 
 		public Wave CurrentWave { get; private set; }
@@ -20,13 +22,18 @@ namespace Game.Systems.WaveRoadSystem
 		private Dictionary<TargetData, ClickableObject> poolTargets = new Dictionary<TargetData, ClickableObject>();
 
 		private WaveRoadPatternData data;
+		private Player player;
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
-		public WaveRoad(WaveRoadPatternData data)
+		public WaveRoad(WaveRoadPatternData data,
+			Player player,
+			AnalyticsSystem.AnalyticsSystem analyticsSystem)
         {
-            this.data = data;
+			this.data = data;
+			this.player = player;
+			this.analyticsSystem = analyticsSystem;
 
 			CurrentWave = new Wave(0);
-			CurrentWave.onWaveEnded += OnWaveEnded;
 			CurrentWave.SetData(GetWave());
 
 			UpdateTarget();
@@ -34,10 +41,12 @@ namespace Game.Systems.WaveRoadSystem
 
 		public void NextTarget()
 		{
-			CurrentWave.TargetsBar.CurrentValue++;
 			CurrentWave.NextTarget();
 			UpdateTarget();
+
+			onChanged?.Invoke();
 		}
+
 
 		private void UpdateTarget()
 		{
@@ -50,6 +59,8 @@ namespace Game.Systems.WaveRoadSystem
 				CurrentTarget = CreateTarget(CurrentWave.CurrentTarget.prefab);
 				poolTargets.Add(CurrentWave.CurrentTarget, CurrentTarget);
 			}
+
+			CurrentTarget.onDead += OnTargetDead;
 		}
 
 		private WaveRoadData GetWave()
@@ -71,27 +82,39 @@ namespace Game.Systems.WaveRoadSystem
 			return obj;
 		}
 
-		private void OnWaveEnded()
+		private void OnTargetDead()
 		{
-			CurrentTarget.onDead += OnBossDead;
-		}
+			CurrentTarget.onDead -= OnTargetDead;
 
-		private void OnBossDead()
-		{
-			CurrentTarget.onDead -= OnBossDead;
+			player.TargetsDefeat.CurrentValue++;
 
-			Debug.LogError("Boss dead " + CurrentWave.CurrentTarget.name);
+			analyticsSystem.LogEvent_target_defeat();
 
-			CurrentWave.SetData(GetWave());
-			UpdateTarget();
+			if (CurrentWave.IsCompleted)
+			{
+				analyticsSystem.LogEvent_boss_defeat();
+
+				player.BossesDefeat.CurrentValue++;
+
+				CurrentWave.SetData(GetWave());
+				CurrentWave.CurrentValue++;
+				analyticsSystem.LogEvent_wave_completed();
+				UpdateTarget();
+			}
+			else
+			{
+				CurrentWave.MiddleTargetsBar.CurrentValue++;
+			}
+
+			onChanged?.Invoke();
 		}
 	}
 
 	public class Wave : Attribute<int>
 	{
-		public UnityAction onWaveEnded;
+		public bool IsCompleted { get; private set; } = false;
 
-		public Targets TargetsBar { get; private set; }
+		public Targets MiddleTargetsBar { get; private set; }
 
 		public TargetData CurrentTarget { get; private set; }
 		public List<TargetData> WaveTargets { get; private set; }
@@ -100,25 +123,27 @@ namespace Game.Systems.WaveRoadSystem
 
 		public Wave(int currentValue) : base(currentValue)
 		{
-			TargetsBar = new Targets(0, 0, 5);
+			MiddleTargetsBar = new Targets(0, 0, 5);
 		}
 
 		public void SetData(WaveRoadData data)
 		{
 			this.data = data;
 
-			TargetsBar.MaxValue = data.middleRoad.countTargets;
-			TargetsBar.CurrentValue = 0;
+			IsCompleted = false;
+
+			MiddleTargetsBar.MaxValue = data.middleRoad.countTargets;
+			MiddleTargetsBar.CurrentValue = 0;
 			WaveTargets = data.middleRoad.style == TargetStyle.Shuffle ? data.middleRoad.targets.Shuffle() : new List<TargetData>(data.middleRoad.targets);
 			NextTarget();
 		}
 
 		public void NextTarget()
 		{
-			if (TargetsBar.CurrentValue == TargetsBar.MaxValue)
+			if (MiddleTargetsBar.CurrentValue == MiddleTargetsBar.MaxValue)
 			{
 				CurrentTarget = GetBoss();
-				onWaveEnded?.Invoke();
+				IsCompleted = true;
 			}
 			else
 			{
@@ -130,7 +155,7 @@ namespace Game.Systems.WaveRoadSystem
 		{
 			if (data.middleRoad.style == TargetStyle.Simple)
 			{
-				return WaveTargets[(int)TargetsBar.CurrentValue % WaveTargets.Count];
+				return WaveTargets[(int)MiddleTargetsBar.CurrentValue % WaveTargets.Count];
 			}
 
 			return WaveTargets.RandomItem();

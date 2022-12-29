@@ -24,22 +24,29 @@ namespace Game.Entities
 		public BonusRegistrator BonusRegistrator { get; }
 		public SkillRegistrator SkillRegistrator { get; }
 
+		public Targets TargetsDefeat { get; }
+		public Bosses BossesDefeat { get; }
+
 		public Player()
 		{
 			PlayerSheet = new PlayerSheet();
 
-			Gold = new Gold(new BFN(1000000, 0).compressed);
-			TapGold = new TapGold(BFN.Zero);
-			TapGoldMultiplier = new TapGoldMultiplier(1f);
-			TapGoldChance = new TapGoldChance(0f);
+			Gold = new(new BFN(1000000, 0).compressed);
+			TapGold = new(BFN.Zero);
+			TapGoldMultiplier = new(1f);
+			TapGoldChance = new(0f);
 
-			Taps = new Taps(0);
-			TapDamage = new TapDamage(BFN.One);
-			TapCriticalPower = new TapCriticalPower(1f);
-			TapCriticalChance = new TapCriticalChance(0f);
+			Taps = new(0);
+			TapDamage = new(BFN.One);
+			TapCriticalPower = new(1f);
+			TapCriticalChance = new(0f);
 
-			BonusRegistrator = new BonusRegistrator();
-			SkillRegistrator = new SkillRegistrator();
+			BonusRegistrator = new();
+			SkillRegistrator = new();
+
+			TargetsDefeat = new(0);
+			BossesDefeat = new(0);
+
 
 			TapGold.onChanged += OnTapChanged;
 			TapGold.onModifiersChanged += OnTapChanged;
@@ -124,4 +131,15 @@ namespace Game.Entities
 		public TapGoldChance(float currentValue) : base(currentValue) { }
 	}
 	#endregion
+
+
+	public class Targets : Attribute<int>
+	{
+		public Targets(int currentValue) : base(currentValue) { }
+	}
+
+	public class Bosses : Attribute<int>
+	{
+		public Bosses(int currentValue) : base(currentValue) { }
+	}
 }

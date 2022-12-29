@@ -29,7 +29,6 @@ namespace Game.Managers.ClickManager
 		[ReadOnly]
 		[SerializeField] public List<ParticleVFX> particles = new List<ParticleVFX>();
 		[ReadOnly]
-		public Collider Collider => collider;
 		[SerializeField] private Collider collider;
 
 		public SheetEnemy Sheet
@@ -51,6 +50,11 @@ namespace Game.Managers.ClickManager
 
 		private void Start()
 		{
+			if(collider != null)
+			{
+				collider.enabled = false;
+			}
+
 			if (!IsInitialized)
 			{
 				Initialization();
