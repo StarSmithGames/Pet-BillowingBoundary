@@ -182,6 +182,23 @@ namespace Game.Entities
 				}
 			}
 		}
+
+		public Data GetData()
+		{
+			return new Data()
+			{
+				chanceLevel = Chance.Level,
+				durationLevel = Duration.Level,
+				powerLevel = Power.Level,
+			};
+		}
+
+		public class Data
+		{
+			public int chanceLevel;
+			public int durationLevel;
+			public int powerLevel;
+		}
 	}
 
 	public class FireFistChanceProperty : SkillProperty

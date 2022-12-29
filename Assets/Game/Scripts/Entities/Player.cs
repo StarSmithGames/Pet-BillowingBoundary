@@ -1,7 +1,8 @@
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 
 namespace Game.Entities
 {
@@ -65,9 +66,42 @@ namespace Game.Entities
 		{
 			onTapChanged?.Invoke();
 		}
+
+		public Data GetData()
+		{
+			return new Data()
+			{
+				gold = Gold.CurrentValue,
+
+				tapsCount = Taps.CurrentValue,
+				targetsDefeat = TargetsDefeat.CurrentValue,
+				bossesDefeat = BossesDefeat.CurrentValue,
+
+				bonuses = BonusRegistrator.GetData(),
+				fireFistData = SkillRegistrator.GetFireFistData(),
+			};
+		}
+
+		public class Data
+		{
+			public BFN gold;
+
+			public int tapsCount;
+			public int targetsDefeat;
+			public int bossesDefeat;
+
+			public List<Bonus.Data> bonuses = new List<Bonus.Data>();
+			public FireFistSkill.Data fireFistData;
+		}
 	}
 
-	public class BonusRegistrator : Registrator<Bonus> { }
+	public class BonusRegistrator : Registrator<Bonus>
+	{
+		public List<Bonus.Data> GetData()
+		{
+			return new List<Bonus.Data>(registers.Select((x) => x.GetData()));
+		}
+	}
 
 	public class SkillRegistrator : Registrator<ActiveSkill>
 	{
@@ -81,6 +115,11 @@ namespace Game.Entities
 
 			CurrentSkill = skill;
 			onSelectedSkillChanged?.Invoke(CurrentSkill);
+		}
+
+		public FireFistSkill.Data GetFireFistData()
+		{
+			return (registers.Find((x) => x is FireFistSkill) as FireFistSkill).GetData();
 		}
 	}
 
@@ -131,7 +170,6 @@ namespace Game.Entities
 		public TapGoldChance(float currentValue) : base(currentValue) { }
 	}
 	#endregion
-
 
 	public class Targets : Attribute<int>
 	{

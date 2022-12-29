@@ -19,13 +19,13 @@ namespace Game.Entities
 		[Header("Coins After Defeat")]
 		public bool isHasCoinsAfterDefeat = true;
 		[ShowIf("@isHasCoinsAfterDefeat && !isCoinsRandomAfterDefeat")]
-		public BFN baseCoinsAfterDefeat;
+		public int baseCoinsAfterDefeat;
 		[ShowIf("isHasCoinsAfterDefeat")]
 		public bool isCoinsRandomAfterDefeat = false;
 		[ShowIf("@isHasCoinsAfterDefeat && isCoinsRandomAfterDefeat")]
-		public BFN baseMinCoinsAfterDefeat;
+		public int baseMinCoinsAfterDefeat;
 		[ShowIf("@isHasCoinsAfterDefeat && isCoinsRandomAfterDefeat")]
-		public BFN baseMaxCoinsAfterDefeat;
+		public int baseMaxCoinsAfterDefeat;
 		#endregion
 
 		#region Coins On Punch
@@ -34,13 +34,13 @@ namespace Game.Entities
 		[ShowIf("isHasCoinsOnPunch")]
 		public bool isPlayerChance = true;
 		[ShowIf("@isHasCoinsOnPunch && !isCoinsRandomOnPunch")]
-		public BFN baseCoinsOnPunch;
+		public int baseCoinsOnPunch;
 		[ShowIf("isHasCoinsOnPunch")]
 		public bool isCoinsRandomOnPunch = false;
 		[ShowIf("@isHasCoinsOnPunch && isCoinsRandomOnPunch")]
-		public BFN baseMinCoinsOnPunch;
+		public int baseMinCoinsOnPunch;
 		[ShowIf("@isHasCoinsOnPunch && isCoinsRandomOnPunch")]
-		public BFN baseMaxCoinsOnPunch;
+		public int baseMaxCoinsOnPunch;
 		[Space]
 		[ShowIf("isHasCoinsOnPunch")]
 		public CoinsOnPunchType coinsOnPunchType = CoinsOnPunchType.Mod;
@@ -56,30 +56,30 @@ namespace Game.Entities
 		public Vector3 initPosition;
 		public Quaternion initRotation;
 
-		public BFN GetCoinsAfterDefeat()
+		public int GetCoinsAfterDefeat()
 		{
 			if (isHasCoinsAfterDefeat)
 			{
 				if (isCoinsRandomAfterDefeat)
 				{
-					return BFN.RandomRange(baseMinCoinsAfterDefeat, baseMaxCoinsAfterDefeat);
+					return Random.Range(baseMinCoinsAfterDefeat, baseMaxCoinsAfterDefeat);
 				}
 				return baseCoinsAfterDefeat;
 			}
-			return BFN.Zero;
+			return 0;
 		}
 
-		public BFN GetCoinsOnPunch()
+		public int GetCoinsOnPunch()
 		{
 			if (isHasCoinsOnPunch)
 			{
 				if (isCoinsRandomOnPunch)
 				{
-					return BFN.RandomRange(baseMinCoinsOnPunch, baseMaxCoinsOnPunch);
+					return Random.Range(baseMinCoinsOnPunch, baseMaxCoinsOnPunch);
 				}
 				return baseCoinsOnPunch;
 			}
-			return BFN.Zero;
+			return 0;
 		}
 	}
 	public enum CoinsOnPunchType

@@ -33,6 +33,8 @@ namespace Game.Managers.StorageManager
 		public void Initialize()
 		{
 			signalBus?.Subscribe<SignalApplicationQuit>(OnApplicationQuit);
+			signalBus?.Subscribe<SignalApplicationPause>(OnApplicationPaused);
+			signalBus?.Subscribe<SignalApplicationFocus>(OnApplicationFocusChanged);
 
 			if (activeStorage == null)
 			{
@@ -43,12 +45,16 @@ namespace Game.Managers.StorageManager
 		public void Dispose()
 		{
 			signalBus?.Unsubscribe<SignalApplicationQuit>(OnApplicationQuit);
+			signalBus?.Unsubscribe<SignalApplicationPause>(OnApplicationPaused);
+			signalBus?.Unsubscribe<SignalApplicationFocus>(OnApplicationFocusChanged);
 
 			Save();
 		}
 
 		public void Save()
 		{
+			signalBus?.Fire(new SignalSaveData());
+
 			string preferenceName = settings.preferenceName;
 			PlayerPrefs.SetString(preferenceName, activeStorage.Database.GetJson());
 			PlayerPrefs.Save();
@@ -86,12 +92,24 @@ namespace Game.Managers.StorageManager
 			return activeStorage;
 		}
 
+		private void OnApplicationFocusChanged(SignalApplicationFocus signal)
+		{
+			Save();
+		}
+
+		private void OnApplicationPaused(SignalApplicationPause signal)
+		{
+			Save();
+		}
+
 		private void OnApplicationQuit()
 		{
 			if(GetStorage().IsFirstTime.GetData() == true)
 			{
 				GetStorage().IsFirstTime.SetData(false);
 			}
+
+			Save();
 		}
 
 		[System.Serializable]

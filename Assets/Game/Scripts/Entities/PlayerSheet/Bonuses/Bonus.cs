@@ -61,4 +61,19 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	{
 		isInitialized = true;
 	}
+
+	public Data GetData()
+	{
+		return new Data
+		{
+			bonus = BonusData,
+			level = Level,
+		};
+	}
+
+	public class Data
+	{
+		public BonusData bonus;
+		public int level;
+	}
 }

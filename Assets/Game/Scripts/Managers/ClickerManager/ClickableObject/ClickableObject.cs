@@ -23,7 +23,7 @@ namespace Game.Managers.ClickManager
 		public bool IsInitialized { get; private set; } = false;
 		public bool IsEnabled { get; private set; } = true;
 
-		public TargetData Data => data;
+		public TargetData TargetData => data;
 		[SerializeField] private TargetData data;
 		[Header("Vars")]
 		[ReadOnly]
@@ -93,7 +93,7 @@ namespace Game.Managers.ClickManager
 			{
 				if(waveRoad.CurrentWave.CurrentValue != 0)
 				{
-					Sheet.HealthPointsBar.Resize(BFN.FormuleExpoLevelLow(data.baseHealthPoints, waveRoad.CurrentWave.CurrentValue + 1));
+					Sheet.HealthPointsBar.Resize(BFN.FormuleExpoHealth(data.baseHealthPoints, waveRoad.CurrentWave.CurrentValue));
 				}
 			}
 
@@ -120,6 +120,14 @@ namespace Game.Managers.ClickManager
 			}
 		}
 
+		public Data GetData()
+		{
+			return new Data()
+			{
+				hp = Sheet.HealthPointsBar.CurrentValue,
+			};
+		}
+
 #if UNITY_EDITOR
 		[Button(DirtyOnClick = true)]
 		private void Fill()
@@ -132,17 +140,32 @@ namespace Game.Managers.ClickManager
 		[Button(DirtyOnClick = true)]
 		private void SaveTransform()
 		{
-			Data.initRotation = transform.localRotation;
-			Data.initPosition = transform.localPosition;
+			TargetData.initRotation = transform.localRotation;
+			TargetData.initPosition = transform.localPosition;
 
-			EditorUtility.SetDirty(Data);
+			EditorUtility.SetDirty(TargetData);
 			AssetDatabase.SaveAssets();
 		}
 #endif
+
+		public class Data
+		{
+			public BFN hp;
+		}
 	}
 
 	public partial class ClickableObject
 	{
+		public BFN GetCoinsAfterDefeat()
+		{
+			return BFN.FormuleExpoGoldForDefeatTarget(TargetData.GetCoinsAfterDefeat(), waveRoad.CurrentWave.CurrentValue);
+		}
+
+		public BFN GetCoinsOnPunch()
+		{
+			return BFN.FormuleExpoGoldForPunchTarget(TargetData.GetCoinsOnPunch(), waveRoad.CurrentWave.CurrentValue);
+		}
+
 
 		public void CustomPunch(PunchSettings settings)
 		{
@@ -153,7 +176,7 @@ namespace Game.Managers.ClickManager
 
 		public void SmallPunch()
 		{
-			CustomPunch(Data.smallPunch.settings);
+			CustomPunch(TargetData.smallPunch.settings);
 			onPunched?.Invoke();
 		}
 

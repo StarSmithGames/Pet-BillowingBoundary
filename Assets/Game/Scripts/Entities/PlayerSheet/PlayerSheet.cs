@@ -11,12 +11,6 @@ namespace Game.Entities
 			
 			TapBar = new TapBar(0, 0, 100);
 		}
-
-		public class Data
-		{
-			public int gold;
-			public int tapCount;
-		}
 	}
 
 	public class TapBar : AttributeBar

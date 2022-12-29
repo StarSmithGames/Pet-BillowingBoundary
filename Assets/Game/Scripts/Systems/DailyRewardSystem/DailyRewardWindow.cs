@@ -86,8 +86,8 @@ namespace Game.Systems.DailyRewardSystem
 
 		public override void Show(UnityAction callback = null)
 		{
-			var data = saveLoad.GetStorage().DailyRewardData.GetData();
-			SelectDay(data.currentDay, data.currentState);
+			//var data = saveLoad.GetStorage().DailyRewardData.GetData();
+			//SelectDay(data.currentDay, data.currentState);
 
 			base.Show(callback);
 		}
@@ -113,16 +113,16 @@ namespace Game.Systems.DailyRewardSystem
 
 		private void OnRewardStateChanged(UIRewardItem rewardItem)
 		{
-			var data = saveLoad.GetStorage().DailyRewardData.GetData();
-			data.currentState = rewardItem.CurrentState;
-			if(rewardItem.CurrentState == DailyRewardState.Claimed)
-			{
-				data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
+			//var data = saveLoad.GetStorage().DailyRewardData.GetData();
+			//data.currentState = rewardItem.CurrentState;
+			//if(rewardItem.CurrentState == DailyRewardState.Claimed)
+			//{
+			//	data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
 
-				floatingAwards.StartAwardCoins(rewardItem.transform.position, 25, new BFN(100, 0));
-			}
+			//	floatingAwards.StartAwardCoins(rewardItem.transform.position, Random.Range(50, 101), new BFN(100, 0));
+			//}
 
-			Assert.IsTrue(data.currentDay == rewardItem.DayType);
+			//Assert.IsTrue(data.currentDay == rewardItem.DayType);
 		}
 
 		private void OnClosed()

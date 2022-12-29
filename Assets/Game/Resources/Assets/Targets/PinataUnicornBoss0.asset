@@ -15,34 +15,22 @@ MonoBehaviour:
   information:
     portrait: {fileID: 0}
     isIconSimple: 1
-    name: Pinata
+    name: Unicorny
     isNameId: 0
     description: 
     isDescriptionId: 1
-  baseHealthPoints: 1000
+  baseHealthPoints: 500
   isHasCoinsAfterDefeat: 1
-  baseCoinsAfterDefeat:
-    coefficient: 1
-    exponent: 3
+  baseCoinsAfterDefeat: 0
   isCoinsRandomAfterDefeat: 0
-  baseMinCoinsAfterDefeat:
-    coefficient: 0
-    exponent: 0
-  baseMaxCoinsAfterDefeat:
-    coefficient: 0
-    exponent: 0
+  baseMinCoinsAfterDefeat: 0
+  baseMaxCoinsAfterDefeat: 0
   isHasCoinsOnPunch: 1
   isPlayerChance: 1
-  baseCoinsOnPunch:
-    coefficient: 1
-    exponent: 0
+  baseCoinsOnPunch: 0
   isCoinsRandomOnPunch: 0
-  baseMinCoinsOnPunch:
-    coefficient: 0
-    exponent: 0
-  baseMaxCoinsOnPunch:
-    coefficient: 0
-    exponent: 0
+  baseMinCoinsOnPunch: 0
+  baseMaxCoinsOnPunch: 0
   coinsOnPunchType: 0
   mod: 2
   smallPunch: {fileID: 11400000, guid: 505afc3d5df378b42bb2d5e2a2def48d, type: 2}

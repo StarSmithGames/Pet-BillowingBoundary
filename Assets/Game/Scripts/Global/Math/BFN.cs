@@ -366,4 +366,19 @@ public struct BFN
 	{
 		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.15f, level)), 0).compressed;
 	}
+
+	public static BFN FormuleExpoHealth(float baseValue, int level)
+	{
+		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.25f, level)), 0).compressed;
+	}
+
+	public static BFN FormuleExpoGoldForDefeatTarget(float baseValue, int level)
+	{
+		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.07f, level)), 0).compressed;
+	}
+
+	public static BFN FormuleExpoGoldForPunchTarget(float baseValue, int level)
+	{
+		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.07f, level)), 0).compressed;
+	}
 }

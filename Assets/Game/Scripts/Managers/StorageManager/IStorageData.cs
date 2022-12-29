@@ -1,5 +1,7 @@
+using Game.Entities;
 using Game.Systems.DailyRewardSystem;
 using Game.Systems.LocalizationSystem;
+using Game.Systems.WaveRoadSystem;
 
 namespace Game.Managers.StorageManager
 {
@@ -44,10 +46,10 @@ namespace Game.Managers.StorageManager
 
 		public IStorageData<bool> IsFirstTime { get; private set; }
 
-		public IStorageData<DailyRewardSystem.Data> DailyRewardData { get; private set; }
-
 		public IStorageData<bool> IsPayUser { get; private set; }
 		public IStorageData<bool> IsBuyRemoveADS { get; private set; }
+
+		public IStorageData<Profile> Profile { get; private set; }
 
 		//settings
 		public IStorageData<bool> IsSound { get; private set; }
@@ -87,10 +89,12 @@ namespace Game.Managers.StorageManager
 		{
 			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
 
-			DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
+			//DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
 
 			IsPayUser = new StorageData<bool>(Database, "is_pay_user", false);
 			IsBuyRemoveADS = new StorageData<bool>(Database, "is_buy_remove_ads", false);
+
+			Profile = new StorageData<Profile>(Database, "profile", new Profile());
 
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);
@@ -108,6 +112,7 @@ namespace Game.Managers.StorageManager
 
 	public class Profile
 	{
-
+		public Player.Data playerData;
+		public WaveRoad.Data waveRoadData;
 	}
 }

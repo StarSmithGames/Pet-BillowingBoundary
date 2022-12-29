@@ -17,7 +17,8 @@ namespace Game.Managers.ClickManager
 	
 		public void Resize(BFN value)
 		{
-
+			MaxValue = value;
+			CurrentValue = value;
 		}
 	}
 }

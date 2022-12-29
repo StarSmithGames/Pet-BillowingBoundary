@@ -97,16 +97,16 @@ namespace Game.Managers.ClickManager
 					{
 						totalGoldForPunch = goldForPunch;
 
-						if (clickable.Data.isHasCoinsOnPunch)
+						if (clickable.TargetData.isHasCoinsOnPunch)
 						{
-							totalGoldForPunch += clickable.Data.GetCoinsOnPunch();
+							totalGoldForPunch += clickable.GetCoinsOnPunch();
 						}
 					}
 					else
 					{
-						if (clickable.Data.isHasCoinsOnPunch && !clickable.Data.isPlayerChance)
+						if (clickable.TargetData.isHasCoinsOnPunch && !clickable.TargetData.isPlayerChance)
 						{
-							totalGoldForPunch += clickable.Data.GetCoinsOnPunch();
+							totalGoldForPunch += clickable.GetCoinsOnPunch();
 						}
 					}
 

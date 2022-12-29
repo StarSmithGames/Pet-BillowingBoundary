@@ -51,7 +51,7 @@ namespace Game.HUD
 
 			if (targetHandler.CurrentTarget != null)
 			{
-				TargetName.text = targetHandler.CurrentTarget.Data.information.name;
+				TargetName.text = targetHandler.CurrentTarget.TargetData.information.name;
 				hp = targetHandler.CurrentTarget.Sheet.HealthPointsBar;
 				hp.onChanged += OnTapCountBarChanged;
 				OnTapCountBarChanged();

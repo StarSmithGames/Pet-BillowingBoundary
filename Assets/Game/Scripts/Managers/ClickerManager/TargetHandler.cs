@@ -88,7 +88,7 @@ namespace Game.Managers.ClickManager
 				obj.transform.SetParent(conveyor.TargetContent);
 				obj.transform.localScale = Vector3.one;
 				obj.transform.position = conveyor.GetRandomStartPosition();
-				obj.transform.rotation = obj.Data.initRotation;
+				obj.transform.rotation = obj.TargetData.initRotation;
 
 				return obj;
 			}
@@ -118,7 +118,7 @@ namespace Game.Managers.ClickManager
 		private Tween MoveTargetIn()
 		{
 			return CurrentTarget.transform
-				.DOLocalMove(CurrentTarget.Data.initPosition, 0.35f)
+				.DOLocalMove(CurrentTarget.TargetData.initPosition, 0.35f)
 				.SetEase(Ease.OutBounce)
 				.OnComplete(() =>
 				{
@@ -151,9 +151,9 @@ namespace Game.Managers.ClickManager
 
 		private void OnTargetDead()
 		{
-			if (CurrentTarget.Data.isHasCoinsAfterDefeat)
+			if (CurrentTarget.TargetData.isHasCoinsAfterDefeat)
 			{
-				BFN totalCoins = CurrentTarget.Data.GetCoinsAfterDefeat();
+				BFN totalCoins = CurrentTarget.GetCoinsAfterDefeat();
 
 				awardCoinsCoroutine = floatingAwards.StartAwardCoins(Camera.main.WorldToScreenPoint(CurrentTarget.transform.position), 10, totalCoins,
 				() =>

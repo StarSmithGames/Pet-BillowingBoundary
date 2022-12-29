@@ -10,8 +10,12 @@ namespace Game.Managers.StorageManager
 
 		public override void InstallBindings()
 		{
+			Container.DeclareSignal<SignalSaveData>();
+
 			Container.BindInstance(playerPrefsSettings).WhenInjectedInto<PlayerPrefsSaveLoad>();
 			Container.BindInterfacesTo<PlayerPrefsSaveLoad>().AsSingle().NonLazy();
 		}
 	}
+
+	public struct SignalSaveData { }
 }

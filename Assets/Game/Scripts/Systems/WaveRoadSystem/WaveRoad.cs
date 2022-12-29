@@ -1,5 +1,6 @@
 using Game.Entities;
 using Game.Managers.ClickManager;
+using Game.Managers.StorageManager;
 
 using System.Collections;
 using System.Collections.Generic;
@@ -21,24 +22,38 @@ namespace Game.Systems.WaveRoadSystem
 
 		private Dictionary<TargetData, ClickableObject> poolTargets = new Dictionary<TargetData, ClickableObject>();
 
-		private WaveRoadPatternData data;
+		private Data data;
 		private Player player;
 		private Conveyor conveyor;
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
-		public WaveRoad(WaveRoadPatternData data,
+		public WaveRoad(WaveRoadPatternData pattern,
+			ISaveLoad saveLoad,
 			Player player,
 			Conveyor conveyor,
 			AnalyticsSystem.AnalyticsSystem analyticsSystem)
-        {
-			this.data = data;
+		{
 			this.player = player;
 			this.conveyor = conveyor;
 			this.analyticsSystem = analyticsSystem;
 
-			CurrentWave = new Wave(0);
-			CurrentWave.SetData(GetWave());
+			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
+			{
+				data = saveLoad.GetStorage().Profile.GetData().waveRoadData;
 
+				CurrentWave = new Wave(data.wave);
+			}
+			else
+			{
+				data = new Data()
+				{
+					pattern = pattern,
+				};
+
+				CurrentWave = new Wave(0);
+			}
+
+			CurrentWave.SetData(GetWave());
 			UpdateTarget();
 		}
 
@@ -59,7 +74,7 @@ namespace Game.Systems.WaveRoadSystem
 			}
 			else
 			{
-				CurrentTarget = conveyor.objects.Find((x) => x.Data == CurrentWave.CurrentTarget);
+				CurrentTarget = conveyor.objects.Find((x) => x.TargetData == CurrentWave.CurrentTarget);
 				poolTargets.Add(CurrentWave.CurrentTarget, CurrentTarget);
 			}
 
@@ -68,12 +83,12 @@ namespace Game.Systems.WaveRoadSystem
 
 		private WaveRoadData GetWave()
 		{
-			if(data.repeat == RepeatStyle.Simple)
+			if(data.pattern.repeat == RepeatStyle.Simple)
 			{
-				return data.waves[CurrentWave.CurrentValue % data.waves.Count];
+				return data.pattern.waves[CurrentWave.CurrentValue % data.pattern.waves.Count];
 			}
 
-			return data.waves.RandomItem();
+			return data.pattern.waves.RandomItem();
 		}
 
 		private ClickableObject CreateTarget(ClickableObject prefab)
@@ -110,6 +125,29 @@ namespace Game.Systems.WaveRoadSystem
 			}
 
 			onChanged?.Invoke();
+		}
+
+		public Data GetData()
+		{
+			return new Data()
+			{
+				pattern = data.pattern,
+				wave = CurrentWave.CurrentValue,
+				targetsCount = (int)CurrentWave.MiddleTargetsBar.MaxValue,
+				targetIndex = (int)CurrentWave.MiddleTargetsBar.CurrentValue,
+				target = CurrentWave.CurrentTarget,
+				targetData = CurrentTarget.GetData(),
+			};
+		}
+
+		public class Data
+		{
+			public WaveRoadPatternData pattern;
+			public int wave;
+			public int targetsCount;
+			public int targetIndex;
+			public TargetData target;
+			public ClickableObject.Data targetData;
 		}
 	}
 

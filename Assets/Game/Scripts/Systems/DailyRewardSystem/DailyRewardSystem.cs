@@ -33,7 +33,7 @@ namespace Game.Systems.DailyRewardSystem
 
 		public void Initialize()
 		{
-			data = saveLoad.GetStorage().DailyRewardData.GetData();
+			//data = saveLoad.GetStorage().DailyRewardData.GetData();
 
 			if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime
 			{
