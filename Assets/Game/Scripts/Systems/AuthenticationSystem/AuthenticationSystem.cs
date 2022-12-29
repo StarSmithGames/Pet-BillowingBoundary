@@ -1,6 +1,11 @@
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+
+using System;
+
 using UnityEngine;
 
 using Zenject;
@@ -34,6 +39,78 @@ namespace Game.Systems.AuthenticationSystem
 			}
 		}
 	}
+
+	public class GooglePlayServicesSystem : IInitializable, IDisposable
+	{
+		public bool IsAuthenticated { get; private set; } = false;
+
+		private SignalBus signalBus;
+
+		public GooglePlayServicesSystem(SignalBus signalBus)
+		{
+			this.signalBus = signalBus;
+		}
+
+		public void Initialize()
+		{
+			Authentication();
+		}
+
+		public void Dispose()
+		{
+		}
+
+		public void Authentication()
+		{
+			var config = new PlayGamesClientConfiguration.Builder()
+			//.EnableSavedGames()
+			.Build();
+
+			PlayGamesPlatform.InitializeInstance(config);
+			PlayGamesPlatform.Activate();
+			PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
+			{
+				if (result == SignInStatus.Success)
+				{
+					Debug.Log("[GooglePlayServicesAuthentication] User signed in successfully.");
+
+					//PlayGamesPlatform.Instance.Events.IncrementEvent("YOUR_EVENT_ID", 1);
+
+					PlayGamesPlatform.DebugLogEnabled = true;
+
+					PlayGamesPlatform.Instance.IncrementAchievement("Cfjewijawiu_QA", 5,
+					(bool success) => {
+						// handle success or failure
+					});
+					//Social.ShowAchievementsUI();
+
+					IsAuthenticated = true;
+				}
+				else
+				{
+					Debug.LogError("[GooglePlayServicesAuthentication] User is signed failed.");
+
+					IsAuthenticated = false;
+				}
+			});
+		}
+
+		/// <param name="progress">0f-100f</param>
+		public void Achieve(string id, float progress, Action<bool> callback)
+		{
+			if (!IsAuthenticated) return;
+
+			Social.ReportProgress(id, progress, callback);
+		}
+
+		public void UnlockAchievement(string id, Action<bool> callback)
+		{
+			if (!IsAuthenticated) return;
+
+			PlayGamesPlatform.Instance.UnlockAchievement(id, callback);
+		}
+	}
+
 
 	public class FirebaseAuthentication
 	{
