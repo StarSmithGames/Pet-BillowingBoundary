@@ -97,7 +97,7 @@ namespace Game.Systems.FloatingSystem
 			var rnd = obj.transform.position + (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * Screen.width / 4);
 
 			sequence
-				.Append(obj.transform.DOPath(new Vector3[] { rnd, target.position }, Random.Range(0.8f, 1.2f), PathType.CatmullRom))
+				.Append(obj.transform.DOPath(new Vector3[] { rnd, target.position }, Random.Range(0.6f, 1.1f), PathType.CatmullRom))
 				.Append(obj.Fade(0, 0.1f))
 				.OnComplete(obj.DespawnIt);
 

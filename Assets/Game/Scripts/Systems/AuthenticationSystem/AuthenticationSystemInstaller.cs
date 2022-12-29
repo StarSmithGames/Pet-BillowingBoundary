@@ -11,6 +11,7 @@ namespace Game.Systems.AuthenticationSystem
 		{
 			Container.DeclareSignal<SignalGooglePlayServicesAuthenticationChanged>();
 
+			Container.BindInterfacesAndSelfTo<GooglePlayServicesSystem>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<FirebaseAuthentication>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<AuthenticationSystem>().AsSingle().NonLazy();
 		}
