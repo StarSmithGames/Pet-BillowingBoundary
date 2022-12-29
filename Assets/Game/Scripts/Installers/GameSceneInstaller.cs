@@ -1,6 +1,7 @@
 using Game.Entities;
 using Game.Managers.ClickManager;
 using Game.Systems.CameraSystem;
+using Game.Systems.WaveRoadSystem;
 using Game.UI;
 using System.Transactions;
 
@@ -12,9 +13,13 @@ namespace Game.Installers
 {
 	public class GameSceneInstaller : MonoInstaller<GameSceneInstaller>
 	{
+		[Header("Data")]
+		[SerializeField] private WaveRoadPatternData pattern;
+		[Header("Components")]
 		[SerializeField] private CameraSystem cameraSystem;
 		[SerializeField] private UISubCanvas subCanvas;
 		[SerializeField] private FastMessageWindow fastMessageWindowPrefab;
+		[SerializeField] private UIPieceAnimatedBar pieceAnimatedBarPrefab;
 		[Header("Out")]
 		[SerializeField] private ClickerConveyor conveyor;
 
@@ -30,6 +35,12 @@ namespace Game.Installers
 			Container.BindFactory<FastMessageWindow, FastMessageWindow.Factory>()
 				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(1)
 				.FromComponentInNewPrefab(fastMessageWindowPrefab)
+				.UnderTransform((x) => x.Container.Resolve<UISubCanvas>().Windows));
+
+			//UIPieceAnimatedBar 5
+			Container.BindFactory<UIPieceAnimatedBar, UIPieceAnimatedBar.Factory>()
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(5)
+				.FromComponentInNewPrefab(pieceAnimatedBarPrefab)
 				.UnderTransform((x) => x.Container.Resolve<UISubCanvas>().Windows));
 		}
 	}

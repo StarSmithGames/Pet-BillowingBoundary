@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b84e5091bd14fb4585216525efc9b65, type: 3}
+  m_Name: WaveRoadPattern
+  m_EditorClassIdentifier: 
+  waves:
+  - {fileID: 11400000, guid: 60c1b7433705ff54aaac40525f9f9083, type: 2}
+  - {fileID: 11400000, guid: 3297d6031b6c3d048b13239a3387fb39, type: 2}
+  repeat: 1
