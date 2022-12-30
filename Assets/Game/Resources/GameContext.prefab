@@ -1967,7 +1967,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pattern: {fileID: 11400000, guid: 1963a86bc1c21824fbf76b17888ff479, type: 2}
-  test: {fileID: 11400000, guid: 2e305066912c97c4b8b259a9acd0b38f, type: 2}
   cameraSystem: {fileID: 7217618759996723291}
   subCanvas: {fileID: 1558576401}
   fastMessageWindowPrefab: {fileID: 3538383396561010641, guid: 8200e8419593c2244b4dc701cf338ece, type: 3}
@@ -2093,7 +2092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

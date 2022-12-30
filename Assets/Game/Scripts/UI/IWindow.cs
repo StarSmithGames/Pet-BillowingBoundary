@@ -109,8 +109,8 @@ namespace Game.UI
 			Sequence sequence = DOTween.Sequence();
 
 			sequence
-				.Append(CanvasGroup.DOFade(0f, 0.15f))
-				.Join(Window.DOScale(0, 0.25f).SetEase(Ease.InBounce))
+				.Append(Window.DOScale(0, 0.25f).SetEase(Ease.InBounce))
+				.Join(CanvasGroup.DOFade(0f, 0.25f))
 				.AppendCallback(() =>
 				{
 					CanvasGroup.Enable(false);

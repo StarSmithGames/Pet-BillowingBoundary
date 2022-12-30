@@ -65,10 +65,10 @@ namespace Game.Systems.DailyRewardSystem
 
 			subCanvas.WindowsRegistrator.Registrate(this);
 
-			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
-			{
-				Show();
-			}
+			//if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
+			//{
+			//	Show();
+			//}
 		}
 
 		private void OnDestroy()

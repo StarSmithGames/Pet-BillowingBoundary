@@ -1,11 +1,12 @@
+using DG.Tweening;
+
 using Game.Entities;
 using Game.Managers.StorageManager;
 using Game.UI;
 
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+using UnityEngine;
 using Zenject;
 
 namespace Game.Systems.TutorialSystem
@@ -22,22 +23,43 @@ namespace Game.Systems.TutorialSystem
 			this.player = player;
 		}
 
-		private void Start()
+		private IEnumerator Start()
 		{
 			Enable(false);
 
-			if(saveLoad.GetStorage().IsCompleteTutorial.GetData() == false)
+			yield return new WaitForSeconds(1f);
+
+			if (saveLoad.GetStorage().IsCompleteTutorial.GetData() == false)
 			{
-				player.onTapChanged += OnTapChanged;
-				Show();
+				player.Taps.onChanged += OnTapsChanged;
+				Show(() =>
+				{
+					IdleAnimation().Play();
+				});
 			}
 		}
 
 
-		private void OnTapChanged()
+		private void OnTapsChanged()
 		{
-			player.onTapChanged -= OnTapChanged;
-			Hide();
+			if (IsInProcess) return;
+
+			player.Taps.onChanged -= OnTapsChanged;
+
+			Hide(() =>
+			{
+				Window.DOKill(true);
+			});
+
+			saveLoad.GetStorage().IsCompleteTutorial.SetData(true);
+		}
+
+		private Tween IdleAnimation()
+		{
+			return Window
+				.DOPunchScale(new Vector3(0.2f, 0.5f, 0.2f), 0.17f)
+				.SetLoops(-1)
+				.SetEase(Ease.OutBounce);
 		}
 	}
 }
