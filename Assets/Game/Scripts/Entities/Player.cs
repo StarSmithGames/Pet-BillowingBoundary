@@ -8,6 +8,8 @@ using UnityEngine.Events;
 
 using Zenject;
 
+using static Game.Entities.Player;
+
 namespace Game.Entities
 {
 	public class Player
@@ -65,7 +67,7 @@ namespace Game.Entities
 			}
 			else//first time
 			{
-				Gold = new(new BFN(0, 0).compressed);
+				Gold = new(new BFN(100000, 0).compressed);
 
 				TargetsDefeat = new(0);
 				BossesDefeat = new(0);
@@ -94,7 +96,9 @@ namespace Game.Entities
 
 		private void OnSaveData()
 		{
-			saveLoad.GetStorage().Profile.GetData().playerData = GetData();
+			var data = saveLoad.GetStorage().Profile.GetData();
+
+			data.playerData = GetData();
 		}
 
 		public Data GetData()
@@ -108,7 +112,6 @@ namespace Game.Entities
 				bossesDefeat = BossesDefeat.CurrentValue,
 
 				bonuses = BonusRegistrator.GetData(),
-				fireFistData = SkillRegistrator.GetFireFistData(),
 			};
 		}
 
@@ -121,16 +124,26 @@ namespace Game.Entities
 			public int targetsDefeat;
 			public int bossesDefeat;
 
-			public List<Bonus.Data> bonuses = new List<Bonus.Data>();
-			public FireFistSkill.Data fireFistData;
+			public Bonuses bonuses;
+		}
+
+		[System.Serializable]
+		public class Bonuses
+		{
+			public List<BonusDataSave> bonuses;
+
+			public Bonuses(List<BonusDataSave> bonuses)
+			{
+				this.bonuses = bonuses;
+			}
 		}
 	}
 
 	public class BonusRegistrator : Registrator<Bonus>
 	{
-		public List<Bonus.Data> GetData()
+		public Bonuses GetData()
 		{
-			return new List<Bonus.Data>(registers.Select((x) => x.GetData()));
+			return new Bonuses(new List<BonusDataSave>(registers.Select((x) => x.GetData())));
 		}
 	}
 
@@ -147,16 +160,6 @@ namespace Game.Entities
 			CurrentSkill = skill;
 
 			onSelectedSkillChanged?.Invoke(CurrentSkill);
-		}
-
-		public FireFistSkill.Data GetFireFistData()
-		{
-			if (ContainsType(out FireFistSkill skill))
-			{
-				return skill.GetData();
-			}
-
-			return null;
 		}
 	}
 

@@ -12,6 +12,8 @@ namespace Game.Managers.AudioManager
 		
 		public override void InstallBindings()
 		{
+			Container.DeclareSignal<SignalMusicChanged>();
+
 			Container.BindInstance(settings).WhenInjectedInto<AudioManager>();
 			Container.BindFactory<AudioSource, AudioSource.Factory>()
 				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(2)
@@ -20,6 +22,8 @@ namespace Game.Managers.AudioManager
 			Container.BindInterfacesAndSelfTo<AudioManager>().AsSingle().NonLazy();
 		}
 	}
+
+	public struct SignalMusicChanged { }
 
 	[System.Serializable]
 	public class AudioSettings

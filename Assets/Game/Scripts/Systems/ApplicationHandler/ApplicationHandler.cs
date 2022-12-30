@@ -1,3 +1,5 @@
+using Game.Managers.StorageManager;
+
 using UnityEngine;
 
 using Zenject;
@@ -7,15 +9,22 @@ namespace Game.Systems.ApplicationHandler
 	public class ApplicationHandler : MonoBehaviour
 	{
 		private SignalBus signalBus;
+		private ISaveLoad saveLoad;
 
 		[Inject]
-		private void Construct(SignalBus signalBus)
+		private void Construct(SignalBus signalBus, ISaveLoad saveLoad)
 		{
 			this.signalBus = signalBus;
+			this.saveLoad = saveLoad;
 		}
 
 		private void Start()
 		{
+			if (saveLoad.GetStorage().IsWasHere.GetData() == true)
+			{
+				saveLoad.GetStorage().IsFirstTime.SetData(false);
+			}
+
 			Application.runInBackground = true;
 
 			signalBus?.Fire(new SignalApplicationRequiredSave());

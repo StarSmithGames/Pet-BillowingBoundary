@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AudioManagerInstaller
   m_EditorClassIdentifier: 
   settings:
-    buttonClick: {fileID: 8300000, guid: 8842ec445629d7748afcf22b0fe78a2c, type: 3}
+    buttonClick: {fileID: 8300000, guid: b8604a24b3d22df4a96d05fde47219cc, type: 3}
     bossDefeated: {fileID: 8300000, guid: 991583ab8e8cb3448aa7567d5b237fd7, type: 3}
     targetDefeated: {fileID: 0}
-    coinsReward: {fileID: 8300000, guid: 590eaccd3143da343987c8d312083541, type: 3}
-    background: {fileID: 0}
+    coinsReward: {fileID: 8300000, guid: 60560dc7c21c6684c9e0379e83a55b4b, type: 3}
+    background: {fileID: 8300000, guid: 57c7c28a368443a449f16cd841fe996c, type: 3}
   audioSourcePrefab: {fileID: 942601889656067811, guid: fe2e4b5299543864e9b9f22bb917460d, type: 3}

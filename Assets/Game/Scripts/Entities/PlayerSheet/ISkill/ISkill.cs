@@ -102,22 +102,18 @@ namespace Game.Entities
 
 	public abstract class SkillProperty : AttributeModifiableFloat
 	{
-		public override float TotalValue => cachedTotalValue;
-
 		public int Level { get; private set; } = 0;
 
 		protected bool isInitialized = false;
 		protected BFN currentCost;
-		private float cachedTotalValue;
 
 		public SkillProperty(float value) : base(value) { }
 
-		public void SetLevel(int level)
+		public virtual void SetLevel(int level)
 		{
 			Level = level;
 
 			currentCost = Formule();
-			cachedTotalValue = base.TotalValue;
 		}
 
 		public virtual void LevelUp()
@@ -125,7 +121,6 @@ namespace Game.Entities
 			Level++;
 
 			currentCost = Formule();
-			cachedTotalValue = base.TotalValue;
 		}
 
 		public virtual string GetOutput(LocalizationSystem localizationSystem)
@@ -138,7 +133,6 @@ namespace Game.Entities
 			if (!isInitialized)
 			{
 				currentCost = Formule();
-				cachedTotalValue = base.TotalValue;
 				isInitialized = true;
 			}
 

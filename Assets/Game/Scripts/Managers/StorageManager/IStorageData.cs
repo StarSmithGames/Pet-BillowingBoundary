@@ -1,6 +1,8 @@
 using Game.Entities;
 using Game.Systems.WaveRoadSystem;
 
+using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace Game.Managers.StorageManager
@@ -46,7 +48,7 @@ namespace Game.Managers.StorageManager
 
 		public Profile Profile { get; private set; }
 
-
+		public IStorageData<bool> IsWasHere{ get; private set; }
 		public IStorageData<bool> IsFirstTime { get; private set; }
 
 		public IStorageData<bool> IsPayUser { get; private set; }
@@ -54,6 +56,8 @@ namespace Game.Managers.StorageManager
 		public IStorageData<bool> IsBuyFreeMode { get; private set; }
 
 		public IStorageData<bool> IsCompleteTutorial { get; private set; }
+
+		public IStorageData<FireFistSkill.Data> FireFistSkill { get; private set; }
 
 		//settings
 		public IStorageData<bool> IsSound { get; private set; }
@@ -95,6 +99,7 @@ namespace Game.Managers.StorageManager
 
 		private void Initialization()
 		{
+			IsWasHere = new StorageData<bool>(Database, "is_was_here", false);
 			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
 
 			IsPayUser = new StorageData<bool>(Database, "is_pay_user", false);
@@ -102,6 +107,8 @@ namespace Game.Managers.StorageManager
 			IsBuyFreeMode = new StorageData<bool>(Database, "is_buy_free_mode", false);
 
 			IsCompleteTutorial = new StorageData<bool>(Database, "tutorial_tap", false);
+
+			FireFistSkill = new StorageData<FireFistSkill.Data>(Database, "fire_fist_skill", new FireFistSkill.Data());
 
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);
@@ -117,31 +124,37 @@ namespace Game.Managers.StorageManager
 		}
 	}
 
+	[System.Serializable]
 	public class Profile
 	{
-		private Data data = new Data();
+		private ProfileData data;
 
-		public void SetData(Data data)
+		public Profile()
+		{
+			data = new ProfileData();
+		}
+
+		public void SetData(ProfileData data)
 		{
 			this.data = data;
 		}
 
 		public void LoadJson(string json)
 		{
-			data = JsonSerializator.ConvertFromJson<Data>(json);
+			data = JsonSerializator.ConvertFromJson<ProfileData>(json);
 		}
 
 		public string GetJson()
 		{
 			return JsonSerializator.ConvertToJson(data);
 		}
-		public Data GetData() => data;
+		public ProfileData GetData() => data;
+	}
 
-		[System.Serializable]
-		public class Data
-		{
-			public Player.Data playerData;
-			public WaveRoad.Data waveRoadData;
-		}
+	[System.Serializable]
+	public class ProfileData
+	{
+		public Player.Data playerData;
+		public WaveRoad.Data waveRoadData;
 	}
 }

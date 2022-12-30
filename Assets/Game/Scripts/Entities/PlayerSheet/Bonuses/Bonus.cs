@@ -2,6 +2,8 @@ using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
+using System;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -34,16 +36,22 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	{
 		if (!saveLoad.GetStorage().IsFirstTime.GetData())
 		{
-			var data = saveLoad.GetStorage().Profile.GetData().playerData.bonuses.Find((x) => x.bonus == BonusData);
+			var data = saveLoad.GetStorage().Profile.GetData().playerData.bonuses;
+
+			Debug.LogError(data.bonuses.Count);
+			for (int i = 0; i < data.bonuses.Count; i++)
+			{
+				Debug.LogError(data.bonuses[i].bonus.information.name);
+			}
 
 			Assert.IsTrue(data != null);
 
-			SetData(data);
+			//SetData(data);
 		}
 	}
 
 
-	public void SetData(Data data)
+	public void SetData(BonusDataSave data)
 	{
 		IsUnknow = data.isUnknow;
 		Level = data.level;
@@ -95,21 +103,22 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		isInitialized = true;
 	}
 
-	public Data GetData()
+	public BonusDataSave GetData()
 	{
-		return new Data
+		return new BonusDataSave
 		{
 			bonus = BonusData,
+			isUnknow = IsUnknow,
 			level = Level,
+			type = BuyType,
 		};
 	}
-
-	[System.Serializable]
-	public class Data
-	{
-		public BonusData bonus;
-		public bool isUnknow;
-		public int level;
-		public BuyType type;
-	}
+}
+[Serializable]
+public class BonusDataSave
+{
+	public BonusData bonus;
+	public bool isUnknow;
+	public int level;
+	public BuyType type;
 }

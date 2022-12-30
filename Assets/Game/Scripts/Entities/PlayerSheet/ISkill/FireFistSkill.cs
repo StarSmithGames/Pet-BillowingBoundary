@@ -4,9 +4,11 @@ using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 using Game.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 
 using Zenject;
 
@@ -31,12 +33,14 @@ namespace Game.Entities
 
 		private List<SkillProperty> properties = new List<SkillProperty>();
 
+		private SignalBus signalBus;
 		private ClickStarter conveyor;
 		private ISaveLoad saveLoad;
 
 		[Inject]
-		private void Construct(ClickStarter conveyor, ISaveLoad saveLoad)
+		private void Construct(SignalBus signalBus, ClickStarter conveyor, ISaveLoad saveLoad)
 		{
+			this.signalBus = signalBus;
 			this.conveyor = conveyor;
 			this.saveLoad = saveLoad;
 		}
@@ -45,11 +49,19 @@ namespace Game.Entities
 		{
 			base.Start();
 
+			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
+			{
+				var data1 = saveLoad.GetStorage().Profile.GetData().waveRoadData;
+				var data2 = saveLoad.GetStorage().Profile.GetData().playerData;
+			}
+
 			Init();
 
 			tapBar = player.PlayerSheet.TapBar;
 			tapBar.Resize(0, 0, 100);//100 hits
 			player.Taps.onChanged += OnTapsChanged;
+
+			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}
 
 		private void OnDestroy()
@@ -59,6 +71,8 @@ namespace Game.Entities
 
 		protected override void Update()
 		{
+			if (!isInitialized) return;
+
 			base.Update();
 
 			if (tapBar.TapPhase == TapPhase.Release)
@@ -116,6 +130,8 @@ namespace Game.Entities
 		{
 			if (!isInitialized)
 			{
+				isInitialized = true;
+
 				Chance = new FireFistChanceProperty(0f);
 				Duration = new FireFistDurationProperty(data.releaseDuration);
 				Power = new FireFistPowerProperty(1f);//100% x2
@@ -124,16 +140,16 @@ namespace Game.Entities
 				properties.Add(Duration);
 				properties.Add(Power);
 
-				if (!saveLoad.GetStorage().IsFirstTime.GetData())
+				if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
 				{
-					var data = saveLoad.GetStorage().Profile.GetData().playerData;
+					var data = saveLoad.GetStorage().FireFistSkill.GetData();
 
-					Chance.SetLevel(data.fireFistData.chanceLevel);
-					Duration.SetLevel(data.fireFistData.durationLevel);
-					Power.SetLevel(data.fireFistData.powerLevel);
+					Chance.SetLevel(data.chanceLevel);
+					Duration.SetLevel(data.durationLevel);
+					Power.SetLevel(data.powerLevel);
+
+					onChanged?.Invoke(this);
 				}
-
-				isInitialized = true;
 			}
 		}
 
@@ -195,6 +211,11 @@ namespace Game.Entities
 			}
 		}
 
+		private void OnSaveData()
+		{
+			saveLoad.GetStorage().FireFistSkill.SetData(GetData());
+		}
+
 		public Data GetData()
 		{
 			return new Data()
@@ -205,7 +226,6 @@ namespace Game.Entities
 			};
 		}
 
-		[System.Serializable]
 		public class Data
 		{
 			public int chanceLevel;
@@ -213,6 +233,7 @@ namespace Game.Entities
 			public int powerLevel;
 		}
 	}
+
 
 	public class FireFistChanceProperty : SkillProperty
 	{
@@ -233,6 +254,14 @@ namespace Game.Entities
 		private PercentModifier xModifier;
 
 		public FireFistChanceProperty(float value) : base(value) { }
+
+		public override void SetLevel(int level)
+		{
+			base.SetLevel(level);
+
+			CurrentValue += 0.01f * Level;
+			XModifier.SetValue(TotalValue * 100f);//xTotalValue
+		}
 
 		public override void LevelUp()
 		{
@@ -255,6 +284,14 @@ namespace Game.Entities
 		public override string LocalizationKey => "ui.skill.fire_fist.duration";
 
 		public FireFistDurationProperty(float value) : base(value) { }
+
+		public override void SetLevel(int level)
+		{
+			base.SetLevel(level);
+
+			CurrentValue += 0.5f * Level;
+		}
+
 
 		public override void LevelUp()
 		{
@@ -289,6 +326,15 @@ namespace Game.Entities
 		private PercentModifier xModifier;
 
 		public FireFistPowerProperty(float value) : base(value) { }
+
+		public override void SetLevel(int level)
+		{
+			base.SetLevel(level);
+
+			CurrentValue += 0.01f * Level;
+
+			XModifier.SetValue(TotalValue * 100f);
+		}
 
 		public override void LevelUp()
 		{

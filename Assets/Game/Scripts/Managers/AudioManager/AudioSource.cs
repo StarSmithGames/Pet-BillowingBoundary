@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 using Zenject;
 
 namespace Game.Managers.AudioManager
@@ -12,11 +9,15 @@ namespace Game.Managers.AudioManager
 
 		public bool isPlaying { get; private set; } = false;
 
+		private bool isLoop = false;
+
 		private float t = 0;
 		private float playTime = 0;
 
 		private void Update()
 		{
+			if (isLoop) return;
+
 			if (isPlaying)
 			{
 				t += Time.deltaTime;
@@ -30,8 +31,27 @@ namespace Game.Managers.AudioManager
 			}
 		}
 
+		public void Mute(bool trigger)
+		{
+			source.mute = trigger;
+		}
+
+		public void PlayLoop(AudioClip clip)
+		{
+			source.loop = true;
+
+			source.clip = clip;
+			source.Play();
+
+			isLoop = true;
+		}
+
 		public void PlayOnce(AudioClip clip)
 		{
+			isLoop = false;
+
+			source.loop = false;
+
 			playTime = clip.length;
 			source.PlayOneShot(clip);
 			isPlaying = true;

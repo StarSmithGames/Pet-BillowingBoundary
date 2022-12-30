@@ -93,10 +93,7 @@ namespace Game.Managers.StorageManager
 
 		private void OnApplicationRequiredSave()
 		{
-			if(GetStorage().IsFirstTime.GetData() == true)
-			{
-				GetStorage().IsFirstTime.SetData(false);
-			}
+			GetStorage().IsWasHere.SetData(true);
 
 			Save();
 		}
