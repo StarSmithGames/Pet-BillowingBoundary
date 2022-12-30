@@ -21,7 +21,7 @@ MonoBehaviour:
     isDescriptionId: 1
   baseHealthPoints: 100
   isHasCoinsAfterDefeat: 1
-  baseCoinsAfterDefeat: 0
+  baseCoinsAfterDefeat: 100
   isCoinsRandomAfterDefeat: 0
   baseMinCoinsAfterDefeat: 0
   baseMaxCoinsAfterDefeat: 0
