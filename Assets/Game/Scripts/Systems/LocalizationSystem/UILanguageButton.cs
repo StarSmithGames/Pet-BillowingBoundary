@@ -28,10 +28,11 @@ namespace Game.Systems.LocalizationSystem
 
 		protected override void OnClick()
 		{
+			base.OnClick();
+
 			if (IsEnable) return;
 
 			Enable(!IsEnable);
-			base.OnClick();
 
 			onClicked?.Invoke(this);
 		}

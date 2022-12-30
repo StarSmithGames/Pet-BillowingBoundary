@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f7a8022016702479beefd4bd94888f, type: 3}
+  m_Name: AudioManagerInstaller
+  m_EditorClassIdentifier: 
+  settings:
+    buttonClick: {fileID: 8300000, guid: 8842ec445629d7748afcf22b0fe78a2c, type: 3}
+    bossDefeated: {fileID: 8300000, guid: 991583ab8e8cb3448aa7567d5b237fd7, type: 3}
+    targetDefeated: {fileID: 0}
+    coinsReward: {fileID: 8300000, guid: 590eaccd3143da343987c8d312083541, type: 3}
+    background: {fileID: 0}
+  audioSourcePrefab: {fileID: 942601889656067811, guid: fe2e4b5299543864e9b9f22bb917460d, type: 3}

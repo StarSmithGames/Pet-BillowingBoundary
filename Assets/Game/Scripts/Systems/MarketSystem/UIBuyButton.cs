@@ -1,5 +1,10 @@
+using Game.Managers.AudioManager;
+using Game.Managers.VibrationManager;
+
 using UnityEngine;
 using UnityEngine.UI;
+
+using Zenject;
 
 namespace Game.Systems.MarketSystem
 {
@@ -11,6 +16,28 @@ namespace Game.Systems.MarketSystem
 		[field: SerializeField] public TMPro.TextMeshProUGUI Text { get; private set; }
 		[SerializeField] private Sprite on;
 		[SerializeField] private Sprite off;
+
+		private AudioManager audioManager;
+		private VibrationManager vibrationManager;
+
+		[Inject]
+		private void Construct(
+			AudioManager audioManager,
+			VibrationManager vibrationManager)
+		{
+			this.audioManager = audioManager;
+			this.vibrationManager = vibrationManager;
+		}
+
+		private void Start()
+		{
+			Button.onClick.AddListener(OnClick);
+		}
+
+		private void OnDestroy()
+		{
+			Button?.onClick.RemoveAllListeners();
+		}
 
 		public void Enable(bool trigger)
 		{
@@ -24,6 +51,12 @@ namespace Game.Systems.MarketSystem
 			if (Text == null) return;
 
 			Text.text = text;
+		}
+
+		private void OnClick()
+		{
+			audioManager.PlayButtonClick();
+			vibrationManager.Vibrate();
 		}
 	}
 }

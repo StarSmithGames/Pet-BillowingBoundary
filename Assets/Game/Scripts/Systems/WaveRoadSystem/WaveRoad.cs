@@ -1,6 +1,8 @@
 using Game.Entities;
+using Game.Managers.AudioManager;
 using Game.Managers.ClickManager;
 using Game.Managers.StorageManager;
+using Game.Managers.VibrationManager;
 
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +31,8 @@ namespace Game.Systems.WaveRoadSystem
 		private Player player;
 		private Conveyor conveyor;
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
+		private AudioManager audioManager;
+		private VibrationManager vibrationManager;
 
 		public WaveRoad(
 			SignalBus signalBus,
@@ -36,12 +40,16 @@ namespace Game.Systems.WaveRoadSystem
 			ISaveLoad saveLoad,
 			Player player,
 			Conveyor conveyor,
-			AnalyticsSystem.AnalyticsSystem analyticsSystem)
+			AnalyticsSystem.AnalyticsSystem analyticsSystem,
+			AudioManager audioManager,
+			VibrationManager vibrationManager)
 		{
 			this.saveLoad = saveLoad;
 			this.player = player;
 			this.conveyor = conveyor;
 			this.analyticsSystem = analyticsSystem;
+			this.audioManager = audioManager;
+			this.vibrationManager = vibrationManager;
 
 			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
 			{
@@ -93,15 +101,6 @@ namespace Game.Systems.WaveRoadSystem
 			return pattern.waves.RandomItem();
 		}
 
-		private ClickableObject CreateTarget(ClickableObject prefab)
-		{
-			var obj = GameObject.Instantiate(prefab);
-			obj.transform.localScale = Vector3.one;
-			obj.Enable(false);
-
-			return obj;
-		}
-
 		private void OnTargetDead(ClickableObject clickableObject)
 		{
 			if (CurrentTarget != clickableObject) return;
@@ -110,8 +109,11 @@ namespace Game.Systems.WaveRoadSystem
 
 			analyticsSystem.LogEvent_target_defeat();
 
-			if (CurrentWave.IsCompleted)
+			if (CurrentWave.IsCompleted)//boss defeated
 			{
+				audioManager.PlayBossDefeated();
+				vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
+
 				analyticsSystem.LogEvent_boss_defeat();
 
 				player.BossesDefeat.CurrentValue++;
@@ -121,8 +123,10 @@ namespace Game.Systems.WaveRoadSystem
 				analyticsSystem.LogEvent_wave_completed();
 				UpdateTarget();
 			}
-			else
+			else//target defeated
 			{
+				vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.LightImpact);
+
 				CurrentWave.MiddleTargetsBar.CurrentValue++;
 			}
 

@@ -1,5 +1,6 @@
 using DG.Tweening;
 
+using Game.Managers.AudioManager;
 using Game.Managers.VibrationManager;
 using Game.UI;
 
@@ -23,12 +24,14 @@ namespace Game.Systems.SettingsSystem
 		private bool isOpenned = false;
 
 		private UISubCanvas subCanvas;
+		private AudioManager audioManager;
 		private VibrationManager vibrationManager;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas, VibrationManager vibrationManager)
+		private void Construct(UISubCanvas subCanvas, AudioManager audioManager, VibrationManager vibrationManager)
 		{
 			this.subCanvas = subCanvas;
+			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
 		}
 
@@ -105,6 +108,7 @@ namespace Game.Systems.SettingsSystem
 				Show();
 			}
 
+			audioManager.PlayButtonClick();
 			vibrationManager.Vibrate();
 		}
 	}

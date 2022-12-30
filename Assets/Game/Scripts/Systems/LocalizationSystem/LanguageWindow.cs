@@ -1,4 +1,7 @@
 using DG.Tweening;
+
+using Game.Managers.AudioManager;
+using Game.Managers.VibrationManager;
 using Game.UI;
 
 using Sirenix.OdinInspector;
@@ -24,13 +27,18 @@ namespace Game.Systems.LocalizationSystem
 		private SignalBus signalBus;
 		private UISubCanvas subCanvas;
 		private LocalizationSystem localizationSystem;
+		private AudioManager audioManager;
+		private VibrationManager vibrationManager;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, UISubCanvas subCanvas, LocalizationSystem localizationSystem)
+		private void Construct(SignalBus signalBus, UISubCanvas subCanvas, LocalizationSystem localizationSystem,
+			AudioManager audioManager, VibrationManager vibrationManager)
 		{
 			this.signalBus = signalBus;
 			this.subCanvas = subCanvas;
 			this.localizationSystem = localizationSystem;
+			this.audioManager = audioManager;
+			this.vibrationManager = vibrationManager;
 		}
 
 		private void Start()
@@ -95,6 +103,9 @@ namespace Game.Systems.LocalizationSystem
 		private void OnClosed()
 		{
 			Hide();
+
+			audioManager.PlayButtonClick();
+			vibrationManager.Vibrate();
 		}
 
 		[Button(DirtyOnClick = true)]

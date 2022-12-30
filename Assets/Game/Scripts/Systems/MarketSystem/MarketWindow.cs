@@ -1,6 +1,7 @@
 using DG.Tweening;
 
 using Game.Entities;
+using Game.Managers.AudioManager;
 using Game.Managers.VibrationManager;
 using Game.UI;
 
@@ -44,18 +45,21 @@ namespace Game.Systems.MarketSystem
 		private Player player;
 		private UIMarketBonusItem.Factory marketItemBonusFactory;
 		private UIMarketSkillItem.Factory marketItemSkillFactory;
+		private AudioManager audioManager;
 		private VibrationManager vibrationManager;
 
 		[Inject]
 		private void Construct(UISubCanvas subCanvas, Player player,
 			UIMarketBonusItem.Factory marketItemBonusFactory,
 			UIMarketSkillItem.Factory marketItemSkillFactory,
+			AudioManager audioManager,
 			VibrationManager vibrationManager)
 		{
 			this.subCanvas = subCanvas;
 			this.player = player;
 			this.marketItemBonusFactory = marketItemBonusFactory;
 			this.marketItemSkillFactory = marketItemSkillFactory;
+			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
 		}
 		
@@ -211,8 +215,6 @@ namespace Game.Systems.MarketSystem
 
 		private void OnBuyClicked(int skillPropertyIndex)
 		{
-			vibrationManager.Vibrate();
-
 			var property = MarkertSkill.CurrentSkill.GetProperty(skillPropertyIndex);
 
 			if (player.Gold.CurrentValue < property.GetCost())
@@ -226,8 +228,6 @@ namespace Game.Systems.MarketSystem
 
 		private void OnBuyClicked(UIMarketItem marketItem)
 		{
-			vibrationManager.Vibrate();
-
 			if (player.Gold.CurrentValue < marketItem.CurrentPurchase.GetCost())
 			{
 				return;
@@ -247,6 +247,7 @@ namespace Game.Systems.MarketSystem
 				TabsSystemBottom.SelectFirst();
 			});
 
+			audioManager.PlayButtonClick();
 			vibrationManager.Vibrate();
 		}
 	}

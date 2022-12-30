@@ -79,7 +79,22 @@ namespace Game.Systems.MarketSystem
 
 		private void OnSelectedSkillChanged(ActiveSkill skill)
 		{
+			if(CurrentSkill != null)
+			{
+				CurrentSkill.onChanged -= OnSkillChanged;
+			}
+
 			CurrentSkill = skill;
+
+			if (CurrentSkill != null)
+			{
+				CurrentSkill.onChanged += OnSkillChanged;
+			}
+			UpdateUI();
+		}
+
+		private void OnSkillChanged(ActiveSkill skill)
+		{
 			UpdateUI();
 		}
 

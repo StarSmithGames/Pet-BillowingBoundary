@@ -1,3 +1,4 @@
+using Game.Managers.AudioManager;
 using Game.Managers.VibrationManager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,10 +14,12 @@ namespace Game.UI
 		[field: SerializeField] public Button Button { get; private set; }
 
 		protected VibrationManager vibrationManager;
+		protected AudioManager audioManager;
 
 		[Inject]
-		private void Construct(VibrationManager vibrationManager)
+		private void Construct(AudioManager audioManager, VibrationManager vibrationManager)
 		{
+			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
 		}
 
@@ -37,6 +40,7 @@ namespace Game.UI
 
 		protected virtual void OnClick()
 		{
+			audioManager.PlayButtonClick();
 			vibrationManager.Vibrate();
 		}
 	}

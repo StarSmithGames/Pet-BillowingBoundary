@@ -1,3 +1,4 @@
+using Game.Managers.AudioManager;
 using Game.Managers.VibrationManager;
 
 using Sirenix.OdinInspector;
@@ -22,11 +23,13 @@ namespace Game.UI
 		[ShowIf("tabBehavior", TabBehavior.Next)]
 		[SerializeField] private Button next;
 
+		private AudioManager audioManager;
 		private VibrationManager vibrationManager;
 
 		[Inject]
-		private void Construct(VibrationManager vibrationManager)
+		private void Construct(AudioManager audioManager, VibrationManager vibrationManager)
 		{
+			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
 		}
 
@@ -83,6 +86,7 @@ namespace Game.UI
 				Next();
 			}
 
+			audioManager.PlayButtonClick();
 			vibrationManager.Vibrate();
 		}
 
@@ -93,6 +97,7 @@ namespace Game.UI
 
 			Open(initIndex);
 
+			audioManager.PlayButtonClick();
 			vibrationManager?.Vibrate();
 		}
 	}
