@@ -1,7 +1,7 @@
 using Game.Entities;
-using Game.Systems.DailyRewardSystem;
-using Game.Systems.LocalizationSystem;
 using Game.Systems.WaveRoadSystem;
+
+using UnityEngine;
 
 namespace Game.Managers.StorageManager
 {
@@ -44,12 +44,15 @@ namespace Game.Managers.StorageManager
 	{
 		public Database Database { get; private set; }
 
+		public Profile Profile { get; private set; }
+
+
 		public IStorageData<bool> IsFirstTime { get; private set; }
 
 		public IStorageData<bool> IsPayUser { get; private set; }
 		public IStorageData<bool> IsBuyRemoveADS { get; private set; }
 
-		public IStorageData<Profile> Profile { get; private set; }
+		public IStorageData<bool> IsCompleteTutorial { get; private set; }
 
 		//settings
 		public IStorageData<bool> IsSound { get; private set; }
@@ -63,6 +66,7 @@ namespace Game.Managers.StorageManager
 		/// </summary>
 		public Storage()
 		{
+			Profile = new Profile();
 			Database = new Database();
 
 			Initialization();
@@ -71,10 +75,13 @@ namespace Game.Managers.StorageManager
 		/// <summary>
 		/// Json Data
 		/// </summary>
-		public Storage(string json)
+		public Storage(string profile, string data)
 		{
+			Profile = new Profile();
+			Profile.LoadJson(profile);
+
 			Database = new Database();
-			Database.LoadJson(json);
+			Database.LoadJson(data);
 
 			Initialization();
 		}
@@ -89,12 +96,10 @@ namespace Game.Managers.StorageManager
 		{
 			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
 
-			//DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
-
 			IsPayUser = new StorageData<bool>(Database, "is_pay_user", false);
 			IsBuyRemoveADS = new StorageData<bool>(Database, "is_buy_remove_ads", false);
 
-			Profile = new StorageData<Profile>(Database, "profile", new Profile());
+			IsCompleteTutorial = new StorageData<bool>(Database, "tutorial_tap", false);
 
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);
@@ -112,7 +117,28 @@ namespace Game.Managers.StorageManager
 
 	public class Profile
 	{
-		public Player.Data playerData;
-		public WaveRoad.Data waveRoadData;
+		private Data data = new Data();
+
+		public void SetData(Data data)
+		{
+			this.data = data;
+		}
+
+		public void LoadJson(string json)
+		{
+			data = JsonSerializator.ConvertFromJson<Data>(json);
+		}
+
+		public string GetJson()
+		{
+			return JsonSerializator.ConvertToJson(data);
+		}
+		public Data GetData() => data;
+
+		[System.Serializable]
+		public class Data
+		{
+			public WaveRoad.Data waveRoadData;
+		}
 	}
 }

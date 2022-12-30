@@ -18,7 +18,7 @@ namespace Game.Managers.ClickManager
 	public abstract partial class ClickableObject : MonoBehaviour
 	{
 		public UnityAction onPunched;
-		public UnityAction onDead;
+		public UnityAction<ClickableObject> onDead;
 
 		public bool IsInitialized { get; private set; } = false;
 		public bool IsEnabled { get; private set; } = true;
@@ -116,7 +116,7 @@ namespace Game.Managers.ClickManager
 			if(Sheet.HealthPointsBar.CurrentValue <= BFN.Zero)
 			{
 				isDead = true;
-				onDead?.Invoke();
+				onDead?.Invoke(this);
 			}
 		}
 
@@ -148,6 +148,7 @@ namespace Game.Managers.ClickManager
 		}
 #endif
 
+		[System.Serializable]
 		public class Data
 		{
 			public BFN hp;

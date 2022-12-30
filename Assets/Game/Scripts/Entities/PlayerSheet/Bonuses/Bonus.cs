@@ -66,14 +66,14 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	{
 		return new Data
 		{
-			bonus = BonusData,
+			//bonus = BonusData,
 			level = Level,
 		};
 	}
 
 	public class Data
 	{
-		public BonusData bonus;
+		//public BonusData bonus;
 		public int level;
 	}
 }

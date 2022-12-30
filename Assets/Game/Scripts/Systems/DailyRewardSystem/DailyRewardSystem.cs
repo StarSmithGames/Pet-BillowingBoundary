@@ -35,22 +35,22 @@ namespace Game.Systems.DailyRewardSystem
 		{
 			//data = saveLoad.GetStorage().DailyRewardData.GetData();
 
-			if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime
-			{
-				isInitialized = true;
-				Reset();
-			}
-			else
-			{
-				//if (networkTimeManager.IsTrustedTime())//need server
-				{
-					isInitialized = true;
-					if (IsMissedDay())
-					{
-						Reset();
-					}
-				}
-			}
+			//if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime
+			//{
+			//	isInitialized = true;
+			//	Reset();
+			//}
+			//else
+			//{
+			//	//if (networkTimeManager.IsTrustedTime())//need server
+			//	{
+			//		isInitialized = true;
+			//		if (IsMissedDay())
+			//		{
+			//			Reset();
+			//		}
+			//	}
+			//}
 		}
 
 		public void Tick()

@@ -149,7 +149,7 @@ namespace Game.Managers.ClickManager
 			}
 		}
 
-		private void OnTargetDead()
+		private void OnTargetDead(ClickableObject obj)
 		{
 			if (CurrentTarget.TargetData.isHasCoinsAfterDefeat)
 			{

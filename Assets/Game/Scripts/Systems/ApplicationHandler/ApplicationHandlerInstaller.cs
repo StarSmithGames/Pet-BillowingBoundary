@@ -6,6 +6,7 @@ namespace Game.Systems.ApplicationHandler
 	{
 		public override void InstallBindings()
 		{
+			Container.DeclareSignal<SignalApplicationRequiredSave>();
 			Container.DeclareSignal<SignalApplicationQuit>();
 			Container.DeclareSignal<SignalApplicationPause>();
 			Container.DeclareSignal<SignalApplicationFocus>();
@@ -14,6 +15,7 @@ namespace Game.Systems.ApplicationHandler
 		}
 	}
 
+	public struct SignalApplicationRequiredSave { }
 	public struct SignalApplicationQuit { }
 	public struct SignalApplicationPause { public bool trigger; }
 	public struct SignalApplicationFocus { public bool trigger; }

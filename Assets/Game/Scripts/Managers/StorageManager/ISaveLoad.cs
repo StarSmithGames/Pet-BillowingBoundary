@@ -1,6 +1,8 @@
 using Game.Systems.ApplicationHandler;
 
 using System;
+using System.Collections.Generic;
+
 using UnityEngine;
 using Zenject;
 
@@ -32,9 +34,7 @@ namespace Game.Managers.StorageManager
 
 		public void Initialize()
 		{
-			signalBus?.Subscribe<SignalApplicationQuit>(OnApplicationQuit);
-			signalBus?.Subscribe<SignalApplicationPause>(OnApplicationPaused);
-			signalBus?.Subscribe<SignalApplicationFocus>(OnApplicationFocusChanged);
+			signalBus?.Subscribe<SignalApplicationRequiredSave>(OnApplicationRequiredSave);
 
 			if (activeStorage == null)
 			{
@@ -44,9 +44,7 @@ namespace Game.Managers.StorageManager
 
 		public void Dispose()
 		{
-			signalBus?.Unsubscribe<SignalApplicationQuit>(OnApplicationQuit);
-			signalBus?.Unsubscribe<SignalApplicationPause>(OnApplicationPaused);
-			signalBus?.Unsubscribe<SignalApplicationFocus>(OnApplicationFocusChanged);
+			signalBus?.Unsubscribe<SignalApplicationRequiredSave>(OnApplicationRequiredSave);
 
 			Save();
 		}
@@ -55,20 +53,21 @@ namespace Game.Managers.StorageManager
 		{
 			signalBus?.Fire(new SignalSaveData());
 
-			string preferenceName = settings.preferenceName;
-			PlayerPrefs.SetString(preferenceName, activeStorage.Database.GetJson());
+			PlayerPrefs.SetString(settings.profileName, activeStorage.Profile.GetJson());
+			PlayerPrefs.SetString(settings.dataName, activeStorage.Database.GetJson());
 			PlayerPrefs.Save();
 
-			Debug.Log($"[PlayerPrefsSaveLoad] Save storage to pref: {preferenceName}");
+			Debug.Log($"[PlayerPrefsSaveLoad] Save storage to pref");
 		}
 
 		public void Load()
 		{
-			if (PlayerPrefs.HasKey(settings.preferenceName))
+			if (PlayerPrefs.HasKey(settings.dataName))
 			{
-				string json = PlayerPrefs.GetString(settings.preferenceName);
+				string profile = PlayerPrefs.GetString(settings.profileName);
+				string data = PlayerPrefs.GetString(settings.dataName);
 
-				activeStorage = new Storage(json);
+				activeStorage = new Storage(profile, data);
 			}
 			else//first time
 			{
@@ -79,7 +78,7 @@ namespace Game.Managers.StorageManager
 				Save();
 			}
 
-			Debug.Log($"[PlayerPrefsSaveLoad] Load storage from pref: {settings.preferenceName}");
+			Debug.Log($"[PlayerPrefsSaveLoad] Load storage from pref: {settings.dataName}");
 		}
 
 		public Storage GetStorage()
@@ -92,17 +91,7 @@ namespace Game.Managers.StorageManager
 			return activeStorage;
 		}
 
-		private void OnApplicationFocusChanged(SignalApplicationFocus signal)
-		{
-			Save();
-		}
-
-		private void OnApplicationPaused(SignalApplicationPause signal)
-		{
-			Save();
-		}
-
-		private void OnApplicationQuit()
+		private void OnApplicationRequiredSave()
 		{
 			if(GetStorage().IsFirstTime.GetData() == true)
 			{
@@ -115,9 +104,18 @@ namespace Game.Managers.StorageManager
 		[System.Serializable]
 		public class Settings
 		{
-			public string preferenceName = "save_data";
-			public string storageDisplayName = "Profile";
-			public string storageFileName = "Profile.dat";
+			public string profileName = "profile";
+			public string dataName = "save_data";
+			//public string storageFileName = "Profile.dat";
+
+			public List<string> GetKeyList()
+			{
+				return new List<string>()
+				{
+					profileName,
+					dataName,
+				};
+			}
 		}
 	}
 }

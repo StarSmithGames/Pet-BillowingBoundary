@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -58,30 +59,53 @@ namespace Game.Managers.StorageManager.Editor
 
 			GUILayout.FlexibleSpace();
 
-			string saveKey = AssetDatabaseExtensions.LoadAsset<StorageManagerInstaller>().playerPrefsSettings.preferenceName;
+			var saveKeys = AssetDatabaseExtensions.LoadAsset<StorageManagerInstaller>().playerPrefsSettings.GetKeyList();
 
-			GUI.enabled = PlayerPrefs.HasKey(saveKey);
+			bool anyHas = false;
+
+			for (int i = 0; i < saveKeys.Count; i++)
+			{
+				if (PlayerPrefs.HasKey(saveKeys[i]))
+				{
+					anyHas = true;
+					break;
+				}
+			}
+
+			GUI.enabled = anyHas;
 
 			if (GUILayout.Button("PlayerPrefs Save"))
 			{
-				string json = PlayerPrefs.GetString(saveKey);
+				Dictionary<string, string> texts = new();
 
+				for (int i = 0; i < saveKeys.Count; i++)
+				{
+					if (PlayerPrefs.HasKey(saveKeys[i]))
+					{
+						texts.Add(saveKeys[i], PlayerPrefs.GetString(saveKeys[i]));
+					}
+				}
+				
 				var jsonWindow = GetWindow<JsonText>(title: "Json");
 				jsonWindow.minSize = new Vector2(400, 700);
-				jsonWindow.text = json;
+				jsonWindow.texts = texts;
 			}
 		}
 	}
 
 	public class JsonText : EditorWindow
 	{
-		public string text;
+		public Dictionary<string, string> texts;
 		public Vector2 scroll = new Vector2(0, 0);
 
 		private void OnGUI()
 		{
 			scroll = EditorGUILayout.BeginScrollView(scroll, true, true);
-			EditorGUILayout.TextArea(text);
+			foreach (var item in texts)
+			{
+				EditorGUILayout.LabelField(item.Key);
+				EditorGUILayout.TextArea(item.Value);
+			}
 			EditorGUILayout.EndScrollView();
 		}
 	}

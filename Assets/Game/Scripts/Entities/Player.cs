@@ -1,8 +1,12 @@
+using Game.Managers.StorageManager;
+
 using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+
+using Zenject;
 
 namespace Game.Entities
 {
@@ -28,8 +32,14 @@ namespace Game.Entities
 		public Targets TargetsDefeat { get; }
 		public Bosses BossesDefeat { get; }
 
-		public Player()
+		private SignalBus signalBus;
+		private ISaveLoad saveLoad;
+
+		public Player(SignalBus signalBus, ISaveLoad saveLoad)
 		{
+			this.signalBus = signalBus;
+			this.saveLoad = saveLoad;
+
 			PlayerSheet = new PlayerSheet();
 
 			Gold = new(new BFN(1000000, 0).compressed);
@@ -60,11 +70,18 @@ namespace Game.Entities
 			TapDamage.onModifiersChanged += OnTapChanged;
 			TapCriticalPower.onChanged += OnTapChanged;
 			TapCriticalPower.onModifiersChanged += OnTapChanged;
+
+			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}
 
 		private void OnTapChanged()
 		{
 			onTapChanged?.Invoke();
+		}
+
+		private void OnSaveData()
+		{
+			//saveLoad.GetStorage().Profile.GetData().playerData = GetData();
 		}
 
 		public Data GetData()
@@ -82,6 +99,7 @@ namespace Game.Entities
 			};
 		}
 
+		[System.Serializable]
 		public class Data
 		{
 			public BFN gold;
@@ -119,7 +137,12 @@ namespace Game.Entities
 
 		public FireFistSkill.Data GetFireFistData()
 		{
-			return (registers.Find((x) => x is FireFistSkill) as FireFistSkill).GetData();
+			if (ContainsType(out FireFistSkill skill))
+			{
+				return skill.GetData();
+			}
+
+			return null;
 		}
 	}
 

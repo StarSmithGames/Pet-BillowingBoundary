@@ -143,7 +143,7 @@ namespace Game.Managers.ClickManager
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();
 
-					vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.LightImpact);
+					//vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.LightImpact);
 				});
 		}
 

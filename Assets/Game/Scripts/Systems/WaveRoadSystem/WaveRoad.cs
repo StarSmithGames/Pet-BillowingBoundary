@@ -4,10 +4,11 @@ using Game.Managers.StorageManager;
 
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 
 using UnityEngine;
 using UnityEngine.Events;
+
+using Zenject;
 
 namespace Game.Systems.WaveRoadSystem
 {
@@ -22,39 +23,41 @@ namespace Game.Systems.WaveRoadSystem
 
 		private Dictionary<TargetData, ClickableObject> poolTargets = new Dictionary<TargetData, ClickableObject>();
 
-		private Data data;
+		private SignalBus signalBus;
+		private WaveRoadPatternData pattern;
+		private ISaveLoad saveLoad;
 		private Player player;
 		private Conveyor conveyor;
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
-		public WaveRoad(WaveRoadPatternData pattern,
+		public WaveRoad(
+			SignalBus signalBus,
+			WaveRoadPatternData pattern,
 			ISaveLoad saveLoad,
 			Player player,
 			Conveyor conveyor,
 			AnalyticsSystem.AnalyticsSystem analyticsSystem)
 		{
+			this.saveLoad = saveLoad;
 			this.player = player;
 			this.conveyor = conveyor;
 			this.analyticsSystem = analyticsSystem;
 
 			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
 			{
-				data = saveLoad.GetStorage().Profile.GetData().waveRoadData;
-
-				CurrentWave = new Wave(data.wave);
+				var data = saveLoad.GetStorage().Profile.GetData().waveRoadData;
+				this.pattern = data.pattern;
+				CurrentWave = new Wave(data.lastWave);
 			}
 			else
 			{
-				data = new Data()
-				{
-					pattern = pattern,
-				};
-
-				CurrentWave = new Wave(0);
+				this.pattern = pattern;
+				CurrentWave = new Wave(GetWave());
 			}
 
-			CurrentWave.SetData(GetWave());
 			UpdateTarget();
+
+			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}
 
 		public void NextTarget()
@@ -76,19 +79,18 @@ namespace Game.Systems.WaveRoadSystem
 			{
 				CurrentTarget = conveyor.objects.Find((x) => x.TargetData == CurrentWave.CurrentTarget);
 				poolTargets.Add(CurrentWave.CurrentTarget, CurrentTarget);
+				CurrentTarget.onDead += OnTargetDead;
 			}
-
-			CurrentTarget.onDead += OnTargetDead;
 		}
 
 		private WaveRoadData GetWave()
 		{
-			if(data.pattern.repeat == RepeatStyle.Simple)
+			if(pattern.repeat == RepeatStyle.Simple)
 			{
-				return data.pattern.waves[CurrentWave.CurrentValue % data.pattern.waves.Count];
+				return pattern.waves[CurrentWave.CurrentValue % pattern.waves.Count];
 			}
 
-			return data.pattern.waves.RandomItem();
+			return pattern.waves.RandomItem();
 		}
 
 		private ClickableObject CreateTarget(ClickableObject prefab)
@@ -100,9 +102,9 @@ namespace Game.Systems.WaveRoadSystem
 			return obj;
 		}
 
-		private void OnTargetDead()
+		private void OnTargetDead(ClickableObject clickableObject)
 		{
-			CurrentTarget.onDead -= OnTargetDead;
+			if (CurrentTarget != clickableObject) return;
 
 			player.TargetsDefeat.CurrentValue++;
 
@@ -114,7 +116,7 @@ namespace Game.Systems.WaveRoadSystem
 
 				player.BossesDefeat.CurrentValue++;
 
-				CurrentWave.SetData(GetWave());
+				CurrentWave.SetWave(GetWave());
 				CurrentWave.CurrentValue++;
 				analyticsSystem.LogEvent_wave_completed();
 				UpdateTarget();
@@ -127,64 +129,69 @@ namespace Game.Systems.WaveRoadSystem
 			onChanged?.Invoke();
 		}
 
+		private void OnSaveData()
+		{
+			saveLoad.GetStorage().Profile.GetData().waveRoadData = GetData();
+		}
+
 		public Data GetData()
 		{
 			return new Data()
 			{
-				pattern = data.pattern,
-				wave = CurrentWave.CurrentValue,
-				targetsCount = (int)CurrentWave.MiddleTargetsBar.MaxValue,
-				targetIndex = (int)CurrentWave.MiddleTargetsBar.CurrentValue,
-				target = CurrentWave.CurrentTarget,
-				targetData = CurrentTarget.GetData(),
+				pattern = pattern,
+				lastClickable = CurrentTarget.GetData(),
+				lastWave = CurrentWave.GetData(),
 			};
 		}
 
+		[System.Serializable]
 		public class Data
 		{
 			public WaveRoadPatternData pattern;
-			public int wave;
-			public int targetsCount;
-			public int targetIndex;
-			public TargetData target;
-			public ClickableObject.Data targetData;
+			public ClickableObject.Data lastClickable;
+			public Wave.Data lastWave;
 		}
 	}
 
 	public class Wave : Attribute<int>
 	{
-		public bool IsCompleted { get; private set; } = false;
+		public bool IsCompleted => MiddleTargetsBar.CurrentValue == MiddleTargetsBar.MaxValue;
 
 		public Targets MiddleTargetsBar { get; private set; }
 
 		public TargetData CurrentTarget { get; private set; }
 		public List<TargetData> WaveTargets { get; private set; }
 
-		private WaveRoadData data;
+		private WaveRoadData waveRoad;
 
-		public Wave(int currentValue) : base(currentValue)
+		public Wave(WaveRoadData data) : base(0)//first time
 		{
-			MiddleTargetsBar = new Targets(0, 0, 5);
+			MiddleTargetsBar = new Targets(0, 0, data.middleRoad.countTargets);
+			SetWaveRoad(data);
+			NextTarget();
 		}
 
-		public void SetData(WaveRoadData data)
+		public Wave(Data data) : base(data.waveCount)
 		{
-			this.data = data;
+			MiddleTargetsBar = new Targets(data.targetCount, 0, data.waveRoadData.middleRoad.countTargets);
+			SetWaveRoad(data.waveRoadData);
+			CurrentTarget = data.targetData;
+		}
 
-			IsCompleted = false;
-
+		public void SetWave(WaveRoadData data)
+		{
 			MiddleTargetsBar.MaxValue = data.middleRoad.countTargets;
 			MiddleTargetsBar.CurrentValue = 0;
-			WaveTargets = data.middleRoad.style == TargetStyle.Shuffle ? data.middleRoad.targets.Shuffle() : new List<TargetData>(data.middleRoad.targets);
+
+			SetWaveRoad(data);
 			NextTarget();
 		}
 
 		public void NextTarget()
 		{
-			if (MiddleTargetsBar.CurrentValue == MiddleTargetsBar.MaxValue)
+			if (IsCompleted)
 			{
 				CurrentTarget = GetBoss();
-				IsCompleted = true;
 			}
 			else
 			{
@@ -192,9 +199,16 @@ namespace Game.Systems.WaveRoadSystem
 			}
 		}
 
+		private void SetWaveRoad(WaveRoadData data)
+		{
+			waveRoad = data;
+
+			WaveTargets = waveRoad.middleRoad.style == TargetStyle.Shuffle ? waveRoad.middleRoad.targets.Shuffle() : new List<TargetData>(waveRoad.middleRoad.targets);
+		}
+
 		private TargetData GetTarget()
 		{
-			if (data.middleRoad.style == TargetStyle.Simple)
+			if (waveRoad.middleRoad.style == TargetStyle.Simple)
 			{
 				return WaveTargets[(int)MiddleTargetsBar.CurrentValue % WaveTargets.Count];
 			}
@@ -204,17 +218,39 @@ namespace Game.Systems.WaveRoadSystem
 
 		private TargetData GetBoss()
 		{
-			if (data.endRoad.isHasBoss)
+			if (waveRoad.endRoad.isHasBoss)
 			{
-				if (data.endRoad.isRandomBoss)
+				if (waveRoad.endRoad.isRandomBoss)
 				{
-					return data.endRoad.bosses.RandomItem();
+					return waveRoad.endRoad.bosses.RandomItem();
 				}
 
-				return data.endRoad.boss;
+				return waveRoad.endRoad.boss;
 			}
 
 			return null;
+		}
+
+		public Data GetData()
+		{
+			return new Data()
+			{
+				waveCount = CurrentValue,
+				targetCount = (int)MiddleTargetsBar.CurrentValue,
+
+				waveRoadData = waveRoad,
+				targetData = CurrentTarget,
+			};
+		}
+
+		[System.Serializable]
+		public class Data
+		{
+			public int waveCount;
+			public int targetCount;
+
+			public WaveRoadData waveRoadData;
+			public TargetData targetData;
 		}
 	}
 

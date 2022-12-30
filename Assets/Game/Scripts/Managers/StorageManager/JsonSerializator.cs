@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.IO;
+using Newtonsoft.Json.Converters;
+using UnityEditor;
+using Newtonsoft.Json.Linq;
 
 namespace Game.Managers.StorageManager
 {
@@ -25,19 +28,17 @@ namespace Game.Managers.StorageManager
 		public static string SerializeObjectToJson(Dictionary<string, object> data)
 		{
 			return JsonConvert.SerializeObject(data,
-				new JsonSerializerSettings()
-				{
-					Formatting = Formatting.Indented,
-					ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-				});
+			new JsonSerializerSettings()
+			{
+				Formatting = Formatting.Indented,
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				TypeNameHandling = TypeNameHandling.Auto,
+			});
 		}
 		public static Dictionary<string, object> DeserializeObjectFromJson(string json)
 		{
 			return JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 		}
-
-
-
 
 		private static void SaveDataToJson<T>(T data, string directory, string fileName)
 		{
