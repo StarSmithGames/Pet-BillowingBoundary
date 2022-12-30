@@ -1,7 +1,9 @@
+using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 using Zenject;
@@ -19,12 +21,38 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	protected bool isInitialized = false;
 	protected BFN currentCost;
 
+	private ISaveLoad saveLoad;
 	private LocalizationSystem localizationSystem;
 
 	[Inject]
-	private void Construct(LocalizationSystem localizationSystem)
+	private void Construct(ISaveLoad saveLoad, LocalizationSystem localizationSystem)
 	{
+		this.saveLoad = saveLoad;
 		this.localizationSystem = localizationSystem;
+	}
+	private void Start()
+	{
+		if (!saveLoad.GetStorage().IsFirstTime.GetData())
+		{
+			var data = saveLoad.GetStorage().Profile.GetData().playerData.bonuses.Find((x) => x.bonus == BonusData);
+
+			Assert.IsTrue(data != null);
+
+			SetData(data);
+		}
+	}
+
+
+	public void SetData(Data data)
+	{
+		IsUnknow = data.isUnknow;
+		Level = data.level;
+		BuyType = data.type;
+
+		UpdateCost();
+		UpdateEffect();
+
+		onChanged?.Invoke(this);
 	}
 
 	public virtual string GetName(bool isRich = true)
@@ -57,6 +85,11 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		return currentCost;
 	}
 
+	protected virtual void UpdateEffect()
+	{
+
+	}
+
 	protected virtual void UpdateCost()
 	{
 		isInitialized = true;
@@ -66,14 +99,17 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	{
 		return new Data
 		{
-			//bonus = BonusData,
+			bonus = BonusData,
 			level = Level,
 		};
 	}
 
+	[System.Serializable]
 	public class Data
 	{
-		//public BonusData bonus;
+		public BonusData bonus;
+		public bool isUnknow;
 		public int level;
+		public BuyType type;
 	}
 }

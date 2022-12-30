@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8751524126829240659}
   - component: {fileID: 2713950690981755919}
+  - component: {fileID: 7251849311500192473}
   m_Layer: 5
   m_Name: CoinsItem5
   m_TagString: Untagged
@@ -52,6 +53,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896636895923428}
   m_CullTransparentMesh: 1
+--- !u!114 &7251849311500192473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896636895923428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a543d0e6dd24db74fbd616571e1ae4eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Reward>k__BackingField: {fileID: 1011385032741074020}
+  <AddReward>k__BackingField: {fileID: 4987734079996156369}
+  <ButtonReward>k__BackingField: {fileID: 2520952317283035612}
+  <Price>k__BackingField: {fileID: 2077125475522686824}
+  isFree: 0
+  isAdd: 1
 --- !u!1 &207649994496620015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,6 +1371,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}
+--- !u!114 &2077125475522686824 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6361276967811182846, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}
+  m_PrefabInstance: {fileID: 4941756314732978070}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2520952317283035612 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7379321614261401162, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}
+  m_PrefabInstance: {fileID: 4941756314732978070}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8617659412920518519 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3678515916043065569, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}

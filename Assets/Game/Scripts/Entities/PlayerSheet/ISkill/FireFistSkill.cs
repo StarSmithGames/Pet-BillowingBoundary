@@ -1,4 +1,5 @@
 using Game.Managers.ClickManager;
+using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 using Game.UI;
@@ -31,11 +32,13 @@ namespace Game.Entities
 		private List<SkillProperty> properties = new List<SkillProperty>();
 
 		private ClickStarter conveyor;
+		private ISaveLoad saveLoad;
 
 		[Inject]
-		private void Construct(ClickStarter conveyor)
+		private void Construct(ClickStarter conveyor, ISaveLoad saveLoad)
 		{
 			this.conveyor = conveyor;
+			this.saveLoad = saveLoad;
 		}
 
 		protected override void Start()
@@ -121,6 +124,15 @@ namespace Game.Entities
 				properties.Add(Duration);
 				properties.Add(Power);
 
+				if (!saveLoad.GetStorage().IsFirstTime.GetData())
+				{
+					var data = saveLoad.GetStorage().Profile.GetData().playerData;
+
+					Chance.SetLevel(data.fireFistData.chanceLevel);
+					Duration.SetLevel(data.fireFistData.durationLevel);
+					Power.SetLevel(data.fireFistData.powerLevel);
+				}
+
 				isInitialized = true;
 			}
 		}
@@ -193,6 +205,7 @@ namespace Game.Entities
 			};
 		}
 
+		[System.Serializable]
 		public class Data
 		{
 			public int chanceLevel;

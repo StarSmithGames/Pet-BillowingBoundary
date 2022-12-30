@@ -112,6 +112,14 @@ namespace Game.Entities
 
 		public SkillProperty(float value) : base(value) { }
 
+		public void SetLevel(int level)
+		{
+			Level = level;
+
+			currentCost = Formule();
+			cachedTotalValue = base.TotalValue;
+		}
+
 		public virtual void LevelUp()
 		{
 			Level++;

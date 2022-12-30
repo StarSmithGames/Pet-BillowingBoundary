@@ -40,11 +40,16 @@ public class TapDamageBonus : Bonus
 	public override void Purchase()
 	{
 		Level++;
-		tapModifier.SetValue(new BFN(CurrentDamage, 0).compressed);//1 tap by level
-
+		
+		UpdateEffect();
 		UpdateCost();
 
 		base.Purchase();
+	}
+
+	protected override void UpdateEffect()
+	{
+		tapModifier.SetValue(new BFN(CurrentDamage, 0).compressed);//1 tap by level
 	}
 
 	protected override void UpdateCost()
@@ -58,10 +63,5 @@ public class TapDamageBonus : Bonus
 			currentCost = BFN.FormuleExpoLevelLow(data.baseCost, Level + 1);
 		}
 		base.UpdateCost();
-	}
-
-	public class Data
-	{
-		public int level;
 	}
 }

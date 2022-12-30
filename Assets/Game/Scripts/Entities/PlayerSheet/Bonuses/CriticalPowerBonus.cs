@@ -53,16 +53,19 @@ public class CriticalPowerBonus : Bonus
 	{
 		if (BuyType == BuyType.LOCK)
 		{
-			//fast message
 			return;
 		}
 
 		Level++;
-		tapModifier.SetValue(0.01f * (Level + 1));//1% by level
-
+		UpdateEffect();
 		UpdateCost();
 
 		base.Purchase();
+	}
+
+	protected override void UpdateEffect()
+	{
+		tapModifier.SetValue(0.01f * (Level + 1));//1% by level
 	}
 
 	protected override void UpdateCost()

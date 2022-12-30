@@ -43,7 +43,6 @@ namespace Game.Systems.AdSystem
 
 		public void Enable(bool trigger)
 		{
-			saveLoad.GetStorage().IsBuyRemoveADS.SetData(!trigger);
 			RefreshAd();
 
 			signalBus?.Fire(new SignalADSEnableChanged() { trigger = trigger });

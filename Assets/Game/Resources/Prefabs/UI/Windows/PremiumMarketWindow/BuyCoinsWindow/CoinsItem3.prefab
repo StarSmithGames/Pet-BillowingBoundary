@@ -377,6 +377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6789974067584968770}
   - component: {fileID: 207339743036994846}
+  - component: {fileID: 4198242390647294419}
   m_Layer: 5
   m_Name: CoinsItem3
   m_TagString: Untagged
@@ -416,6 +417,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2832695277999998453}
   m_CullTransparentMesh: 1
+--- !u!114 &4198242390647294419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2832695277999998453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a543d0e6dd24db74fbd616571e1ae4eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Reward>k__BackingField: {fileID: 2972469177350323573}
+  <ButtonReward>k__BackingField: {fileID: 411311242363576525}
+  <Price>k__BackingField: {fileID: 4294766353809630841}
+  isFree: 0
 --- !u!1 &4082808253332631809
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,6 +1206,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}
+--- !u!114 &411311242363576525 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7379321614261401162, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}
+  m_PrefabInstance: {fileID: 7196145877031655047}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4294766353809630841 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6361276967811182846, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}
+  m_PrefabInstance: {fileID: 7196145877031655047}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5823556945805774438 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3678515916043065569, guid: 07d4dfcaa578a8d448aa0da98892b9f1, type: 3}

@@ -36,7 +36,7 @@ namespace Game.Systems.MarketSystem
 				Hide();
 			}
 
-			iapManager.onPurchaseFailed += OnPurchaseFailed;
+			iapManager.onPurchased += OnPurchased;
 
 			signalBus?.Subscribe<SignalADSEnableChanged>(OnADSEnableChanged);
 		}
@@ -45,7 +45,7 @@ namespace Game.Systems.MarketSystem
 		{
 			base.OnDestroy();
 
-			iapManager.onPurchaseFailed -= OnPurchaseFailed;
+			iapManager.onPurchased -= OnPurchased;
 
 			signalBus?.Unsubscribe<SignalADSEnableChanged>(OnADSEnableChanged);
 		}
@@ -64,7 +64,7 @@ namespace Game.Systems.MarketSystem
 			}
 		}
 
-		private void OnPurchaseFailed()
+		private void OnPurchased(bool trigger)
 		{
 			Button.interactable = true;
 		}

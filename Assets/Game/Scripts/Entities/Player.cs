@@ -42,7 +42,6 @@ namespace Game.Entities
 
 			PlayerSheet = new PlayerSheet();
 
-			Gold = new(new BFN(1000000, 0).compressed);
 			TapGold = new(BFN.Zero);
 			TapGoldMultiplier = new(1f);
 			TapGoldChance = new(0f);
@@ -55,8 +54,22 @@ namespace Game.Entities
 			BonusRegistrator = new();
 			SkillRegistrator = new();
 
-			TargetsDefeat = new(0);
-			BossesDefeat = new(0);
+			if (!saveLoad.GetStorage().IsFirstTime.GetData())
+			{
+				var data = saveLoad.GetStorage().Profile.GetData().playerData;
+
+				Gold = new(data.gold.compressed);
+
+				TargetsDefeat = new(data.targetsDefeat);
+				BossesDefeat = new(data.bossesDefeat);
+			}
+			else//first time
+			{
+				Gold = new(new BFN(0, 0).compressed);
+
+				TargetsDefeat = new(0);
+				BossesDefeat = new(0);
+			}
 
 
 			TapGold.onChanged += OnTapChanged;
@@ -81,7 +94,7 @@ namespace Game.Entities
 
 		private void OnSaveData()
 		{
-			//saveLoad.GetStorage().Profile.GetData().playerData = GetData();
+			saveLoad.GetStorage().Profile.GetData().playerData = GetData();
 		}
 
 		public Data GetData()
@@ -132,6 +145,7 @@ namespace Game.Entities
 			Assert.IsTrue(registers.Contains(skill));
 
 			CurrentSkill = skill;
+
 			onSelectedSkillChanged?.Invoke(CurrentSkill);
 		}
 

@@ -295,6 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4204627872242172688}
   - component: {fileID: 7386921332891311692}
+  - component: {fileID: 5903626719798827592}
   m_Layer: 5
   m_Name: CoinsItem1
   m_TagString: Untagged
@@ -335,6 +336,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4840458024947183271}
   m_CullTransparentMesh: 1
+--- !u!114 &5903626719798827592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4840458024947183271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a543d0e6dd24db74fbd616571e1ae4eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Reward>k__BackingField: {fileID: 5558382308516746791}
+  <ButtonReward>k__BackingField: {fileID: 4030012348559836640}
+  <Price>k__BackingField: {fileID: 0}
+  isFree: 1
 --- !u!1 &5037692104815501995
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,6 +881,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d593727111aee52469f371a2a916b8ef, type: 3}
+--- !u!114 &4030012348559836640 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4508294506491032211, guid: d593727111aee52469f371a2a916b8ef, type: 3}
+  m_PrefabInstance: {fileID: 683939210979637107}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7100296122361408331 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7778990490930224184, guid: d593727111aee52469f371a2a916b8ef, type: 3}

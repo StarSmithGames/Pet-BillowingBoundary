@@ -51,6 +51,7 @@ namespace Game.Managers.StorageManager
 
 		public IStorageData<bool> IsPayUser { get; private set; }
 		public IStorageData<bool> IsBuyRemoveADS { get; private set; }
+		public IStorageData<bool> IsBuyFreeMode { get; private set; }
 
 		public IStorageData<bool> IsCompleteTutorial { get; private set; }
 
@@ -98,6 +99,7 @@ namespace Game.Managers.StorageManager
 
 			IsPayUser = new StorageData<bool>(Database, "is_pay_user", false);
 			IsBuyRemoveADS = new StorageData<bool>(Database, "is_buy_remove_ads", false);
+			IsBuyFreeMode = new StorageData<bool>(Database, "is_buy_free_mode", false);
 
 			IsCompleteTutorial = new StorageData<bool>(Database, "tutorial_tap", false);
 
@@ -138,6 +140,7 @@ namespace Game.Managers.StorageManager
 		[System.Serializable]
 		public class Data
 		{
+			public Player.Data playerData;
 			public WaveRoad.Data waveRoadData;
 		}
 	}

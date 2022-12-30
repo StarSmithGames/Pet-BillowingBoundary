@@ -26,6 +26,16 @@ namespace Game.Systems.AnalyticsSystem
 		{
 			LogEvent("iap_remove_ads");
 		}
+
+		public void LogEvent_iap_free_mode()
+		{
+			LogEvent("iap_free_mode");
+		}
+
+		public void LogEvent_iap_buy(int number)
+		{
+			LogEvent($"iap_{number}");
+		}
 		#endregion
 
 		#region ADS

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 using Zenject;
 
@@ -8,6 +9,8 @@ namespace Game.Systems.AdSystem
 {
 	public class AdRewarded : IAdPlacement, IInitializable
 	{
+		public event UnityAction<RewardedClosedType> onClosed;
+
 		public bool IsEnabled { get; private set; } = true;
 		public bool IsShowing { get; private set; } = false;
 
@@ -79,6 +82,7 @@ namespace Game.Systems.AdSystem
 			if (!isClosed)
 			{
 				analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Simple);
+				onClosed?.Invoke(RewardedClosedType.Simple);
 			}
 
 			IsShowing = false;
@@ -91,6 +95,7 @@ namespace Game.Systems.AdSystem
 		{
 			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Rewarded);
 			isClosed = true;
+			onClosed?.Invoke(RewardedClosedType.Rewarded);
 		}
 
 		// Invoked when the video ad was clicked.
@@ -100,6 +105,7 @@ namespace Game.Systems.AdSystem
 		{
 			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Clicked);
 			isClosed = true;
+			onClosed?.Invoke(RewardedClosedType.Clicked);
 		}
 
 
