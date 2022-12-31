@@ -2,7 +2,10 @@ using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
+using Sirenix.OdinInspector;
+
 using System;
+using System.Collections;
 
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -20,6 +23,8 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	public abstract int Level { get; protected set; }
 	public abstract BuyType BuyType { get; protected set; }
 
+	[SerializeField, HideInInspector] private Profile.Data data;
+
 	protected bool isInitialized = false;
 	protected BFN currentCost;
 
@@ -32,26 +37,26 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		this.saveLoad = saveLoad;
 		this.localizationSystem = localizationSystem;
 	}
-	private void Start()
+	private IEnumerator Start()
 	{
+		yield return new WaitForSeconds(1f);
+
 		if (!saveLoad.GetStorage().IsFirstTime.GetData())
 		{
-			var data = saveLoad.GetStorage().Profile.GetData().playerData.bonuses;
+			data = saveLoad.GetStorage().Profile.GetData();
 
-			Debug.LogError(data.bonuses.Count);
-			for (int i = 0; i < data.bonuses.Count; i++)
+			Debug.LogError(data.playerData.bonuses.Count);
+			for (int i = 0; i < data.playerData.bonuses.Count; i++)
 			{
-				Debug.LogError(data.bonuses[i].bonus.information.name);
+				Debug.LogError(data.playerData.bonuses[i].data.information.name);
 			}
-
-			Assert.IsTrue(data != null);
 
 			//SetData(data);
 		}
 	}
 
 
-	public void SetData(BonusDataSave data)
+	public void SetData(Data data)
 	{
 		IsUnknow = data.isUnknow;
 		Level = data.level;
@@ -103,22 +108,32 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		isInitialized = true;
 	}
 
-	public BonusDataSave GetData()
+	public Data GetData()
 	{
-		return new BonusDataSave
+		return new Data
 		{
-			bonus = BonusData,
+			data = BonusData,
 			isUnknow = IsUnknow,
 			level = Level,
 			type = BuyType,
 		};
 	}
-}
-[Serializable]
-public class BonusDataSave
-{
-	public BonusData bonus;
-	public bool isUnknow;
-	public int level;
-	public BuyType type;
+
+
+
+	[Button]
+	private void Load()
+	{
+		data = saveLoad.GetStorage().Profile.GetData();
+		Debug.LogError(data.playerData.bonuses.Count);
+	}
+
+	[Serializable]
+	public class Data
+	{
+		public BonusData data;
+		public bool isUnknow;
+		public int level;
+		public BuyType type;
+	}
 }

@@ -3,12 +3,11 @@ using Game.Managers.StorageManager;
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 using Zenject;
-
-using static Game.Entities.Player;
 
 namespace Game.Entities
 {
@@ -60,7 +59,8 @@ namespace Game.Entities
 			{
 				var data = saveLoad.GetStorage().Profile.GetData().playerData;
 
-				Gold = new(data.gold.compressed);
+				//Gold = new(data.gold.compressed);
+				Gold = new(new BFN(100000, 0).compressed);
 
 				TargetsDefeat = new(data.targetsDefeat);
 				BossesDefeat = new(data.bossesDefeat);
@@ -97,15 +97,14 @@ namespace Game.Entities
 		private void OnSaveData()
 		{
 			var data = saveLoad.GetStorage().Profile.GetData();
-
 			data.playerData = GetData();
 		}
 
-		public Data GetData()
+		public PlayerData GetData()
 		{
-			return new Data()
+			return new PlayerData()
 			{
-				gold = Gold.CurrentValue,
+				//gold = Gold.CurrentValue,
 
 				tapsCount = Taps.CurrentValue,
 				targetsDefeat = TargetsDefeat.CurrentValue,
@@ -114,36 +113,25 @@ namespace Game.Entities
 				bonuses = BonusRegistrator.GetData(),
 			};
 		}
+	}
 
-		[System.Serializable]
-		public class Data
-		{
-			public BFN gold;
+	[System.Serializable]
+	public class PlayerData
+	{
+		//public BFN gold;
 
-			public int tapsCount;
-			public int targetsDefeat;
-			public int bossesDefeat;
+		public int tapsCount;
+		public int targetsDefeat;
+		public int bossesDefeat;
 
-			public Bonuses bonuses;
-		}
-
-		[System.Serializable]
-		public class Bonuses
-		{
-			public List<BonusDataSave> bonuses;
-
-			public Bonuses(List<BonusDataSave> bonuses)
-			{
-				this.bonuses = bonuses;
-			}
-		}
+		public List<Bonus.Data> bonuses = new List<Bonus.Data>();
 	}
 
 	public class BonusRegistrator : Registrator<Bonus>
 	{
-		public Bonuses GetData()
+		public List<Bonus.Data> GetData()
 		{
-			return new Bonuses(new List<BonusDataSave>(registers.Select((x) => x.GetData())));
+			return new List<Bonus.Data>(registers.Select((x) => x.GetData()));
 		}
 	}
 

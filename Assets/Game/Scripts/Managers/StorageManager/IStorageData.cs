@@ -82,9 +82,7 @@ namespace Game.Managers.StorageManager
 		/// </summary>
 		public Storage(string profile, string data)
 		{
-			Profile = new Profile();
-			Profile.LoadJson(profile);
-
+			Profile = new Profile(profile);
 			Database = new Database();
 			Database.LoadJson(data);
 
@@ -127,34 +125,38 @@ namespace Game.Managers.StorageManager
 	[System.Serializable]
 	public class Profile
 	{
-		private ProfileData data;
+		public Data data;
 
 		public Profile()
 		{
-			data = new ProfileData();
+			data = new Data();
 		}
 
-		public void SetData(ProfileData data)
+		public Profile(string json)
 		{
-			this.data = data;
-		}
-
-		public void LoadJson(string json)
-		{
-			data = JsonSerializator.ConvertFromJson<ProfileData>(json);
+			data = JsonSerializator.ConvertFromJson<Data>(json);
 		}
 
 		public string GetJson()
 		{
 			return JsonSerializator.ConvertToJson(data);
 		}
-		public ProfileData GetData() => data;
-	}
 
-	[System.Serializable]
-	public class ProfileData
-	{
-		public Player.Data playerData;
-		public WaveRoad.Data waveRoadData;
+		public string GetDefaultJson()
+		{
+			return JsonSerializator.ConvertToJson(new Data());
+		}
+
+		public Data GetData()
+		{
+			return data;
+		}
+
+		[System.Serializable]
+		public class Data
+		{
+			public PlayerData playerData;
+			public WaveRoad.Data waveRoadData;
+		}
 	}
 }

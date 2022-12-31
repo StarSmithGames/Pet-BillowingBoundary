@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using Unity.VisualScripting;
+using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -351,6 +352,24 @@ public struct BFN
 			}
 			EditorGUI.EndProperty();
 		}
+	}
+
+	public static T GetFieldValue<T>(object obj, string fieldName)
+	{
+		if (obj == null)
+			throw new ArgumentNullException("obj");
+
+		var field = obj.GetType().GetField(fieldName, BindingFlags.Public |
+													  BindingFlags.NonPublic |
+													  BindingFlags.Instance);
+
+		if (field == null)
+			throw new ArgumentException("fieldName", "No such field was found.");
+
+		if (!typeof(T).IsAssignableFrom(field.FieldType))
+			throw new InvalidOperationException("Field type and requested type are not compatible.");
+
+		return (T)field.GetValue(obj);
 	}
 #endif
 
