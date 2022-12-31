@@ -56,14 +56,16 @@ namespace Game.Systems.WaveRoadSystem
 				var data = saveLoad.GetStorage().Profile.GetData().waveRoadData;
 				this.pattern = data.pattern;
 				CurrentWave = new Wave(data.lastWave);
+				UpdateTarget();
+				CurrentTarget.Sheet.HealthPointsBar.CurrentValue = data.lastClickable.hp;
 			}
 			else
 			{
 				this.pattern = pattern;
 				CurrentWave = new Wave(GetWave());
+				UpdateTarget();
 			}
 
-			UpdateTarget();
 
 			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}

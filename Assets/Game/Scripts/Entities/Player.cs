@@ -59,8 +59,7 @@ namespace Game.Entities
 			{
 				var data = saveLoad.GetStorage().Profile.GetData().playerData;
 
-				//Gold = new(data.gold.compressed);
-				Gold = new(new BFN(100000, 0).compressed);
+				Gold = new(data.gold.compressed);
 
 				TargetsDefeat = new(data.targetsDefeat);
 				BossesDefeat = new(data.bossesDefeat);
@@ -96,36 +95,39 @@ namespace Game.Entities
 
 		private void OnSaveData()
 		{
-			var data = saveLoad.GetStorage().Profile.GetData();
-			data.playerData = GetData();
+			saveLoad.GetStorage().Profile.GetData().playerData = GetData();
 		}
 
-		public PlayerData GetData()
+		public Data GetData()
 		{
-			return new PlayerData()
+			return new Data()
 			{
-				//gold = Gold.CurrentValue,
+				gold = Gold.CurrentValue,
 
 				tapsCount = Taps.CurrentValue,
 				targetsDefeat = TargetsDefeat.CurrentValue,
 				bossesDefeat = BossesDefeat.CurrentValue,
 
 				bonuses = BonusRegistrator.GetData(),
+				fireFistData = SkillRegistrator.GetFireFistData(),
 			};
+		}
+
+		[System.Serializable]
+		public class Data
+		{
+			public BFN gold;
+
+			public int tapsCount;
+			public int targetsDefeat;
+			public int bossesDefeat;
+
+			public List<Bonus.Data> bonuses = new List<Bonus.Data>();
+			public FireFistSkill.Data fireFistData;
 		}
 	}
 
-	[System.Serializable]
-	public class PlayerData
-	{
-		//public BFN gold;
-
-		public int tapsCount;
-		public int targetsDefeat;
-		public int bossesDefeat;
-
-		public List<Bonus.Data> bonuses = new List<Bonus.Data>();
-	}
+	
 
 	public class BonusRegistrator : Registrator<Bonus>
 	{
@@ -148,6 +150,11 @@ namespace Game.Entities
 			CurrentSkill = skill;
 
 			onSelectedSkillChanged?.Invoke(CurrentSkill);
+		}
+
+		public FireFistSkill.Data GetFireFistData()
+		{
+			return GetAs<FireFistSkill>().GetData();
 		}
 	}
 

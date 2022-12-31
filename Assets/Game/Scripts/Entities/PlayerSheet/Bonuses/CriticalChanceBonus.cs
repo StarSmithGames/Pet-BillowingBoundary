@@ -12,8 +12,6 @@ using Zenject;
 
 public class CriticalChanceBonus : Bonus
 {
-	public override BonusData BonusData => data;
-	[SerializeField] private BonusData data;
 	[SerializeField] private CriticalPowerBonus criticalPowerBonus;
 
 	public override bool IsUnknow { get; protected set; } = false;
@@ -30,13 +28,15 @@ public class CriticalChanceBonus : Bonus
 		this.player = player;
 	}
 
-	private void Start()
+	protected override void Start()
 	{
 		tapModifier = new AddModifier(0f);
 
 		UpdateCost();
 
 		player.TapCriticalChance.AddModifier(tapModifier);
+
+		base.Start();
 	}
 
 	public override string GetDescription(bool isReach = true)
@@ -68,11 +68,11 @@ public class CriticalChanceBonus : Bonus
 	{
 		if (BuyType == BuyType.GET)
 		{
-			currentCost = new BFN(data.baseCost, 0).compressed;
+			currentCost = new BFN(BonusData.baseCost, 0).compressed;
 		}
 		else if (BuyType == BuyType.UPGADE)
 		{
-			currentCost = BFN.FormuleExpoLevelHigh(data.baseCost, Level + 1);
+			currentCost = BFN.FormuleExpoLevelHigh(BonusData.baseCost, Level + 1);
 		}
 
 		base.UpdateCost();

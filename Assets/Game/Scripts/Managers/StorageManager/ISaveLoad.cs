@@ -53,8 +53,8 @@ namespace Game.Managers.StorageManager
 		{
 			signalBus?.Fire(new SignalSaveData());
 
-			PlayerPrefs.SetString(settings.profileName, activeStorage.Profile.GetJson());
-			PlayerPrefs.SetString(settings.dataName, activeStorage.Database.GetJson());
+			JsonSerializator.SaveToPlayerPrefs(settings.profileName, activeStorage.Profile.GetJson());
+			JsonSerializator.SaveToPlayerPrefs(settings.dataName, activeStorage.Database.GetJson());
 			PlayerPrefs.Save();
 
 			Debug.Log($"[PlayerPrefsSaveLoad] Save storage to pref");
@@ -64,8 +64,8 @@ namespace Game.Managers.StorageManager
 		{
 			if (PlayerPrefs.HasKey(settings.dataName))
 			{
-				string profile = PlayerPrefs.GetString(settings.profileName);
-				string data = PlayerPrefs.GetString(settings.dataName);
+				string profile = JsonSerializator.LoadFromPlayerPrefs(settings.profileName);
+				string data = JsonSerializator.LoadFromPlayerPrefs(settings.dataName);
 
 				activeStorage = new Storage(profile, data);
 			}
@@ -101,7 +101,7 @@ namespace Game.Managers.StorageManager
 		[System.Serializable]
 		public class Settings
 		{
-			public string profileName = "profile";
+			public string profileName = "profile.data";
 			public string dataName = "save_data";
 			//public string storageFileName = "Profile.dat";
 

@@ -26,8 +26,6 @@ namespace Game.Systems.ApplicationHandler
 			}
 
 			Application.runInBackground = true;
-
-			signalBus?.Fire(new SignalApplicationRequiredSave());
 		}
 
 		private void OnDestroy()

@@ -17,13 +17,13 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 {
 	public UnityAction<Bonus> onChanged;
 
-	public abstract BonusData BonusData { get; }
+	public BonusData BonusData => bonusData;
+	[SerializeField] private BonusData bonusData;
+
 	public Information Information => BonusData.information;
 	public abstract bool IsUnknow { get; protected set; }
 	public abstract int Level { get; protected set; }
 	public abstract BuyType BuyType { get; protected set; }
-
-	[SerializeField, HideInInspector] private Profile.Data data;
 
 	protected bool isInitialized = false;
 	protected BFN currentCost;
@@ -37,24 +37,14 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		this.saveLoad = saveLoad;
 		this.localizationSystem = localizationSystem;
 	}
-	private IEnumerator Start()
-	{
-		yield return new WaitForSeconds(1f);
 
+	protected virtual void Start()
+	{
 		if (!saveLoad.GetStorage().IsFirstTime.GetData())
 		{
-			data = saveLoad.GetStorage().Profile.GetData();
-
-			Debug.LogError(data.playerData.bonuses.Count);
-			for (int i = 0; i < data.playerData.bonuses.Count; i++)
-			{
-				Debug.LogError(data.playerData.bonuses[i].data.information.name);
-			}
-
-			//SetData(data);
+			SetData(saveLoad.GetStorage().Profile.GetData().playerData.bonuses.Find((x) => x.data == BonusData));
 		}
 	}
-
 
 	public void SetData(Data data)
 	{
@@ -117,15 +107,6 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 			level = Level,
 			type = BuyType,
 		};
-	}
-
-
-
-	[Button]
-	private void Load()
-	{
-		data = saveLoad.GetStorage().Profile.GetData();
-		Debug.LogError(data.playerData.bonuses.Count);
 	}
 
 	[Serializable]

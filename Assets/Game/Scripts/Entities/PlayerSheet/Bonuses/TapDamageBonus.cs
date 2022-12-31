@@ -14,8 +14,6 @@ using Zenject;
 
 public class TapDamageBonus : Bonus
 {
-	public override BonusData BonusData => data;
-	[SerializeField] private BonusData data;
 	public override bool IsUnknow { get; protected set; } = false;
 	public override int Level { get; protected set; } = 0;
 	public override BuyType BuyType { get; protected set; } = BuyType.UPGADE;
@@ -32,13 +30,15 @@ public class TapDamageBonus : Bonus
 		this.player = player;
 	}
 
-	private void Start()
+	protected override void Start()
 	{
 		tapModifier = new AddModifierBFN(new BFN(CurrentDamage, 0).compressed);
 
 		UpdateCost();
 
 		player.TapDamage.AddModifier(tapModifier);
+
+		base.Start();
 	}
 
 	public override void Purchase()
@@ -60,11 +60,11 @@ public class TapDamageBonus : Bonus
 	{
 		if(Level == 0)
 		{
-			currentCost = new BFN(data.baseCost, 0).compressed;
+			currentCost = new BFN(BonusData.baseCost, 0).compressed;
 		}
 		else
 		{
-			currentCost = BFN.FormuleExpoLevelLow(data.baseCost, Level + 1);
+			currentCost = BFN.FormuleExpoLevelLow(BonusData.baseCost, Level + 1);
 		}
 		base.UpdateCost();
 	}

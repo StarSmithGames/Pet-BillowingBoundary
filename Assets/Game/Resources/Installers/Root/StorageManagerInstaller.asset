@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: StorageManagerInstaller
   m_EditorClassIdentifier: 
   playerPrefsSettings:
-    preferenceName: save_data
-    storageDisplayName: Profile
-    storageFileName: Profile.dat
+    profileName: profile_data
+    dataName: save_data

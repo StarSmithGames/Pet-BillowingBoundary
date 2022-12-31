@@ -49,19 +49,11 @@ namespace Game.Entities
 		{
 			base.Start();
 
-			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
-			{
-				var data1 = saveLoad.GetStorage().Profile.GetData().waveRoadData;
-				var data2 = saveLoad.GetStorage().Profile.GetData().playerData;
-			}
-
 			Init();
 
 			tapBar = player.PlayerSheet.TapBar;
 			tapBar.Resize(0, 0, 100);//100 hits
 			player.Taps.onChanged += OnTapsChanged;
-
-			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}
 
 		private void OnDestroy()
@@ -142,7 +134,7 @@ namespace Game.Entities
 
 				if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
 				{
-					var data = saveLoad.GetStorage().FireFistSkill.GetData();
+					var data =  saveLoad.GetStorage().Profile.GetData().playerData.fireFistData;
 
 					Chance.SetLevel(data.chanceLevel);
 					Duration.SetLevel(data.durationLevel);
@@ -211,11 +203,6 @@ namespace Game.Entities
 			}
 		}
 
-		private void OnSaveData()
-		{
-			saveLoad.GetStorage().FireFistSkill.SetData(GetData());
-		}
-
 		public Data GetData()
 		{
 			return new Data()
@@ -226,6 +213,7 @@ namespace Game.Entities
 			};
 		}
 
+		[System.Serializable]
 		public class Data
 		{
 			public int chanceLevel;

@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9d1e50bcadb7849a4a4ff26d332bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 9bf0eb2c3cface344817165f40210683, type: 2}
+  bonusData: {fileID: 11400000, guid: 9bf0eb2c3cface344817165f40210683, type: 2}
 --- !u!1001 &116851089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60fae4ac0c8291d4d877468833207be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: b60f7a32e34be924b8d64d5a2680fac5, type: 2}
+  bonusData: {fileID: 11400000, guid: b60f7a32e34be924b8d64d5a2680fac5, type: 2}
 --- !u!1001 &405100683
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -943,7 +943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 007fcf250c69fb94993050e17adc0adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: e752c2d2f32e72345b3597e560927754, type: 2}
+  bonusData: {fileID: 11400000, guid: e752c2d2f32e72345b3597e560927754, type: 2}
   criticalPowerBonus: {fileID: 97903733}
 --- !u!1001 &913317600
 PrefabInstance:
@@ -1636,7 +1636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d11b1e56afb3e143926bdf838c98da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unknowData: {fileID: 11400000, guid: 8192f8123f3c8f34d96ce2f101299f4e, type: 2}
+  bonusData: {fileID: 11400000, guid: 8192f8123f3c8f34d96ce2f101299f4e, type: 2}
 --- !u!1 &2110499294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,7 +1681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08cb70d638a9b7540a00d09886c69bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 68c75ef6c2c23b24aaabb9e37871cbec, type: 2}
+  bonusData: {fileID: 11400000, guid: 68c75ef6c2c23b24aaabb9e37871cbec, type: 2}
 --- !u!33 &994956008098583962
 MeshFilter:
   m_ObjectHideFlags: 0

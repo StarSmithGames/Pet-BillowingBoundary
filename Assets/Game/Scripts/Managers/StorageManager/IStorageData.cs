@@ -57,8 +57,6 @@ namespace Game.Managers.StorageManager
 
 		public IStorageData<bool> IsCompleteTutorial { get; private set; }
 
-		public IStorageData<FireFistSkill.Data> FireFistSkill { get; private set; }
-
 		//settings
 		public IStorageData<bool> IsSound { get; private set; }
 		public IStorageData<bool> IsMusic { get; private set; }
@@ -106,8 +104,6 @@ namespace Game.Managers.StorageManager
 
 			IsCompleteTutorial = new StorageData<bool>(Database, "tutorial_tap", false);
 
-			FireFistSkill = new StorageData<FireFistSkill.Data>(Database, "fire_fist_skill", new FireFistSkill.Data());
-
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);
 			IsVibration = new StorageData<bool>(Database, "is_vibration", true);
@@ -134,17 +130,12 @@ namespace Game.Managers.StorageManager
 
 		public Profile(string json)
 		{
-			data = JsonSerializator.ConvertFromJson<Data>(json);
+			data = JsonSerializator.ConvertFromUnityJson<Data>(json);
 		}
 
 		public string GetJson()
 		{
-			return JsonSerializator.ConvertToJson(data);
-		}
-
-		public string GetDefaultJson()
-		{
-			return JsonSerializator.ConvertToJson(new Data());
+			return JsonSerializator.ConvertToUnityJson(data);
 		}
 
 		public Data GetData()
@@ -155,7 +146,7 @@ namespace Game.Managers.StorageManager
 		[System.Serializable]
 		public class Data
 		{
-			public PlayerData playerData;
+			public Player.Data playerData;
 			public WaveRoad.Data waveRoadData;
 		}
 	}

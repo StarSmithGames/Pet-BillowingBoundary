@@ -45,6 +45,13 @@ namespace Game.Managers.StorageManager.Editor
 				EditorGUI.FocusTextInControl(null);
 			}
 
+			if (GUILayout.Button("Очистить PersistentDataPath"))
+			{
+				JsonSerializator.ClearPersistentPath();
+
+				EditorGUI.FocusTextInControl(null);
+			}
+
 			GUI.enabled = true;
 
 			if (GUILayout.Button("Очистить PlayerPrefs"))

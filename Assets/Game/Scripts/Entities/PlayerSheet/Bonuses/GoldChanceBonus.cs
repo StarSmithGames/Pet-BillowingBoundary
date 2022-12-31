@@ -7,9 +7,6 @@ using Zenject;
 
 public class GoldChanceBonus : Bonus
 {
-	public override BonusData BonusData => data;
-	[SerializeField] private BonusData data;
-
 	public override bool IsUnknow { get; protected set; } = false;
 	public override int Level { get; protected set; } = 0;
 	public override BuyType BuyType { get; protected set; } = BuyType.GET;
@@ -24,13 +21,15 @@ public class GoldChanceBonus : Bonus
 		this.player = player;
 	}
 
-	private void Start()
+	protected override void Start()
 	{
 		tapModifier = new AddModifier(0f);
 
 		UpdateCost();
 
 		player.TapGoldChance.AddModifier(tapModifier);
+
+		base.Start();
 	}
 
 	public override string GetDescription(bool isReach = true)
@@ -62,11 +61,11 @@ public class GoldChanceBonus : Bonus
 	{
 		if(BuyType == BuyType.GET)
 		{
-			currentCost = new BFN(data.baseCost, 0).compressed;
+			currentCost = new BFN(BonusData.baseCost, 0).compressed;
 		}
 		else if(BuyType == BuyType.UPGADE)
 		{
-			currentCost = BFN.FormuleExpoLevelLow(data.baseCost, Level + 1);
+			currentCost = BFN.FormuleExpoLevelLow(BonusData.baseCost, Level + 1);
 		}
 
 		base.UpdateCost();
