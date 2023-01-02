@@ -2,22 +2,29 @@ using Game.Entities;
 using Game.HUD;
 using Game.Managers.AsyncManager;
 using Game.Managers.AudioManager;
+using Game.Managers.StorageManager;
 
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
+using Zenject;
+
 namespace Game.Systems.FloatingSystem
 {
 	public class FloatingAwards
 	{
+		private BFN maxCoins = new BFN(1000, 0);
+
+		private SignalBus signalBus;
 		private FloatingSystem floatingSystem;
 		private AsyncManager asyncManager;
 		private Player player;
 		private AudioManager audioManager;
 
-		public FloatingAwards(FloatingSystem floatingSystem, AsyncManager asyncManager, Player player, AudioManager audioManager)
+		public FloatingAwards(SignalBus signalBus, FloatingSystem floatingSystem, AsyncManager asyncManager, Player player, AudioManager audioManager)
 		{
+			this.signalBus = signalBus;
 			this.floatingSystem = floatingSystem;
 			this.asyncManager = asyncManager;
 			this.player = player;
@@ -30,12 +37,16 @@ namespace Game.Systems.FloatingSystem
 			return asyncManager.StartCoroutine(Test(startPosition, UIGoldHUD.Instance.transform, count, addCoins, callback));
 		}
 
-		
+		public Coroutine StartAwardCoins(Vector3 startPosition, BFN addCoins, UnityAction callback = null)
+		{
+			return asyncManager.StartCoroutine(Test(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
+		}
+
 		private IEnumerator Test(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
 		{
 			audioManager.PlayCoinsReward();
 
-			asyncManager.StartCoroutine(LerpGoldTo(player.Gold.CurrentValue + addCoins, count * 0.05f));
+			asyncManager.StartCoroutine(LerpGoldTo(addCoins, count * 0.05f));
 			var wait = new WaitForSeconds(0.05f);
 			for (int i = 0; i < count; i++)
 			{
@@ -47,11 +58,13 @@ namespace Game.Systems.FloatingSystem
 			callback?.Invoke();
 		}
 
-		private IEnumerator LerpGoldTo(BFN end, float duration)
+		private IEnumerator LerpGoldTo(BFN coins, float duration)
 		{
 			yield return new WaitForSeconds(Random.Range(0.15f, 0.25f));//Wait first floatingSystem.CreateCoin2D
 
 			var start = player.Gold.CurrentValue;
+			var end = player.Gold.CurrentValue + coins;
+			//var part = coins / duration;
 
 			float t = 0;
 
@@ -65,6 +78,8 @@ namespace Game.Systems.FloatingSystem
 
 				yield return null;
 			}
+
+			signalBus?.Fire<SignalSave>();
 		}
 	}
 }

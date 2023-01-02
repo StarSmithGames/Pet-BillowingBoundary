@@ -6,6 +6,7 @@ using Game.Systems.AdSystem;
 
 using Sirenix.OdinInspector;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,12 +33,15 @@ namespace Game.Systems.PremiumMarketSystem
 
 		private string key;
 		private PremiumItemData data;
+		private BFN totalReward;
 
 		private AdSystem.AdSystem adSystem;
 		private IAPManager iapManager;
 		private ISaveLoad saveLoad;
 		private AudioManager audioManager;
 		private VibrationManager vibrationManager;
+		private WaveRoadSystem.WaveRoad waveRoad;
+		private FloatingSystem.FloatingAwards floatingAwards;
 
 		[Inject]
 		private void Construct(
@@ -45,13 +49,17 @@ namespace Game.Systems.PremiumMarketSystem
 			IAPManager iapManager,
 			ISaveLoad saveLoad,
 			AudioManager audioManager,
-			VibrationManager vibrationManager)
+			VibrationManager vibrationManager,
+			WaveRoadSystem.WaveRoad waveRoad,
+			FloatingSystem.FloatingAwards floatingAwards)
 		{
 			this.adSystem = adSystem;
 			this.iapManager = iapManager;
 			this.saveLoad = saveLoad;
 			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
+			this.waveRoad = waveRoad;
+			this.floatingAwards = floatingAwards;
 		}
 
 		private void Start()
@@ -83,14 +91,22 @@ namespace Game.Systems.PremiumMarketSystem
 
 		public void UpdateUI()
 		{
+			totalReward = BFN.Zero;
+
 			if (isCost)
 			{
-				Reward.text = data.baseCost.ToStringPritty();
+				BFN reward = waveRoad.CurrentWave.CurrentValue <= 3 ? data.baseCost : BFN.FormuleExpoPremiumMarketAddReward(data.baseCost, 0);
+
+				totalReward += reward;
+				Reward.text = reward.ToStringPritty();
 			}
 
 			if (isAdd)
 			{
-				AddReward.text = $"+{data.baseAdd.ToStringPritty()} Free";
+				BFN add = waveRoad.CurrentWave.CurrentValue <= 3 ? data.baseAdd : BFN.FormuleExpoPremiumMarketFreeReward(data.baseAdd, 0);
+
+				totalReward += add;
+				AddReward.text = $"+{add.ToStringPritty()} Free";
 			}
 
 			if (!isFree)
@@ -99,16 +115,23 @@ namespace Game.Systems.PremiumMarketSystem
 			}
 		}
 
-		private void onPurchased(bool trigger)
+		private void onPurchased(string id, bool trigger)
 		{
 			ButtonReward.interactable = true;
+			
+			if(string.Equals(id, key, StringComparison.Ordinal))//iap
+			{
+				floatingAwards.StartAwardCoins(ButtonReward.transform.position, totalReward);
+			}
 		}
 
 		private void OnRewardClosed(RewardedClosedType closedType)
 		{
-			if(closedType == RewardedClosedType.Rewarded)
+			ButtonReward.interactable = true;
+			
+			if (closedType == RewardedClosedType.Rewarded)//free
 			{
-				//coins for ads TODO
+				floatingAwards.StartAwardCoins(ButtonReward.transform.position, totalReward);
 			}
 		}
 
@@ -118,12 +141,13 @@ namespace Game.Systems.PremiumMarketSystem
 
 			audioManager.PlayButtonClick();
 			vibrationManager.Vibrate();
-			
-			if(data.type == PremiumItemType.ADS)
-			{
+
 #if UNITY_EDITOR
-				ButtonReward.interactable = true;
+			ButtonReward.interactable = true;
 #endif
+
+			if (data.type == PremiumItemType.ADS)
+			{
 				adSystem.AdRewarded.Show();
 			}
 			else

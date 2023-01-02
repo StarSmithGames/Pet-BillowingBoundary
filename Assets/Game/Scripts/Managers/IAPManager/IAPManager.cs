@@ -12,7 +12,7 @@ namespace Game.Managers.IAPManager
 {
 	public sealed class IAPManager : MonoBehaviour, IStoreListener
 	{
-		public event UnityAction<bool> onPurchased;
+		public event UnityAction<string, bool> onPurchased;
 
 		public readonly string removeADS = "remove_ads";
 		public readonly string freeMode = "free_mode";
@@ -25,13 +25,15 @@ namespace Game.Managers.IAPManager
 		private IStoreController storeController;
 		private IExtensionProvider storeExtensionProvider;
 
+		private SignalBus signalBus;
 		private ISaveLoad saveLoad;
 		private AnalyticsSystem analyticsSystem;
 		private AdSystem adSystem;
 
 		[Inject]
-		private void Construct(ISaveLoad saveLoad, AnalyticsSystem analyticsSystem, AdSystem adSystem)
+		private void Construct(SignalBus signalBus, ISaveLoad saveLoad, AnalyticsSystem analyticsSystem, AdSystem adSystem)
 		{
+			this.signalBus = signalBus;
 			this.saveLoad = saveLoad;
 			this.analyticsSystem = analyticsSystem;
 			this.adSystem = adSystem;
@@ -107,7 +109,7 @@ namespace Game.Managers.IAPManager
 
 				analyticsSystem.LogEvent_iap_remove_ads();
 
-				onPurchased?.Invoke(true);
+				onPurchased?.Invoke(id, true);
 			}
 			else if (string.Equals(id, freeMode, StringComparison.Ordinal))
 			{
@@ -117,39 +119,41 @@ namespace Game.Managers.IAPManager
 
 				analyticsSystem.LogEvent_iap_free_mode();
 
-				onPurchased?.Invoke(true);
+				onPurchased?.Invoke(id, true);
 			}
 			else if (string.Equals(id, item1, StringComparison.Ordinal))
 			{
 				analyticsSystem.LogEvent_iap_buy(1);
 
-				onPurchased?.Invoke(true);
+				onPurchased?.Invoke(id, true);
 			}
 			else if (string.Equals(id, item2, StringComparison.Ordinal))
 			{
 				analyticsSystem.LogEvent_iap_buy(2);
 
-				onPurchased?.Invoke(true);
+				onPurchased?.Invoke(id, true);
 			}
 			else if (string.Equals(id, item3, StringComparison.Ordinal))
 			{
 				analyticsSystem.LogEvent_iap_buy(3);
-				
-				onPurchased?.Invoke(true);
+
+				onPurchased?.Invoke(id, true);
 			}
 			else if (string.Equals(id, item4, StringComparison.Ordinal))
 			{
 				analyticsSystem.LogEvent_iap_buy(4);
 
-				onPurchased?.Invoke(true);
+				onPurchased?.Invoke(id, true);
 			}
 			else
 			{
 				Debug.LogError($"[IAPManager] ProcessPurchase: FAIL. Unrecognized product: '{args.purchasedProduct.definition.id}'");
-				onPurchased?.Invoke(false);
+				onPurchased?.Invoke(id, false);
 			}
 
 			saveLoad.GetStorage().IsPayUser.SetData(true);
+
+			signalBus?.Fire<SignalSave>();
 
 			return PurchaseProcessingResult.Complete;
 		}
@@ -175,7 +179,7 @@ namespace Game.Managers.IAPManager
 		{
 			Debug.Log($"[IAPManager] OnPurchaseFailed: FAIL. Product: '{product.definition.storeSpecificId}', PurchaseFailureReason: {failureReason}");
 
-			onPurchased?.Invoke(false);
+			onPurchased?.Invoke("", false);
 		}
 	}
 }

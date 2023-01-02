@@ -24,7 +24,7 @@ namespace Game.Systems.FloatingSystem
 
 			Container
 				.BindFactory<FloatingText, FloatingText.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(10)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(12)
 				.FromComponentInNewPrefab(floatingTextPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
@@ -45,7 +45,7 @@ namespace Game.Systems.FloatingSystem
 
 			Container
 				.BindFactory<FloatingCoin3D, FloatingCoin3D.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(50)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(10)
 				.FromComponentInNewPrefab(floatingCoin3DPrefab))
 				.WhenInjectedInto<FloatingSystem>();
 		}

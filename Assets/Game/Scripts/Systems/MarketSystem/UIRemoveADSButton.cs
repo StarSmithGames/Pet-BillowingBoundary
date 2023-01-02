@@ -64,7 +64,7 @@ namespace Game.Systems.MarketSystem
 			}
 		}
 
-		private void OnPurchased(bool trigger)
+		private void OnPurchased(string id, bool trigger)
 		{
 			Button.interactable = true;
 		}
