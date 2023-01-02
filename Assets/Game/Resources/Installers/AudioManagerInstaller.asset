@@ -15,7 +15,10 @@ MonoBehaviour:
   settings:
     buttonClick: {fileID: 8300000, guid: b8604a24b3d22df4a96d05fde47219cc, type: 3}
     bossDefeated: {fileID: 8300000, guid: 991583ab8e8cb3448aa7567d5b237fd7, type: 3}
-    targetDefeated: {fileID: 0}
+    targetDefeated: {fileID: 8300000, guid: 51ce404dc0cdd4341bff5ec651e41cae, type: 3}
     coinsReward: {fileID: 8300000, guid: 60560dc7c21c6684c9e0379e83a55b4b, type: 3}
+    hits:
+    - {fileID: 8300000, guid: 27460eba91f5acb48a2c24c191df85c9, type: 3}
+    - {fileID: 8300000, guid: ce692bac98e1fc34ca928371d72d159a, type: 3}
+    goldLamaHit: {fileID: 8300000, guid: 7038298609e386a4ca2309796ee0509d, type: 3}
     background: {fileID: 8300000, guid: 57c7c28a368443a449f16cd841fe996c, type: 3}
-  audioSourcePrefab: {fileID: 942601889656067811, guid: fe2e4b5299543864e9b9f22bb917460d, type: 3}
