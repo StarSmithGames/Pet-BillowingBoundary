@@ -9,16 +9,9 @@ namespace Game.Systems.AuthenticationSystem
     {
 		public override void InstallBindings()
 		{
-			Container.DeclareSignal<SignalGooglePlayServicesAuthenticationChanged>();
-
-			Container.BindInterfacesAndSelfTo<GooglePlayServicesSystem>().AsSingle().NonLazy();
+			Container.BindInterfacesAndSelfTo<GooglePlayAuthentication>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<FirebaseAuthentication>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<AuthenticationSystem>().AsSingle().NonLazy();
 		}
-	}
-
-	public struct SignalGooglePlayServicesAuthenticationChanged
-	{
-		public bool result;
 	}
 }

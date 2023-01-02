@@ -1,13 +1,6 @@
-using Firebase;
 using Firebase.Auth;
-using Firebase.Extensions;
 using GooglePlayGames;
-using GooglePlayGames.BasicApi;
-
-using System;
-
 using UnityEngine;
-using UnityEngine.Events;
 
 using Zenject;
 
@@ -15,13 +8,18 @@ namespace Game.Systems.AuthenticationSystem
 {
 	public class AuthenticationSystem : IInitializable
 	{
-		private GooglePlayServicesSystem googlePlayServicesSystem;
+		private GooglePlayAuthentication googlePlayAuthentication;
 		private FirebaseAuthentication firebaseAuthentication;
+		private AchievementSystem.AchievementSystem achievementSystem;
 
-		public AuthenticationSystem(GooglePlayServicesSystem googlePlayServicesSystem, FirebaseAuthentication firebaseAuthentication)
+		public AuthenticationSystem(
+			GooglePlayAuthentication googlePlaySystem,
+			FirebaseAuthentication firebaseAuthentication,
+			AchievementSystem.AchievementSystem achievementSystem)
 		{
-			this.googlePlayServicesSystem = googlePlayServicesSystem;
+			this.googlePlayAuthentication = googlePlaySystem;
 			this.firebaseAuthentication = firebaseAuthentication;
+			this.achievementSystem = achievementSystem;
 		}
 
 		public void Initialize()
@@ -31,7 +29,7 @@ namespace Game.Systems.AuthenticationSystem
 			return;
 #endif
 
-			googlePlayServicesSystem.Authentication(
+			googlePlayAuthentication.Authenticate(
 			(result, auth) =>
 			{
 				if (auth)
@@ -39,7 +37,7 @@ namespace Game.Systems.AuthenticationSystem
 					var authCode = PlayGamesPlatform.Instance.GetServerAuthCode();
 					var credential = PlayGamesAuthProvider.GetCredential(authCode);
 
-					firebaseAuthentication.AuthenticationCredential((credential),
+					firebaseAuthentication.AuthenticateWithCredential((credential),
 					(fireResult) =>
 					{
 						if (fireResult)
@@ -51,7 +49,7 @@ namespace Game.Systems.AuthenticationSystem
 						{
 							if (FirebaseAuth.DefaultInstance.CurrentUser == null)
 							{
-								firebaseAuthentication.AuthenticationAnonymously();
+								firebaseAuthentication.AuthenticateAnonymously();
 								Debug.Log("[AuthenticationSystem] SignInAnonymouslyAsync.");
 							}
 							else
@@ -61,12 +59,14 @@ namespace Game.Systems.AuthenticationSystem
 							}
 						}
 					});
+
+					achievementSystem.Achive_achievement_newkid_authenticated();
 				}
 				else
 				{
 					if (FirebaseAuth.DefaultInstance.CurrentUser == null)
 					{
-						firebaseAuthentication.AuthenticationAnonymously();
+						firebaseAuthentication.AuthenticateAnonymously();
 						Debug.Log("[AuthenticationSystem] SignInAnonymouslyAsync.");
 					}
 					else
@@ -74,145 +74,6 @@ namespace Game.Systems.AuthenticationSystem
 						// user is signed in
 						Debug.Log("[AuthenticationSystem] User is signed in.");
 					}
-				}
-			});
-		}
-	}
-
-	public class GooglePlayServicesSystem
-	{
-		public bool IsAuthenticated { get; private set; } = false;
-
-		public void Authentication(UnityAction<SignInStatus, bool> callback)
-		{
-			var config = new PlayGamesClientConfiguration.Builder()
-			.RequestServerAuthCode(false)//Don't force refresh
-			//.EnableSavedGames()
-			.Build();
-
-			PlayGamesPlatform.InitializeInstance(config);
-			PlayGamesPlatform.Activate();
-			PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
-			{
-				if (result == SignInStatus.Success)
-				{
-					Debug.Log("[GooglePlayServicesAuthentication] User signed in successfully.");
-
-					PlayGamesPlatform.DebugLogEnabled = true;
-
-					//PlayGamesPlatform.Instance.Events.IncrementEvent("YOUR_EVENT_ID", 1);
-
-					//PlayGamesPlatform.Instance.IncrementAchievement("Cfjewijawiu_QA", 5,
-					//(bool success) => {
-					//	// handle success or failure
-					//});
-					//Social.ShowAchievementsUI();
-
-					IsAuthenticated = true;
-				}
-				else
-				{
-					Debug.LogError("[GooglePlayServicesAuthentication] User is signed failed.");
-
-					IsAuthenticated = false;
-				}
-
-				callback?.Invoke(result, IsAuthenticated);
-			});
-		}
-
-		/// <param name="progress">0f-100f</param>
-		public void Achieve(string id, float progress, Action<bool> callback)
-		{
-			if (!IsAuthenticated) return;
-
-			Social.ReportProgress(id, progress, callback);
-		}
-
-		public void UnlockAchievement(string id, Action<bool> callback)
-		{
-			if (!IsAuthenticated) return;
-
-			PlayGamesPlatform.Instance.UnlockAchievement(id, callback);
-		}
-	}
-
-
-	public class FirebaseAuthentication
-	{
-		public bool IsInitialized { get; private set; } = false;
-
-		public void AuthenticationAnonymously()
-		{
-			FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith((task) =>
-			{
-				var dependencyStatus = task.Result;
-				if (dependencyStatus == DependencyStatus.Available)
-				{
-					FirebaseAuth.DefaultInstance.SignInAnonymouslyAsync().ContinueWith(task => {
-						if (task.IsCanceled)
-						{
-							Debug.LogError("[FirebaseAuthentication] SignInAnonymouslyAsync was canceled.");
-							return;
-						}
-						if (task.IsFaulted)
-						{
-							Debug.LogError("[FirebaseAuthentication] SignInAnonymouslyAsync encountered an error: " + task.Exception);
-							return;
-						}
-
-						FirebaseUser newUser = task.Result;
-
-						Debug.Log($"[FirebaseAuthentication] User signed in successfully: {newUser.DisplayName} {newUser.UserId}");
-					});
-
-					IsInitialized = true;
-					Debug.Log($"[FirebaseAuthentication] Initialized!");
-				}
-				else
-				{
-					Debug.LogError($"[FirebaseAuthentication] AuthenticationAnonymously Could not resolve all Firebase dependencies: {dependencyStatus}");
-				}
-			});
-
-			
-		}
-
-		public void AuthenticationCredential(Credential credential, UnityAction<bool> result)
-		{
-			FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith((task) =>
-			{
-				var dependencyStatus = task.Result;
-				if (dependencyStatus == DependencyStatus.Available)
-				{
-					FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential).ContinueWith((task) =>
-					{
-						if (task.IsCanceled)
-						{
-							Debug.LogError("[FirebaseAuthentication] SignInWithCredentialAsync was canceled.");
-							result?.Invoke(false);
-							return;
-						}
-						if (task.IsFaulted)
-						{
-							Debug.LogError($"[FirebaseAuthentication] SignInWithCredentialAsync encountered an error: {task.Exception}");
-							result?.Invoke(false);
-							return;
-						}
-
-						FirebaseUser newUser = task.Result;
-						Debug.Log($"[FirebaseAuthentication] User signed in successfully: {newUser.DisplayName} ({newUser.UserId})");
-
-						result?.Invoke(true);
-					});
-
-					IsInitialized = true;
-					Debug.Log($"[FirebaseAuthentication] Initialized!");
-				}
-				else
-				{
-					Debug.LogError($"[FirebaseAuthentication] SignInWithCredentialAsync Could not resolve all Firebase dependencies: {dependencyStatus}");
-					result?.Invoke(false);
 				}
 			});
 		}

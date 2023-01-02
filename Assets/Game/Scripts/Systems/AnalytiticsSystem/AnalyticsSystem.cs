@@ -86,6 +86,11 @@ namespace Game.Systems.AnalyticsSystem
 		#endregion
 
 		#region Statistics
+		public void LogEvent_achievment_get(string id)
+		{
+			LogEvent($"achievment_get_{id}");
+		}
+
 		public void LogEvent_wave_completed()
 		{
 			LogEvent("wave_completed");

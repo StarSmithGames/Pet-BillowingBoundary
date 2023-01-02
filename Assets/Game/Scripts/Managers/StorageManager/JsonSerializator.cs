@@ -11,6 +11,7 @@ namespace Game.Managers.StorageManager
 {
 	public class JsonSerializator : MonoBehaviour
 	{
+		#region PlayerPrefs
 		public static void SaveToPlayerPrefs(string key, string data)
 		{
 			PlayerPrefs.SetString(key, data);
@@ -20,15 +21,19 @@ namespace Game.Managers.StorageManager
 		{
 			return PlayerPrefs.GetString(key);
 		}
+		#endregion
 
+		#region Unity Serialiation
 		public static string ConvertToUnityJson(object data)
 		{
 			return JsonUtility.ToJson(data, true);
 		}
+
 		public static T ConvertFromUnityJson<T>(string json)
 		{
 			return JsonUtility.FromJson<T>(json);
 		}
+		#endregion
 
 		//public static string ConvertToOdinJson(object data)
 		//{
@@ -37,10 +42,10 @@ namespace Game.Managers.StorageManager
 		//	return tmp;
 		//}
 
-		public static byte[] ConvertToOdinByteJson(object data)
-		{
-			return Sirenix.Serialization.SerializationUtility.SerializeValue(data, DataFormat.JSON);
-		}
+		//public static byte[] ConvertToOdinByteJson(object data)
+		//{
+		//	return Sirenix.Serialization.SerializationUtility.SerializeValue(data, DataFormat.JSON);
+		//}
 
 		//public static T ConvertFromOdinJson<T>(string json)
 		//{

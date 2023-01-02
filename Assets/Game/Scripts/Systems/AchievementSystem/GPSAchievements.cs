@@ -36,4 +36,3 @@ public static class GPSAchievements
         public const string achievement_newkid_authenticated = "CgkI653j2KAEEAIQCg"; // <GPGSID>
 
 }
-
