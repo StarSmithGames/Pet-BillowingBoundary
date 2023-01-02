@@ -35,13 +35,16 @@ namespace Game.Systems.DailyRewardSystem
 		private NetworkTimeManager networkTimeManager;
 		private FloatingAwards floatingAwards;
 		private Player player;
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas, ISaveLoad saveLoad,
+		private void Construct(UISubCanvas subCanvas,
+			ISaveLoad saveLoad,
 			DailyRewardSystem dailyRewardSystem,
 			NetworkTimeManager networkTimeManager,
 			FloatingAwards floatingAwards,
-			Player player)
+			Player player,
+			AnalyticsSystem.AnalyticsSystem analyticsSystem)
 		{
 			this.subCanvas = subCanvas;
 			this.saveLoad = saveLoad;
@@ -49,6 +52,7 @@ namespace Game.Systems.DailyRewardSystem
 			this.networkTimeManager = networkTimeManager;
 			this.floatingAwards = floatingAwards;
 			this.player = player;
+			this.analyticsSystem = analyticsSystem;
 		}
 
 		private void Start()
@@ -65,10 +69,10 @@ namespace Game.Systems.DailyRewardSystem
 
 			subCanvas.WindowsRegistrator.Registrate(this);
 
-			//if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
-			//{
-			//	Show();
-			//}
+			if (saveLoad.GetStorage().IsFirstTime.GetData() == false && dailyRewardSystem.IsHasReward())
+			{
+				Show();
+			}
 		}
 
 		private void OnDestroy()
@@ -86,43 +90,57 @@ namespace Game.Systems.DailyRewardSystem
 
 		public override void Show(UnityAction callback = null)
 		{
-			//var data = saveLoad.GetStorage().DailyRewardData.GetData();
-			//SelectDay(data.currentDay, data.currentState);
+			UpdateUI();
 
 			base.Show(callback);
 		}
 
-		private void SelectDay(DayType day, DailyRewardState state)
+		private void UpdateUI()
 		{
+			var dailyRewards = dailyRewardSystem.GetRewards();
+
+			Assert.IsTrue(dailyRewards.Count == rewards.Count);
+
+			var data = saveLoad.GetStorage().DailyRewardData.GetData();
 			for (int i = 0; i < rewards.Count; i++)
 			{
-				if (rewards[i].DayType == day)
+				if (rewards[i].DayType == data.currentDay)
 				{
-					rewards[i].SetState(state, false);
+					rewards[i].SetState(data.currentState, false);
 				}
-				else if(rewards[i].DayType < day)
+				else if (rewards[i].DayType < data.currentDay)
 				{
 					rewards[i].SetState(DailyRewardState.Claimed, false);
 				}
-				else if (rewards[i].DayType > day)
+				else if (rewards[i].DayType > data.currentDay)
 				{
 					rewards[i].SetState(DailyRewardState.Close, false);
 				}
+			}
+
+			for (int i = 0; i < dailyRewards.Count; i++)
+			{
+				rewards[i].SetReward(dailyRewards[i]);
 			}
 		}
 
 		private void OnRewardStateChanged(UIRewardItem rewardItem)
 		{
-			//var data = saveLoad.GetStorage().DailyRewardData.GetData();
-			//data.currentState = rewardItem.CurrentState;
-			//if(rewardItem.CurrentState == DailyRewardState.Claimed)
-			//{
-			//	data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
+			var data = saveLoad.GetStorage().DailyRewardData.GetData();
 
-			//	floatingAwards.StartAwardCoins(rewardItem.transform.position, Random.Range(50, 101), new BFN(100, 0));
-			//}
+			Assert.IsTrue(data.currentDay == rewardItem.DayType);
 
-			//Assert.IsTrue(data.currentDay == rewardItem.DayType);
+			data.currentState = rewardItem.CurrentState;
+			if (rewardItem.CurrentState == DailyRewardState.Claimed)
+			{
+				data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
+
+				floatingAwards.StartAwardCoins(rewardItem.transform.position, rewardItem.TotalCoins);
+
+				dailyRewardSystem.RefreshDays();
+
+				analyticsSystem.LogEvent_daily_reward_claimed();
+			}
 		}
 
 		private void OnClosed()

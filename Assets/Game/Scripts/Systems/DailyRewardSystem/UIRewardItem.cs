@@ -1,14 +1,21 @@
+using Game.Systems.WaveRoadSystem;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.UI;
+
+using Zenject;
 
 namespace Game.Systems.DailyRewardSystem
 {
 	public class UIRewardItem : MonoBehaviour
 	{
 		public UnityAction<UIRewardItem> onRewardStateChanged;
+
+		public DailyRewardState CurrentState { get; private set; } = DailyRewardState.Open;
 
 		[field: SerializeField] public Image Icon { get; private set; }
 		[field: SerializeField] public TMPro.TextMeshProUGUI Day { get; private set; }
@@ -19,7 +26,16 @@ namespace Game.Systems.DailyRewardSystem
 		[Space]
 		[SerializeField] private DayType dayType = DayType.Day1;
 
-		public DailyRewardState CurrentState { get; private set; } = DailyRewardState.Open;
+		public DailyReward Reward { get; private set; }
+		public BFN TotalCoins { get; private set; }
+
+		private WaveRoad waveRoad;
+
+		[Inject]
+		private void Construct(WaveRoad waveRoad)
+		{
+			this.waveRoad = waveRoad;
+		}
 
 		private void Start()
 		{
@@ -31,6 +47,24 @@ namespace Game.Systems.DailyRewardSystem
 		private void OnDestroy()
 		{
 			Claim?.onClick.RemoveAllListeners();
+		}
+
+		public void SetReward(DailyReward reward)
+		{
+			Assert.IsTrue(dayType == reward.day);
+
+			Reward = reward;
+
+			if(CurrentState != DailyRewardState.Claimed)
+			{
+				TotalCoins = BFN.FormuleExpoDailyReward(Reward.baseCoins, waveRoad.CurrentWave.CurrentValue);
+
+				Text.text = TotalCoins.ToStringPritty();
+			}
+			else
+			{
+				TotalCoins = BFN.Zero;
+			}
 		}
 
 		public void SetState(DailyRewardState rewardState, bool notify = true)

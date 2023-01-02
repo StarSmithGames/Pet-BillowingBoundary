@@ -1,6 +1,5 @@
 using Game.Managers.StorageManager;
 using Game.Systems.AdSystem;
-
 using System.Collections.Generic;
 
 namespace Game.Systems.AnalyticsSystem
@@ -18,10 +17,23 @@ namespace Game.Systems.AnalyticsSystem
 		}
 
 		#region Market
+		public void LogEvent_bonus_upgraded(string name)
+		{
+			LogEvent($"bonus_upgraded_{name}");
+		}
 
+		public void LogEvent_skill_upgraded(string name)
+		{
+			LogEvent($"skill_upgraded_{name}");
+		}
 		#endregion
 
 		#region IAP
+		public void LogEvent_show_premium_market()
+		{
+			LogEvent("show_premium_market");
+		}
+
 		public void LogEvent_iap_remove_ads()
 		{
 			LogEvent("iap_remove_ads");
@@ -86,6 +98,16 @@ namespace Game.Systems.AnalyticsSystem
 		#endregion
 
 		#region Statistics
+		public void LogEvent_daily_reward_claimed()
+		{
+			LogEvent("daily_reward_claimed");
+		}
+
+		public void LogEvent_daily_reward_reseted()
+		{
+			LogEvent("daily_reward_reseted");
+		}
+
 		public void LogEvent_achievment_get(string id)
 		{
 			LogEvent($"achievment_get_{id}");
@@ -104,6 +126,28 @@ namespace Game.Systems.AnalyticsSystem
 		public void LogEvent_boss_defeat()
 		{
 			LogEvent("boss_defeat");
+		}
+		#endregion
+
+		#region Settings
+		public void LogEvent_settings_language(string lang)
+		{
+			LogEvent($"settings_language_{lang}");
+		}
+
+		public void LogEvent_settings_music()
+		{
+			LogEvent("settings_music");
+		}
+
+		public void LogEvent_settings_sound()
+		{
+			LogEvent("settings_sound");
+		}
+
+		public void LogEvent_settings_vibration()
+		{
+			LogEvent("settings_vibration");
 		}
 		#endregion
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 using Zenject;
 
@@ -13,6 +14,8 @@ namespace Game.Systems.DailyRewardSystem
 {
     public class DailyRewardSystem : IInitializable, ITickable
     {
+		public UnityAction onChanged;
+
 		private bool isInitialized = false;
 		private Data data;
 		private TimeSpan oneDay = TimeSpan.FromDays(1f);
@@ -20,37 +23,46 @@ namespace Game.Systems.DailyRewardSystem
 		private float t = 0;
 		private bool needCheck = false;
 
+		private DailyRewardSetting setting;
 		private UISubCanvas subCanvas;
 		private ISaveLoad saveLoad;
 		private NetworkTimeManager networkTimeManager;
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
-		public DailyRewardSystem(UISubCanvas subCanvas, ISaveLoad saveLoad, NetworkTimeManager networkTimeManager)
+		public DailyRewardSystem(
+			DailyRewardSetting setting,
+			UISubCanvas subCanvas,
+			ISaveLoad saveLoad,
+			NetworkTimeManager networkTimeManager,
+			AnalyticsSystem.AnalyticsSystem analyticsSystem)
         {
-            this.subCanvas = subCanvas;
+			this.setting = setting;
+			this.subCanvas = subCanvas;
 			this.saveLoad = saveLoad;
 			this.networkTimeManager = networkTimeManager;
+			this.analyticsSystem = analyticsSystem;
 		}
 
 		public void Initialize()
 		{
-			//data = saveLoad.GetStorage().DailyRewardData.GetData();
+			data = saveLoad.GetStorage().DailyRewardData.GetData();
 
-			//if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime
-			//{
-			//	isInitialized = true;
-			//	Reset();
-			//}
-			//else
-			//{
-			//	//if (networkTimeManager.IsTrustedTime())//need server
-			//	{
-			//		isInitialized = true;
-			//		if (IsMissedDay())
-			//		{
-			//			Reset();
-			//		}
-			//	}
-			//}
+			if (saveLoad.GetStorage().IsFirstTime.GetData() == true)//FirstTime
+			{
+				isInitialized = true;
+				Reset();
+			}
+			else
+			{
+				//if (networkTimeManager.IsTrustedTime())//need server
+				{
+					isInitialized = true;
+					if (IsMissedDay())
+					{
+						Reset();
+					}
+				}
+			}
 		}
 
 		public void Tick()
@@ -81,6 +93,23 @@ namespace Game.Systems.DailyRewardSystem
 			//}
 		}
 
+		public void RefreshDays()
+		{
+			SetupNextDay();
+
+			onChanged?.Invoke();
+		}
+
+		public List<DailyReward> GetRewards()
+		{
+			return setting.rewards;
+		}
+
+
+		public bool IsHasReward()
+		{
+			return saveLoad.GetStorage().DailyRewardData.GetData().currentState == DailyRewardState.Open;
+		}
 
 		public bool IsMissedDay()
 		{
@@ -98,6 +127,7 @@ namespace Game.Systems.DailyRewardSystem
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
 			date = date.AddDays(1);
 			data.nextDay = date.TotalSeconds();
+			data.currentDay = (DayType)(((int)data.currentDay + 1) % 9);//next
 		}
 
 		private void Reset()
@@ -106,6 +136,8 @@ namespace Game.Systems.DailyRewardSystem
 			data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
 			data.currentDay = DayType.Day1;
 			data.currentState = DailyRewardState.Open;
+
+			analyticsSystem.LogEvent_daily_reward_reseted();
 		}
 
 		public class Data

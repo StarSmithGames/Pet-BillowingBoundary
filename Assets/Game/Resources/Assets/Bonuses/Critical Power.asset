@@ -19,6 +19,7 @@ MonoBehaviour:
     isNameId: 1
     description: ui.bonus.critical_power.description
     isDescriptionId: 1
+  id: critical_power
   baseCost: 150
   isHasMaxLevel: 1
   maxLevel: 100

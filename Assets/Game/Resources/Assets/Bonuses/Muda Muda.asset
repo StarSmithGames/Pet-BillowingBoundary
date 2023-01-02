@@ -19,6 +19,7 @@ MonoBehaviour:
     isNameId: 1
     description: ui.bonus.muda_muda.description
     isDescriptionId: 1
+  id: muda_muda
   baseCost: 50
   isHasMaxLevel: 1
   maxLevel: 100

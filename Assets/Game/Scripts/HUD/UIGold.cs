@@ -1,4 +1,5 @@
 using Game.Entities;
+using Game.Systems.AnalyticsSystem;
 using Game.Systems.PremiumMarketSystem;
 using Game.UI;
 
@@ -15,12 +16,14 @@ namespace Game.HUD
 
 		private UISubCanvas subCanvas;
 		private Gold gold;
+		private AnalyticsSystem analyticsSystem;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas, Player player)
+		private void Construct(UISubCanvas subCanvas, Player player, AnalyticsSystem analyticsSystem)
 		{
 			this.subCanvas = subCanvas;
 			this.gold = player.Gold;
+			this.analyticsSystem = analyticsSystem;
 		}
 
 		protected override void Start()
@@ -49,6 +52,8 @@ namespace Game.HUD
 			subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
 
 			base.OnClick();
+
+			analyticsSystem.LogEvent_show_premium_market();
 		}
 	}
 }

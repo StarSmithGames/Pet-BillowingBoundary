@@ -19,6 +19,7 @@ MonoBehaviour:
     isNameId: 1
     description: ui.bonus.gold_chance.description
     isDescriptionId: 1
+  id: gold_chance
   baseCost: 150
   isHasMaxLevel: 1
   maxLevel: 100

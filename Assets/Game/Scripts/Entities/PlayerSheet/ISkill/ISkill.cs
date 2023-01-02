@@ -110,6 +110,8 @@ namespace Game.Entities
 
 	public abstract class SkillProperty : AttributeModifiableFloat
 	{
+		public abstract string ID { get; }
+
 		public int Level { get; private set; } = 0;
 
 		protected bool isInitialized = false;

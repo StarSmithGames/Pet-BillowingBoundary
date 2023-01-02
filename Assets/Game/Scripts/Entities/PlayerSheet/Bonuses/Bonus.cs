@@ -1,4 +1,5 @@
 using Game.Managers.StorageManager;
+using Game.Systems.AnalyticsSystem;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
@@ -31,13 +32,19 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	protected SignalBus signalBus;
 	private ISaveLoad saveLoad;
 	private LocalizationSystem localizationSystem;
+	private AnalyticsSystem analyticsSystem;
 
 	[Inject]
-	private void Construct(SignalBus signalBus, ISaveLoad saveLoad, LocalizationSystem localizationSystem)
+	private void Construct(
+		SignalBus signalBus,
+		ISaveLoad saveLoad,
+		LocalizationSystem localizationSystem,
+		AnalyticsSystem analyticsSystem)
 	{
 		this.signalBus = signalBus;
 		this.saveLoad = saveLoad;
 		this.localizationSystem = localizationSystem;
+		this.analyticsSystem = analyticsSystem;
 	}
 
 	protected virtual void Start()
@@ -80,6 +87,8 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		onChanged?.Invoke(this);
 
 		signalBus?.Fire<SignalSave>();
+
+		analyticsSystem.LogEvent_bonus_upgraded(BonusData.id);
 	}
 
 	public BFN GetCost()

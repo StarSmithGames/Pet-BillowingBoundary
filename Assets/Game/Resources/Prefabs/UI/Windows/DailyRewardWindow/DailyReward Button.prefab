@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 6448214072221507817}
   - component: {fileID: 7075897415310251494}
   - component: {fileID: 914183335394919157}
+  - component: {fileID: 4479172586628135880}
   - component: {fileID: 3194025370471264441}
   - component: {fileID: 6634444363201091765}
   m_Layer: 5
@@ -247,6 +248,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &4479172586628135880
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222044089981642388}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &3194025370471264441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,6 +273,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Button>k__BackingField: {fileID: 914183335394919157}
+  <CanvasGroup>k__BackingField: {fileID: 4479172586628135880}
+  <Root>k__BackingField: {fileID: 6448214072221507817}
   <Alert>k__BackingField: {fileID: 2625602038863033935}
 --- !u!114 &6634444363201091765
 MonoBehaviour:

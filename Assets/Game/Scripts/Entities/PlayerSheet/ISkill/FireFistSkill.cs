@@ -1,5 +1,6 @@
 using Game.Managers.ClickManager;
 using Game.Managers.StorageManager;
+using Game.Systems.AnalyticsSystem;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 using Game.UI;
@@ -35,12 +36,17 @@ namespace Game.Entities
 
 		private ClickStarter conveyor;
 		private ISaveLoad saveLoad;
+		private AnalyticsSystem analyticsSystem;
 
 		[Inject]
-		private void Construct(ClickStarter conveyor, ISaveLoad saveLoad)
+		private void Construct(
+			ClickStarter conveyor,
+			ISaveLoad saveLoad,
+			AnalyticsSystem analyticsSystem)
 		{
 			this.conveyor = conveyor;
 			this.saveLoad = saveLoad;
+			this.analyticsSystem = analyticsSystem;
 		}
 
 		protected override void Start()
@@ -116,6 +122,8 @@ namespace Game.Entities
 			onChanged?.Invoke(this);
 
 			signalBus?.Fire<SignalSave>();
+
+			analyticsSystem.LogEvent_skill_upgraded(properties[index].ID);
 		}
 
 		private void Init()
@@ -225,6 +233,8 @@ namespace Game.Entities
 
 	public class FireFistChanceProperty : SkillProperty
 	{
+		public override string ID => "fire_fist.chance";
+
 		public override string LocalizationKey => "ui.skill.fire_fist.chance";
 
 		public PercentModifier XModifier
@@ -239,6 +249,7 @@ namespace Game.Entities
 				return xModifier;
 			}
 		}
+
 		private PercentModifier xModifier;
 
 		public FireFistChanceProperty(float value) : base(value) { }
@@ -269,6 +280,8 @@ namespace Game.Entities
 
 	public class FireFistDurationProperty : SkillProperty
 	{
+		public override string ID => "fire_fist.duration";
+
 		public override string LocalizationKey => "ui.skill.fire_fist.duration";
 
 		public FireFistDurationProperty(float value) : base(value) { }
@@ -297,6 +310,8 @@ namespace Game.Entities
 
 	public class FireFistPowerProperty : SkillProperty
 	{
+		public override string ID => "fire_fist.power";
+
 		public override string LocalizationKey => "ui.skill.fire_fist.power";
 
 		public PercentModifier XModifier

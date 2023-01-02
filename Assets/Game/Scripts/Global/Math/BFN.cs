@@ -7,6 +7,8 @@ using UnityEngine;
 using Unity.VisualScripting;
 using System.Reflection;
 using System.Globalization;
+using System.Linq;
+using System.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -329,7 +331,7 @@ public struct BFN
 	{
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			BFN bigNumber = (BFN)fieldInfo.GetValue(property.serializedObject.targetObject);
+			BFN bigNumber = property.GetSerializedValue<BFN>(); //(BFN)fieldInfo.GetValue(property.serializedObject.targetObject);
 			var coefficientProperty = property.FindPropertyRelative(nameof(BFN.coefficient));
 			var exponentProperty = property.FindPropertyRelative(nameof(BFN.exponent));
 
@@ -374,7 +376,6 @@ public struct BFN
 	}
 #endif
 
-
 	#endregion
 
 
@@ -403,12 +404,23 @@ public struct BFN
 		return new BFN(Math.Ceiling(baseValue * Mathf.Pow(1.07f, level)), 0).compressed;
 	}
 
-	public static BFN FormuleExpoPremiumMarketFreeReward(BFN baseValue, int level)
+	public static BFN FormuleExpoDailyReward(BFN baseValue, int level)
 	{
-		return (baseValue * Mathf.Pow(1.2f, level)).compressed;
+		return level <= 5 ? baseValue : (baseValue * Mathf.Pow(1.15f, level)).compressed;
 	}
+
+	public static BFN FormuleExpoPremiumMarketReward(BFN baseValue, int level)
+	{
+		return level <= 5 ? baseValue : (baseValue * Mathf.Pow(1.5f, level)).compressed;
+	}
+
 	public static BFN FormuleExpoPremiumMarketAddReward(BFN baseValue, int level)
 	{
-		return (baseValue * Mathf.Pow(1.15f, level)).compressed;
+		return level <= 5 ? baseValue : (baseValue * Mathf.Pow(1.15f, level)).compressed;
+	}
+
+	public static BFN FormuleExpoPremiumMarketFreeReward(BFN baseValue, int level)
+	{
+		return level <= 5 ? baseValue : (baseValue * Mathf.Pow(1.2f, level)).compressed;
 	}
 }

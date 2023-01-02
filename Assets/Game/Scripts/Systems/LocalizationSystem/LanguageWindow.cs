@@ -24,21 +24,30 @@ namespace Game.Systems.LocalizationSystem
 		[Space]
 		[SerializeField] private List<UILanguageButton> langs = new List<UILanguageButton>();
 
+		private bool isChangeManualy = false;
+
 		private SignalBus signalBus;
 		private UISubCanvas subCanvas;
 		private LocalizationSystem localizationSystem;
 		private AudioManager audioManager;
 		private VibrationManager vibrationManager;
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, UISubCanvas subCanvas, LocalizationSystem localizationSystem,
-			AudioManager audioManager, VibrationManager vibrationManager)
+		private void Construct(
+			SignalBus signalBus,
+			UISubCanvas subCanvas,
+			LocalizationSystem localizationSystem,
+			AudioManager audioManager,
+			VibrationManager vibrationManager,
+			AnalyticsSystem.AnalyticsSystem analyticsSystem)
 		{
 			this.signalBus = signalBus;
 			this.subCanvas = subCanvas;
 			this.localizationSystem = localizationSystem;
 			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
+			this.analyticsSystem = analyticsSystem;
 		}
 
 		private void Start()
@@ -57,6 +66,7 @@ namespace Game.Systems.LocalizationSystem
 
 			signalBus.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 			OnLocalizationChanged();
+
 		}
 
 		private void OnDestroy()
@@ -84,11 +94,20 @@ namespace Game.Systems.LocalizationSystem
 				langs[i].SetText(names[i]);
 				langs[i].Enable(i == index);
 			}
+
+			if (isChangeManualy)
+			{
+				analyticsSystem.LogEvent_settings_language(localizationSystem.CurrentLocaleCode);
+			}
+
+			isChangeManualy = false;
 		}
 
 		private void OnLangClicked(UILanguageButton lang)
 		{
 			if (localizationSystem.IsLocaleProcess) return;
+
+			isChangeManualy = true;
 
 			var index = langs.IndexOf(lang);
 

@@ -1,4 +1,5 @@
 using Game.Entities;
+using Game.Systems.DailyRewardSystem;
 using Game.Systems.WaveRoadSystem;
 
 using System.Collections.Generic;
@@ -57,6 +58,8 @@ namespace Game.Managers.StorageManager
 
 		public IStorageData<bool> IsCompleteTutorial { get; private set; }
 
+		public IStorageData<DailyRewardSystem.Data> DailyRewardData { get; private set; }
+
 		//settings
 		public IStorageData<bool> IsSound { get; private set; }
 		public IStorageData<bool> IsMusic { get; private set; }
@@ -103,6 +106,8 @@ namespace Game.Managers.StorageManager
 			IsBuyFreeMode = new StorageData<bool>(Database, "is_buy_free_mode", false);
 
 			IsCompleteTutorial = new StorageData<bool>(Database, "tutorial_tap", false);
+
+			DailyRewardData = new StorageData<DailyRewardSystem.Data>(Database, "daily_reward_data", new DailyRewardSystem.Data());
 
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);

@@ -12,3 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 208d406e66984fb41ab02dedf6257bcf, type: 3}
   m_Name: DailyRewardInstaller
   m_EditorClassIdentifier: 
+  setting:
+    rewards:
+    - day: 1
+      baseCoins:
+        coefficient: 10
+        exponent: 0
+    - day: 2
+      baseCoins:
+        coefficient: 25
+        exponent: 0
+    - day: 3
+      baseCoins:
+        coefficient: 75
+        exponent: 0
+    - day: 4
+      baseCoins:
+        coefficient: 100
+        exponent: 0
+    - day: 5
+      baseCoins:
+        coefficient: 200
+        exponent: 0
+    - day: 6
+      baseCoins:
+        coefficient: 500
+        exponent: 0
+    - day: 7
+      baseCoins:
+        coefficient: 1
+        exponent: 3
+    - day: 8
+      baseCoins:
+        coefficient: 3
+        exponent: 3

@@ -7,6 +7,8 @@ public class BonusData : ScriptableObject
 	[HideLabel]
 	public Information information;
 
+	public string id;
+
 	[Space]
 	public int baseCost;
 	[Space]

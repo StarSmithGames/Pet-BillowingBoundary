@@ -128,6 +128,7 @@ namespace Game.Systems.LocalizationSystem
 	public partial class LocalizationSystem
 	{
 		public string CurrentLocale => LocalizationSettings.SelectedLocale.name;
+		public string CurrentLocaleCode => LocalizationSettings.SelectedLocale.Identifier.Code;
 		public int CurrentLocaleIndex => LocalizationSettings.AvailableLocales.Locales.IndexOf(LocalizationSettings.SelectedLocale);
 
 

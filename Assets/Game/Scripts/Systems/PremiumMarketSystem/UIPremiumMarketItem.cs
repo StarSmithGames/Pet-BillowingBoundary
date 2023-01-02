@@ -95,7 +95,7 @@ namespace Game.Systems.PremiumMarketSystem
 
 			if (isCost)
 			{
-				BFN reward = waveRoad.CurrentWave.CurrentValue <= 3 ? data.baseCost : BFN.FormuleExpoPremiumMarketAddReward(data.baseCost, 0);
+				BFN reward = isFree ? BFN.FormuleExpoPremiumMarketFreeReward(data.baseCost, waveRoad.CurrentWave.CurrentValue) : BFN.FormuleExpoPremiumMarketReward(data.baseCost, waveRoad.CurrentWave.CurrentValue);
 
 				totalReward += reward;
 				Reward.text = reward.ToStringPritty();
@@ -103,7 +103,7 @@ namespace Game.Systems.PremiumMarketSystem
 
 			if (isAdd)
 			{
-				BFN add = waveRoad.CurrentWave.CurrentValue <= 3 ? data.baseAdd : BFN.FormuleExpoPremiumMarketFreeReward(data.baseAdd, 0);
+				BFN add = BFN.FormuleExpoPremiumMarketAddReward(data.baseAdd, waveRoad.CurrentWave.CurrentValue);
 
 				totalReward += add;
 				AddReward.text = $"+{add.ToStringPritty()} Free";

@@ -145,7 +145,7 @@ MonoBehaviour:
   m_text: 999.9KK
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4f361a3dccae2ba47b148ebbe7e48151, type: 2}
-  m_sharedMaterial: {fileID: -2237749729835323621, guid: 4f361a3dccae2ba47b148ebbe7e48151, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 74104068661cc7d4294ab4c436749a73, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -747,9 +747,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Reward>k__BackingField: {fileID: 8217118397924904974}
+  <AddReward>k__BackingField: {fileID: 0}
   <ButtonReward>k__BackingField: {fileID: 6844345770210217398}
   <Price>k__BackingField: {fileID: 6977015273282341634}
+  isCost: 1
   isFree: 0
+  isAdd: 0
 --- !u!1001 &4077057140495907836
 PrefabInstance:
   m_ObjectHideFlags: 0
