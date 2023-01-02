@@ -109,7 +109,9 @@ namespace Game.Systems.AnalyticsSystem
 
 		public void LogEvent(string id, Dictionary<string, object> parameters = null)
 		{
-			if(parameters == null)
+			id = saveLoad.GetStorage().IsPayUser.GetData() ? $"WHALE_{id}" : id;
+
+			if (parameters == null)
 			{
 				firebaseAnalyticsGroup.LogEvent(id);
 			}

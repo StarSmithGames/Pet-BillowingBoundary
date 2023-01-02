@@ -3,7 +3,6 @@ using Game.HUD;
 using Game.Managers.AsyncManager;
 using Game.Managers.AudioManager;
 using Game.Managers.StorageManager;
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,7 +13,7 @@ namespace Game.Systems.FloatingSystem
 {
 	public class FloatingAwards
 	{
-		private BFN maxCoins = new BFN(1000, 0);
+		private BFN maxCoins = new BFN(10000, 0);
 
 		private SignalBus signalBus;
 		private FloatingSystem floatingSystem;
@@ -31,18 +30,31 @@ namespace Game.Systems.FloatingSystem
 			this.audioManager = audioManager;
 		}
 
-		///Time required 0.05 * count
-		public Coroutine StartAwardCoins(Vector3 startPosition, int count, BFN addCoins, UnityAction callback = null)
-		{
-			return asyncManager.StartCoroutine(Test(startPosition, UIGoldHUD.Instance.transform, count, addCoins, callback));
-		}
-
 		public Coroutine StartAwardCoins(Vector3 startPosition, BFN addCoins, UnityAction callback = null)
 		{
-			return asyncManager.StartCoroutine(Test(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
+			return asyncManager.StartCoroutine(BurstCoins(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
 		}
 
-		private IEnumerator Test(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
+		public Coroutine StartCollectCoins(Vector3 startPosition, BFN addCoins, UnityAction callback = null)
+		{
+			return asyncManager.StartCoroutine(SlowCollectCoins(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
+		}
+
+		private IEnumerator BurstCoins(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
+		{
+			audioManager.PlayCoinsReward();
+			asyncManager.StartCoroutine(LerpGoldTo(addCoins, count * 0.05f));
+			yield return null;
+			for (int i = 0; i < count; i++)
+			{
+				floatingSystem.CreateCoin2D(startPosition, target);
+			}
+
+
+			callback?.Invoke();
+		}
+
+		private IEnumerator SlowCollectCoins(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
 		{
 			audioManager.PlayCoinsReward();
 

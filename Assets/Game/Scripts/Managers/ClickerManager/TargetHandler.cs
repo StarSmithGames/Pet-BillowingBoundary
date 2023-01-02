@@ -155,7 +155,7 @@ namespace Game.Managers.ClickManager
 			{
 				BFN totalCoins = CurrentTarget.GetCoinsAfterDefeat();
 
-				awardCoinsCoroutine = floatingAwards.StartAwardCoins(Camera.main.WorldToScreenPoint(CurrentTarget.transform.position), 10, totalCoins,
+				awardCoinsCoroutine = floatingAwards.StartAwardCoins(Camera.main.WorldToScreenPoint(CurrentTarget.transform.position), totalCoins,
 				() =>
 				{
 					awardCoinsCoroutine = null;

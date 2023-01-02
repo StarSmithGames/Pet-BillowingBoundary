@@ -137,8 +137,8 @@ public struct BFN
 	#endregion
 	#region public methods
 
-	public string ToStringPritty() => $"{coefficient.ToString("F3", CultureInfo.InvariantCulture)}{GetExponentNamePritty()}";
-
+	public string ToStringPritty() => $"{(exponent > 0 ? coefficient.ToString("F3", CultureInfo.InvariantCulture) : coefficient)}{GetExponentNamePritty()}";
+	
 	public string ToStringPrecise() => $"{coefficient.ToString("G17")}e{exponent.ToString("G17")}";
 
 	public static BFN RandomRange(BFN min, BFN max)

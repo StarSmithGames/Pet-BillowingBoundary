@@ -1,4 +1,5 @@
 using Game.Managers.StorageManager;
+using Game.Systems.WaveRoadSystem;
 
 using UnityEngine;
 
@@ -9,20 +10,18 @@ namespace Game.Systems.ApplicationHandler
 	public class ApplicationHandler : MonoBehaviour
 	{
 		private SignalBus signalBus;
-		private ISaveLoad saveLoad;
 
 		[Inject]
 		private void Construct(SignalBus signalBus, ISaveLoad saveLoad)
 		{
 			this.signalBus = signalBus;
-			this.saveLoad = saveLoad;
-
-			Application.runInBackground = true;
 
 			if (saveLoad.GetStorage().IsWasHere.GetData() == true)
 			{
 				saveLoad.GetStorage().IsFirstTime.SetData(false);
 			}
+
+			Application.runInBackground = true;
 		}
 
 		private void OnDestroy()
