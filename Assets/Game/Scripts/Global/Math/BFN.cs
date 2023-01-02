@@ -136,7 +136,7 @@ public struct BFN
 	#endregion
 	#region public methods
 
-	public string ToStringPritty() => $"{(exponent > 0 ? Math.Round(coefficient, 3) : Math.Round(coefficient))}{GetExponentNamePritty()}";
+	public string ToStringPritty() => $"{(exponent > 3 ? Math.Round(coefficient, 3) : Math.Round(coefficient))}{GetExponentNamePritty()}";
 
 	public string ToStringPrecise() => $"{coefficient.ToString("G17")}e{exponent.ToString("G17")}";
 
@@ -284,7 +284,7 @@ public struct BFN
 	};
 
 	private static readonly Dictionary<long, string> exponentNamesPritty = new Dictionary<long, string>{
-		{ 3, "T"},
+		{ 3, ""},//T
 		{ 6, "M"},
 		{ 9, "B"},
 		{ 12, "T"},

@@ -1,4 +1,5 @@
 using Game.Entities;
+using Game.Managers.ClickManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
@@ -44,6 +45,7 @@ namespace Game.Systems.MarketSystem
 				properties[i].onBuyClicked += OnBuyClick;
 			}
 
+			player.Gold.onChanged += GoldCheck;
 			player.SkillRegistrator.onSelectedSkillChanged += OnSelectedSkillChanged;
 			OnSelectedSkillChanged(player.SkillRegistrator.CurrentSkill);
 			signalBus?.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
@@ -59,6 +61,7 @@ namespace Game.Systems.MarketSystem
 				properties[i].onBuyClicked -= OnBuyClick;
 			}
 
+			player.Gold.onChanged -= GoldCheck;
 			player.SkillRegistrator.onSelectedSkillChanged -= OnSelectedSkillChanged;
 		}
 
@@ -70,6 +73,11 @@ namespace Game.Systems.MarketSystem
 			{
 				properties[i].SetProperty(CurrentSkill.GetProperty(i));
 			}
+		}
+
+		private void GoldCheck()
+		{
+			UpdateUI();
 		}
 
 		private void OnBuyClick(UISkillProperty property)
