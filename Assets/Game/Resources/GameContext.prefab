@@ -2625,6 +2625,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Achievements Button
       objectReference: {fileID: 0}
+    - target: {fileID: 928623106722109500, guid: d15024a725198074ca55f0a11e31563d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 928623106722109501, guid: d15024a725198074ca55f0a11e31563d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

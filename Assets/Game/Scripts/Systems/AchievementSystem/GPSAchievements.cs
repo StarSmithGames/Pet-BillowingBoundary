@@ -22,7 +22,7 @@
 ///
 
 
-public static class GPSAchievementsData
+public static class GPSAchievements
 {
         public const string achievement_1000_times = "CgkI653j2KAEEAIQAg"; // <GPGSID>
         public const string achievement_100_times = "CgkI653j2KAEEAIQAQ"; // <GPGSID>
@@ -33,5 +33,7 @@ public static class GPSAchievementsData
         public const string achievement_iam_a_rich_now = "CgkI653j2KAEEAIQCA"; // <GPGSID>
         public const string achievement_rapid_fire = "CgkI653j2KAEEAIQBQ"; // <GPGSID>
         public const string achievement_monster = "CgkI653j2KAEEAIQBg"; // <GPGSID>
+        public const string achievement_newkid_authenticated = "CgkI653j2KAEEAIQCg"; // <GPGSID>
 
 }
+

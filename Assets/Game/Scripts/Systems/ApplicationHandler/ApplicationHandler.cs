@@ -33,16 +33,6 @@ namespace Game.Systems.ApplicationHandler
 			signalBus?.Fire(new SignalApplicationRequiredSave());
 		}
 
-		private void OnEnable()
-		{
-			signalBus?.Fire(new SignalApplicationRequiredSave());
-		}
-
-		private void OnDisable()
-		{
-			signalBus?.Fire(new SignalApplicationRequiredSave());
-		}
-
 		private void OnApplicationFocus(bool focus)
 		{
 			signalBus?.Fire(new SignalApplicationRequiredSave());
