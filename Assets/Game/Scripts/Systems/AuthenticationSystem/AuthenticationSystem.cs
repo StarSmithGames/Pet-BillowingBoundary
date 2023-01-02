@@ -13,11 +13,11 @@ namespace Game.Systems.AuthenticationSystem
 		private AchievementSystem.AchievementSystem achievementSystem;
 
 		public AuthenticationSystem(
-			GooglePlayAuthentication googlePlaySystem,
+			GooglePlayAuthentication googlePlayAuthentication,
 			FirebaseAuthentication firebaseAuthentication,
 			AchievementSystem.AchievementSystem achievementSystem)
 		{
-			this.googlePlayAuthentication = googlePlaySystem;
+			this.googlePlayAuthentication = googlePlayAuthentication;
 			this.firebaseAuthentication = firebaseAuthentication;
 			this.achievementSystem = achievementSystem;
 		}

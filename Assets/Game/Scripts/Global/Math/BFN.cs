@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.VisualScripting;
 using System.Reflection;
+using System.Globalization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -136,7 +137,7 @@ public struct BFN
 	#endregion
 	#region public methods
 
-	public string ToStringPritty() => $"{(exponent > 0 ? Math.Round(coefficient, 3) : Math.Round(coefficient))}{GetExponentNamePritty()}";
+	public string ToStringPritty() => $"{coefficient.ToString("F3", CultureInfo.InvariantCulture)}{GetExponentNamePritty()}";
 
 	public string ToStringPrecise() => $"{coefficient.ToString("G17")}e{exponent.ToString("G17")}";
 

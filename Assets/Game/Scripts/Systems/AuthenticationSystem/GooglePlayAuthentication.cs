@@ -14,26 +14,18 @@ namespace Game.Systems.AuthenticationSystem
 		{
 			var config = new PlayGamesClientConfiguration.Builder()
 			.RequestServerAuthCode(false)//Don't force refresh
-			//.EnableSavedGames()
+			.EnableSavedGames()
 			.Build();
 
 			PlayGamesPlatform.InitializeInstance(config);
+			PlayGamesPlatform.DebugLogEnabled = true;
 			PlayGamesPlatform.Activate();
-			PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
+			PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptAlways,
+			(result) =>
 			{
 				if (result == SignInStatus.Success)
 				{
 					Debug.Log("[GooglePlayServicesAuthentication] User signed in successfully.");
-
-					PlayGamesPlatform.DebugLogEnabled = true;
-
-					//PlayGamesPlatform.Instance.Events.IncrementEvent("YOUR_EVENT_ID", 1);
-
-					//PlayGamesPlatform.Instance.IncrementAchievement("Cfjewijawiu_QA", 5,
-					//(bool success) => {
-					//	// handle success or failure
-					//});
-					//Social.ShowAchievementsUI();
 
 					IsAuthenticated = true;
 				}

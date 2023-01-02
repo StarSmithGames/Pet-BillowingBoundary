@@ -33,14 +33,12 @@ namespace Game.Entities
 
 		private List<SkillProperty> properties = new List<SkillProperty>();
 
-		private SignalBus signalBus;
 		private ClickStarter conveyor;
 		private ISaveLoad saveLoad;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, ClickStarter conveyor, ISaveLoad saveLoad)
+		private void Construct(ClickStarter conveyor, ISaveLoad saveLoad)
 		{
-			this.signalBus = signalBus;
 			this.conveyor = conveyor;
 			this.saveLoad = saveLoad;
 		}
@@ -116,6 +114,8 @@ namespace Game.Entities
 			properties[index].LevelUp();
 
 			onChanged?.Invoke(this);
+
+			signalBus?.Fire<SignalSave>();
 		}
 
 		private void Init()

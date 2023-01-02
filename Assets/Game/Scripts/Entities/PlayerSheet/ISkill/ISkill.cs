@@ -1,3 +1,4 @@
+using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
@@ -32,12 +33,14 @@ namespace Game.Entities
 		protected bool isHasCooldown = true;
 		protected bool isCooldown = false;
 
+		protected SignalBus signalBus;
 		protected Player player;
 		protected LocalizationSystem localizationSystem;
 
 		[Inject]
-		private void Construct(Player player, LocalizationSystem localizationSystem)
+		private void Construct(SignalBus signalBus, Player player, LocalizationSystem localizationSystem)
 		{
+			this.signalBus = signalBus;
 			this.player = player;
 			this.localizationSystem = localizationSystem;
 		}
@@ -89,9 +92,14 @@ namespace Game.Entities
 			return BFN.Zero;
 		}
 
+		/// <summary>
+		/// NOT WORK IN SKILL TODO
+		/// </summary>
 		public void Purchase()
 		{
 			onChanged?.Invoke(this);
+
+			signalBus?.Fire<SignalSave>();
 		}
 
 		protected virtual void ResetSkill()

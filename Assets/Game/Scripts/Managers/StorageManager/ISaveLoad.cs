@@ -34,8 +34,6 @@ namespace Game.Managers.StorageManager
 
 		public void Initialize()
 		{
-			signalBus?.Subscribe<SignalApplicationRequiredSave>(OnApplicationRequiredSave);
-
 			if (activeStorage == null)
 			{
 				Load();
@@ -44,15 +42,11 @@ namespace Game.Managers.StorageManager
 
 		public void Dispose()
 		{
-			signalBus?.Unsubscribe<SignalApplicationRequiredSave>(OnApplicationRequiredSave);
-
 			Save();
 		}
 
 		public void Save()
 		{
-			signalBus?.Fire(new SignalSaveData());
-
 			JsonSerializator.SaveToPlayerPrefs(settings.profileName, activeStorage.Profile.GetJson());
 			JsonSerializator.SaveToPlayerPrefs(settings.dataName, activeStorage.Database.GetJson());
 			PlayerPrefs.Save();
@@ -89,13 +83,6 @@ namespace Game.Managers.StorageManager
 			}
 
 			return activeStorage;
-		}
-
-		private void OnApplicationRequiredSave()
-		{
-			GetStorage().IsWasHere.SetData(true);
-
-			Save();
 		}
 
 		[System.Serializable]

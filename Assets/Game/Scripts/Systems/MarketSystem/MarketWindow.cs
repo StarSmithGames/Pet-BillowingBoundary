@@ -3,6 +3,7 @@ using DG.Tweening;
 using Game.Entities;
 using Game.Managers.AudioManager;
 using Game.Managers.VibrationManager;
+using Game.Systems.ApplicationHandler;
 using Game.UI;
 
 using MoreMountains.NiceVibrations;

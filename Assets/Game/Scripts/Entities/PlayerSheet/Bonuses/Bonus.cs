@@ -28,12 +28,14 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	protected bool isInitialized = false;
 	protected BFN currentCost;
 
+	protected SignalBus signalBus;
 	private ISaveLoad saveLoad;
 	private LocalizationSystem localizationSystem;
 
 	[Inject]
-	private void Construct(ISaveLoad saveLoad, LocalizationSystem localizationSystem)
+	private void Construct(SignalBus signalBus, ISaveLoad saveLoad, LocalizationSystem localizationSystem)
 	{
+		this.signalBus = signalBus;
 		this.saveLoad = saveLoad;
 		this.localizationSystem = localizationSystem;
 	}
@@ -76,6 +78,8 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	public virtual void Purchase()
 	{
 		onChanged?.Invoke(this);
+
+		signalBus?.Fire<SignalSave>();
 	}
 
 	public BFN GetCost()

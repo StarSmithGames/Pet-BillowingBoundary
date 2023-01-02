@@ -1,5 +1,6 @@
 using Game.Entities;
 using Game.Managers.ClickManager;
+using Game.Managers.StorageManager;
 using Game.Systems.CameraSystem;
 using Game.Systems.WaveRoadSystem;
 using Game.UI;
@@ -26,6 +27,8 @@ namespace Game.Installers
 
 		public override void InstallBindings()
 		{
+			Container.BindInterfacesAndSelfTo<SaveHandler>().AsSingle().NonLazy();
+
 			Container.BindInstance(cameraSystem);
 			Container.BindInstance(subCanvas);
 			Container.BindInstance(conveyor);

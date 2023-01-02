@@ -16,38 +16,35 @@ namespace Game.Systems.ApplicationHandler
 		{
 			this.signalBus = signalBus;
 			this.saveLoad = saveLoad;
-		}
 
-		private void Start()
-		{
+			Application.runInBackground = true;
+
 			if (saveLoad.GetStorage().IsWasHere.GetData() == true)
 			{
 				saveLoad.GetStorage().IsFirstTime.SetData(false);
 			}
-
-			Application.runInBackground = true;
 		}
 
 		private void OnDestroy()
 		{
-			signalBus?.Fire(new SignalApplicationRequiredSave());
+			signalBus?.Fire(new SignalSave());
 		}
 
 		private void OnApplicationFocus(bool focus)
 		{
-			signalBus?.Fire(new SignalApplicationRequiredSave());
+			signalBus?.Fire(new SignalSave());
 			signalBus?.Fire(new SignalApplicationFocus() { trigger = focus });
 		}
 
 		private void OnApplicationPause(bool pause)
 		{
-			signalBus?.Fire(new SignalApplicationRequiredSave());
+			signalBus?.Fire(new SignalSave());
 			signalBus?.Fire(new SignalApplicationPause() { trigger = pause });
 		}
 
 		private void OnApplicationQuit()
 		{
-			signalBus?.Fire(new SignalApplicationRequiredSave());
+			signalBus?.Fire(new SignalSave());
 			signalBus?.Fire(new SignalApplicationQuit());
 		}
 	}

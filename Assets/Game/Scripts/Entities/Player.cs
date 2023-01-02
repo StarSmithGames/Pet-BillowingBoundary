@@ -33,14 +33,8 @@ namespace Game.Entities
 		public Targets TargetsDefeat { get; }
 		public Bosses BossesDefeat { get; }
 
-		private SignalBus signalBus;
-		private ISaveLoad saveLoad;
-
-		public Player(SignalBus signalBus, ISaveLoad saveLoad)
+		public Player(ISaveLoad saveLoad)
 		{
-			this.signalBus = signalBus;
-			this.saveLoad = saveLoad;
-
 			PlayerSheet = new PlayerSheet();
 
 			TapGold = new(BFN.Zero);
@@ -72,7 +66,6 @@ namespace Game.Entities
 				BossesDefeat = new(0);
 			}
 
-
 			TapGold.onChanged += OnTapChanged;
 			TapGold.onModifiersChanged += OnTapChanged;
 			TapGoldMultiplier.onChanged += OnTapChanged;
@@ -84,18 +77,11 @@ namespace Game.Entities
 			TapDamage.onModifiersChanged += OnTapChanged;
 			TapCriticalPower.onChanged += OnTapChanged;
 			TapCriticalPower.onModifiersChanged += OnTapChanged;
-
-			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}
 
 		private void OnTapChanged()
 		{
 			onTapChanged?.Invoke();
-		}
-
-		private void OnSaveData()
-		{
-			saveLoad.GetStorage().Profile.GetData().playerData = GetData();
 		}
 
 		public Data GetData()

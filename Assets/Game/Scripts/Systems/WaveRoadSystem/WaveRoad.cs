@@ -61,9 +61,6 @@ namespace Game.Systems.WaveRoadSystem
 				CurrentWave = new Wave(GetWave());
 				UpdateTarget();
 			}
-
-
-			signalBus?.Subscribe<SignalSaveData>(OnSaveData);
 		}
 
 		public void NextTarget()
@@ -130,11 +127,6 @@ namespace Game.Systems.WaveRoadSystem
 			}
 
 			onChanged?.Invoke();
-		}
-
-		private void OnSaveData()
-		{
-			saveLoad.GetStorage().Profile.GetData().waveRoadData = GetData();
 		}
 
 		public Data GetData()
