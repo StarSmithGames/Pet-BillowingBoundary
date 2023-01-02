@@ -1,6 +1,7 @@
 using Game.Entities;
 using Game.HUD;
 using Game.Managers.AsyncManager;
+using Game.Managers.AudioManager;
 
 using System.Collections;
 using UnityEngine;
@@ -13,12 +14,14 @@ namespace Game.Systems.FloatingSystem
 		private FloatingSystem floatingSystem;
 		private AsyncManager asyncManager;
 		private Player player;
+		private AudioManager audioManager;
 
-		public FloatingAwards(FloatingSystem floatingSystem, AsyncManager asyncManager, Player player)
+		public FloatingAwards(FloatingSystem floatingSystem, AsyncManager asyncManager, Player player, AudioManager audioManager)
 		{
 			this.floatingSystem = floatingSystem;
 			this.asyncManager = asyncManager;
 			this.player = player;
+			this.audioManager = audioManager;
 		}
 
 		///Time required 0.05 * count
@@ -30,6 +33,8 @@ namespace Game.Systems.FloatingSystem
 		
 		private IEnumerator Test(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
 		{
+			audioManager.PlayCoinsReward();
+
 			asyncManager.StartCoroutine(LerpGoldTo(player.Gold.CurrentValue + addCoins, count * 0.05f));
 			var wait = new WaitForSeconds(0.05f);
 			for (int i = 0; i < count; i++)

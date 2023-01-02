@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 using Zenject;
@@ -8,7 +10,6 @@ namespace Game.Managers.AudioManager
 	public class AudioManagerInstaller : ScriptableObjectInstaller<AudioManagerInstaller>
 	{
 		public AudioSettings settings;
-		public AudioSource audioSourcePrefab;
 		
 		public override void InstallBindings()
 		{
@@ -17,7 +18,7 @@ namespace Game.Managers.AudioManager
 			Container.BindInstance(settings).WhenInjectedInto<AudioManager>();
 			Container.BindFactory<AudioSource, AudioSource.Factory>()
 				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(2)
-				.FromComponentInNewPrefab(audioSourcePrefab))
+				.FromNewComponentOnNewGameObject())
 				.WhenInjectedInto<AudioManager>();
 			Container.BindInterfacesAndSelfTo<AudioManager>().AsSingle().NonLazy();
 		}
@@ -33,6 +34,10 @@ namespace Game.Managers.AudioManager
 		public AudioClip bossDefeated;
 		public AudioClip targetDefeated;
 		public AudioClip coinsReward;
+		[Space]
+		public List<AudioClip> hits = new List<AudioClip>();
+		public AudioClip goldLamaHit;
+
 		[Header("Music")]
 		public AudioClip background;
 	}

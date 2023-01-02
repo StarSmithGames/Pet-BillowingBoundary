@@ -41,6 +41,11 @@ namespace Game.Managers.AudioManager
 			PlaySoundOnce(settings.buttonClick);
 		}
 
+		public void PlayTargetDefeated()
+		{
+			PlaySoundOnce(settings.targetDefeated);
+		}
+
 		public void PlayBossDefeated()
 		{
 			PlaySoundOnce(settings.bossDefeated);
@@ -49,6 +54,16 @@ namespace Game.Managers.AudioManager
 		public void PlayCoinsReward()
 		{
 			PlaySoundOnce(settings.coinsReward);
+		}
+
+		public void PlayHit()
+		{
+			PlaySoundOnce(settings.hits.RandomItem());
+		}
+
+		public void PlayGoldHit()
+		{
+			PlaySoundOnce(settings.goldLamaHit);
 		}
 
 		private void PlaySoundOnce(AudioClip clip)

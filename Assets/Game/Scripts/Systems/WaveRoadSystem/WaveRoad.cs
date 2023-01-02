@@ -3,11 +3,7 @@ using Game.Managers.AudioManager;
 using Game.Managers.ClickManager;
 using Game.Managers.StorageManager;
 using Game.Managers.VibrationManager;
-
-using System.Collections;
 using System.Collections.Generic;
-
-using UnityEngine;
 using UnityEngine.Events;
 
 using Zenject;
@@ -127,6 +123,7 @@ namespace Game.Systems.WaveRoadSystem
 			}
 			else//target defeated
 			{
+				audioManager.PlayTargetDefeated();
 				vibrationManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.LightImpact);
 
 				CurrentWave.MiddleTargetsBar.CurrentValue++;

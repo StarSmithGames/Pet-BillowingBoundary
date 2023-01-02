@@ -2,6 +2,7 @@ using DG.Tweening;
 
 using Game.Entities;
 using Game.HUD;
+using Game.Managers.AudioManager;
 using Game.Managers.GameManager;
 using Game.Managers.VibrationManager;
 using Game.Systems.CameraSystem;
@@ -37,6 +38,7 @@ namespace Game.Managers.ClickManager
 		private TargetHandler targetHandler;
 		private FloatingSystem floatingSystem;
 		private CameraSystem cameraSystem;
+		private AudioManager.AudioManager audioManager;
 		private VibrationManager.VibrationManager vibrationManager;
 
 		[Inject]
@@ -46,6 +48,7 @@ namespace Game.Managers.ClickManager
 			TargetHandler targetHandler,
 			FloatingSystem floatingTextSystem,
 			CameraSystem cameraSystem,
+			AudioManager.AudioManager audioManager,
 			VibrationManager.VibrationManager vibrationManager)
 		{
 			this.signalBus = signalBus;
@@ -53,6 +56,7 @@ namespace Game.Managers.ClickManager
 			this.targetHandler = targetHandler;
 			this.floatingSystem = floatingTextSystem;
 			this.cameraSystem = cameraSystem;
+			this.audioManager = audioManager;
 			this.vibrationManager = vibrationManager;
 		}
 
@@ -91,6 +95,7 @@ namespace Game.Managers.ClickManager
 				{
 
 					//Coins
+					bool isGoldChance = false;
 					BFN totalGoldForPunch = BFN.Zero;
 
 					if (Random.value <= player.TapGoldChance.TotalValue)//isGoldChance
@@ -101,6 +106,8 @@ namespace Game.Managers.ClickManager
 						{
 							totalGoldForPunch += clickable.GetCoinsOnPunch();
 						}
+
+						isGoldChance = true;
 					}
 					else
 					{
@@ -139,6 +146,14 @@ namespace Game.Managers.ClickManager
 					}
 
 					//Hit
+					if (isGoldChance)
+					{
+						audioManager.PlayGoldHit();
+					}
+					else
+					{
+						audioManager.PlayHit();
+					}
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();

@@ -1,11 +1,26 @@
+using Unity.VisualScripting;
+
 using UnityEngine;
 using Zenject;
 
 namespace Game.Managers.AudioManager
 {
+	[RequireComponent(typeof(UnityEngine.AudioSource))]
 	public class AudioSource : PoolableObject
 	{
-		[SerializeField] private UnityEngine.AudioSource source;
+		private UnityEngine.AudioSource Source
+		{
+			get
+			{
+				if(source == null)
+				{
+					source = gameObject.AddComponent<UnityEngine.AudioSource>();
+				}
+
+				return source;
+			}
+		}
+		private UnityEngine.AudioSource source;
 
 		public bool isPlaying { get; private set; } = false;
 
@@ -33,15 +48,15 @@ namespace Game.Managers.AudioManager
 
 		public void Mute(bool trigger)
 		{
-			source.mute = trigger;
+			Source.mute = trigger;
 		}
 
 		public void PlayLoop(AudioClip clip)
 		{
-			source.loop = true;
+			Source.loop = true;
 
-			source.clip = clip;
-			source.Play();
+			Source.clip = clip;
+			Source.Play();
 
 			isLoop = true;
 		}
@@ -50,10 +65,10 @@ namespace Game.Managers.AudioManager
 		{
 			isLoop = false;
 
-			source.loop = false;
+			Source.loop = false;
 
 			playTime = clip.length;
-			source.PlayOneShot(clip);
+			Source.PlayOneShot(clip);
 			isPlaying = true;
 
 			OnPlayingChanged(isPlaying);
