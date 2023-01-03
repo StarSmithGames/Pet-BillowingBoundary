@@ -208,7 +208,7 @@ namespace Game.Systems.WaveRoadSystem
 				return WaveTargets[(int)MiddleTargetsBar.CurrentValue % WaveTargets.Count];
 			}
 
-			return WaveTargets.RandomItem();
+			return WaveTargets.RandomItem(except: CurrentTarget);
 		}
 
 		private TargetData GetBoss()

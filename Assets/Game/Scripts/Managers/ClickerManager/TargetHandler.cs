@@ -101,7 +101,6 @@ namespace Game.Managers.ClickManager
 					obj.onDead -= OnTargetDead;
 					obj.Enable(false);
 					obj.transform.SetParent(null);
-					obj.transform.localScale = Vector3.one;
 					obj.Refresh();
 				}
 			}

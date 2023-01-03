@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class CollectionExtensions
 {
@@ -7,6 +8,14 @@ public static class CollectionExtensions
 	{
 		if (list.Count == 0) return default;
 		return list[UnityEngine.Random.Range(from, to == -1 ? list.Count : to)];
+	}
+
+	public static T RandomItem<T>(this IList<T> list, int from = 0, int to = -1, params T[] except)
+	{
+		if (list.Count == 0) return default;
+
+		var check = list.Except(except).ToList();
+		return check[UnityEngine.Random.Range(from, to == -1 ? check.Count : to)];
 	}
 
 	public static List<T> Shuffle<T>(this IList<T> list)

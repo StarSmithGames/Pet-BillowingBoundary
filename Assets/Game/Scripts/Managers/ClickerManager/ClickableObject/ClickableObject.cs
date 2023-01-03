@@ -104,6 +104,8 @@ namespace Game.Managers.ClickManager
 
 		public void Refresh()
 		{
+			transform.DOKill(true);
+			transform.localScale = Vector3.one;
 			transform.eulerAngles = startRotation;
 			sheet.HealthPointsBar.CurrentValue = sheet.HealthPointsBar.MaxValue;
 			isDead = false;
