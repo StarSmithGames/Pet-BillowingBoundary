@@ -24,11 +24,6 @@ namespace Game.Systems.ApplicationHandler
 			Application.runInBackground = true;
 		}
 
-		private void OnDestroy()
-		{
-			signalBus?.Fire(new SignalSave());
-		}
-
 		private void OnApplicationFocus(bool focus)
 		{
 			signalBus?.Fire(new SignalSave());
