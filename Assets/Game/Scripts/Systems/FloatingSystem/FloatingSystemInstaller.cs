@@ -15,6 +15,7 @@ namespace Game.Systems.FloatingSystem
 		public FloatingTextUI floatingText2DPrefab;
 		public FloatingCoin2D floatingCoin2DPrefab;
 		public FloatingCoin3D floatingCoin3DPrefab;
+		public FloatingCandy3D floatingCandy3DPrefab;
 
 		public override void InstallBindings()
 		{
@@ -47,6 +48,12 @@ namespace Game.Systems.FloatingSystem
 				.BindFactory<FloatingCoin3D, FloatingCoin3D.Factory>()
 				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(10)
 				.FromComponentInNewPrefab(floatingCoin3DPrefab))
+				.WhenInjectedInto<FloatingSystem>();
+
+			Container
+				.BindFactory<FloatingCandy3D, FloatingCandy3D.Factory>()
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(10)
+				.FromComponentInNewPrefab(floatingCandy3DPrefab))
 				.WhenInjectedInto<FloatingSystem>();
 		}
 	}

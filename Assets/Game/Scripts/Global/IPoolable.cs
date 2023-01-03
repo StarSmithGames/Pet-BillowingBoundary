@@ -13,7 +13,7 @@ public abstract class PoolableObject : MonoBehaviour, IPoolable
 	public IMemoryPool Pool { get => pool; protected set => pool = value; }
 	private IMemoryPool pool;
 
-	public void DespawnIt()
+	public virtual void DespawnIt()
 	{
 		pool?.Despawn(this);
 	}

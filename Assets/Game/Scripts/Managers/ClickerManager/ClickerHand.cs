@@ -123,7 +123,7 @@ namespace Game.Managers.ClickManager
 						goldCount.CurrentValue += totalGoldForPunch;
 
 						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch.ToStringPritty()}", color: Color.yellow, type: AnimationType.BasicDamage);
-						floatingSystem.CreateCoin3D(clickable.GetRandomPoint().position);
+						floatingSystem.Create3D(clickable.GetRandomPoint().position, true);
 						UIGoldHUD.Instance.Punch();
 					}
 
@@ -154,6 +154,7 @@ namespace Game.Managers.ClickManager
 					{
 						audioManager.PlayHit();
 					}
+					floatingSystem.Create3D(clickable.GetRandomPoint().position, false);
 					clickable.GetRandomParticle().Play();
 					clickable.SmallPunch();
 					cameraSystem.SmallestShake();

@@ -13,18 +13,21 @@ namespace Game.Systems.FloatingSystem
 		private FloatingTextUI.Factory floatingTextUIFactory;
 		private FloatingCoin2D.Factory floatingCoin2DFactory;
 		private FloatingCoin3D.Factory floatingCoin3DFactory;
+		private FloatingCandy3D.Factory floatingCandy3DFactory;
 
 		private FloatingSystem(CameraSystem.CameraSystem cameraSystem,
 			FloatingText.Factory floatingTextFactory,
 			FloatingTextUI.Factory floatingTextUIFactory,
 			FloatingCoin2D.Factory floatingCoin2DFactory,
-			FloatingCoin3D.Factory floatingCoin3DFactory)
+			FloatingCoin3D.Factory floatingCoin3DFactory,
+			FloatingCandy3D.Factory floatingCandy3DFactory)
 		{
 			this.cameraSystem = cameraSystem;
 			this.floatingTextFactory = floatingTextFactory;
 			this.floatingTextUIFactory = floatingTextUIFactory;
 			this.floatingCoin2DFactory = floatingCoin2DFactory;
 			this.floatingCoin3DFactory = floatingCoin3DFactory;
+			this.floatingCandy3DFactory = floatingCandy3DFactory;
 		}
 
 		public void CreateText(Vector3 position, string text, Color? color = null, AnimationType type = AnimationType.BasicDamage)
@@ -65,26 +68,37 @@ namespace Game.Systems.FloatingSystem
 			}
 		}
 
-		public void CreateCoin3D(Vector3 position)
+		public void Create3D(Vector3 position, bool isCoin)
 		{
 			Sequence sequence = DOTween.Sequence();
 
 			var obj = Create();
 
+			Vector3 force = isCoin ?
+				new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0.2f, 0.7f), 0) * Random.Range(300f, 800f) :
+				new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0) * Random.Range(300f, 800f);
+
 			sequence
-				.AppendCallback(() => obj.Rigidbody.AddForce(new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0.2f, 0.7f), 0) * Random.Range(300f, 800f)))
-				.AppendInterval(0.5f)
-				.Append(obj.Fade(0, 0.25f))
+				.AppendCallback(() => obj.Rigidbody.AddForce(force))
+				.AppendInterval(Random.Range(0.5f, 1f))
 				.OnComplete(obj.DespawnIt);
 
-			FloatingCoin3D Create()
+			Floating3D Create()
 			{
-				var item = floatingCoin3DFactory.Create();
-				item.SetFade(1f);
-				item.transform.position = position;
-				item.StartRotate();
+				Floating3D item3D = null;
 
-				return item;
+				if (isCoin)
+				{
+					item3D = floatingCoin3DFactory.Create();
+				}
+				else
+				{
+					item3D = floatingCandy3DFactory.Create();
+				}
+
+				item3D.transform.position = position;
+
+				return item3D;
 			}
 		}
 

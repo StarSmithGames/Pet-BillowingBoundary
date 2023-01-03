@@ -16,3 +16,4 @@ MonoBehaviour:
   floatingText2DPrefab: {fileID: 7179112676425028238, guid: fe9b5d873f63dc04686aec1f9bebc1ea, type: 3}
   floatingCoin2DPrefab: {fileID: 4661443261204356123, guid: e640a9699c207c14c9e7c4a1097b39f5, type: 3}
   floatingCoin3DPrefab: {fileID: 3079281889615683578, guid: b2ae866cbd6151e4fa946a0c40669417, type: 3}
+  floatingCandy3DPrefab: {fileID: 5424254408982890347, guid: 89ad350b05c6ba746915e185b777b21e, type: 3}
