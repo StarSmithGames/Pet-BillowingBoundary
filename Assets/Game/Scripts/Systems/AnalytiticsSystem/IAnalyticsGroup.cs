@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.Analytics;
 
 namespace Game.Systems.AnalyticsSystem
 {
@@ -85,6 +86,19 @@ namespace Game.Systems.AnalyticsSystem
 		private Dictionary<string, string> IntoStringDictionary(Dictionary<string, object> parameters)
 		{
 			return parameters.ToDictionary(x => x.Key, x => x.Value.ToString());
+		}
+	}
+
+	public class UnityAnalyticsGroup : IAnalyticsGroup
+	{
+		public void LogEvent(string id)
+		{
+			Analytics.CustomEvent(id);
+		}
+
+		public void LogEvent(string id, Dictionary<string, object> parameters)
+		{
+			Analytics.CustomEvent(id, parameters);
 		}
 	}
 }

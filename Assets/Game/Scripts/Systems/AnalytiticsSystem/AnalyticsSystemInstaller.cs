@@ -11,6 +11,7 @@ namespace Game.Systems.AnalyticsSystem
 		{
 			Container.BindInterfacesAndSelfTo<AmplitudeAnalyticsGroup>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<FirebaseAnalyticsGroup>().AsSingle().NonLazy();
+			Container.BindInterfacesAndSelfTo<UnityAnalyticsGroup>().AsSingle().NonLazy();
 			Container.BindInterfacesAndSelfTo<AnalyticsSystem>().AsSingle().NonLazy();
 		}
 	}
