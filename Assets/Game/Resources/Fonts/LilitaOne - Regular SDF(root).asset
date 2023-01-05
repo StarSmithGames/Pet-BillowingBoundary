@@ -117,9 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: LilitaOne - Regular SDF(root)
   m_EditorClassIdentifier: 
-  hashCode: 899062839
+  hashCode: -136330736
   material: {fileID: -2237749729835323621}
-  materialHashCode: -389754185
+  materialHashCode: -213035088
   m_Version: 1.1.0
   m_SourceFontFileGUID: 7f47410f368bf40f4b4be4929906c9c9
   m_SourceFontFile_EditorRef: {fileID: 0}
@@ -2670,7 +2670,7 @@ MonoBehaviour:
     m_GlyphPairAdjustmentRecords: []
   fallbackFontAssets: []
   m_FallbackFontAssetTable:
-  - {fileID: 11400000, guid: 1d96b18155920fb4f935983a7eaf7a97, type: 2}
+  - {fileID: 11400000, guid: 1e1dc96c74da77748811c345c98aef3b, type: 2}
   - {fileID: 11400000, guid: 59d7a5bd7ce421f49a99143d7340e28f, type: 2}
   - {fileID: 11400000, guid: b48dbae389fb39d49820d967e6ed890c, type: 2}
   m_CreationSettings:
