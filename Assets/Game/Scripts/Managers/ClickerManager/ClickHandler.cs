@@ -1,5 +1,6 @@
 using Game.Entities;
 using Game.Managers.VibrationManager;
+using Game.Systems.AchievementSystem;
 
 using System;
 using System.Collections;
@@ -18,23 +19,35 @@ namespace Game.Managers.ClickManager
 		public UnityAction onTouchEnded;
 
 		private int maxTapCount = 0;
+		private int tapsInSecond = 0;
+		private int criticalTapsInSecond = 0;
+		private float t = 0;
 
 		private Taps taps;
+		private Taps criticalTaps;
 
 		private SignalBus signalBus;
 		private Player player;
 		private GameManager.GameManager gameManager;
+		private AchievementSystem achievementSystem;
 
-		public ClickHandler(SignalBus signalBus, Player player, GameManager.GameManager gameManager)
+		public ClickHandler(SignalBus signalBus,
+			Player player,
+			GameManager.GameManager gameManager,
+			AchievementSystem achievementSystem)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
 			this.gameManager = gameManager;
+			this.achievementSystem = achievementSystem;
 		}
 
 		public void Initialize()
 		{
 			taps = player.Taps;
+			criticalTaps = player.CriticalTaps;
+
+			criticalTaps.onChanged += OnCriticalTapsChanged;
 		}
 
 		public void Tick()
@@ -59,6 +72,7 @@ namespace Game.Managers.ClickManager
 					if (touch.phase == TouchPhase.Began)
 					{
 						taps.CurrentValue++;
+						tapsInSecond++;
 
 						signalBus.Fire(new SignalTouchChanged()
 						{
@@ -74,11 +88,30 @@ namespace Game.Managers.ClickManager
 						});
 					}
 
-					if (touch.tapCount > maxTapCount)
-					{
-						maxTapCount = touch.tapCount;
-					}
+					//if (touch.tapCount > maxTapCount)
+					//{
+					//	maxTapCount = touch.tapCount;
+					//}
 				}
+			}
+
+			t += Time.deltaTime;
+
+			if (t >= 1f)
+			{
+				if(tapsInSecond >= 12)
+				{
+					achievementSystem.Achive_achievement_rapid_fire();
+				}
+
+				if(criticalTapsInSecond >= 2)
+				{
+					achievementSystem.Achive_achievement_monster();
+				}
+
+				t = 0;
+				tapsInSecond = 0;
+				criticalTapsInSecond = 0;
 			}
 		}
 
@@ -89,6 +122,11 @@ namespace Game.Managers.ClickManager
 			List<RaycastResult> results = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 			return results.Count > 0;
+		}
+
+		private void OnCriticalTapsChanged()
+		{
+			criticalTapsInSecond++;
 		}
 	}
 }

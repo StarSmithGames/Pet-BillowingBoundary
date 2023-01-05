@@ -20,9 +20,12 @@ namespace Game.Systems.AchievementSystem
 		{
 			if (!googlePlaySystem.IsAuthenticated) return;
 
-			Social.ReportProgress(id, progress, callback);
+			Social.ReportProgress(id, progress, (result) =>
+			{
+				analyticsSystem.LogEvent_achievment_get(id);
 
-			analyticsSystem.LogEvent_achievment_get(id);
+				callback?.Invoke(result);
+			});
 		}
 
 		public void UnlockAchievement(string id, Action<bool> callback)

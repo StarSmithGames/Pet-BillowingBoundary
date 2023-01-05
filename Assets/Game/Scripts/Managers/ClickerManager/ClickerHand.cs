@@ -139,6 +139,8 @@ namespace Game.Managers.ClickManager
 
 						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"CRIT", color: Color.red, type: AnimationType.BasicDamage);
 						//floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{totalDamageForPunch.ToStringPritty()}", color: Color.red, type: AnimationType.AdvanceDamage);
+
+						player.CriticalTaps.CurrentValue++;
 					}
 					else
 					{

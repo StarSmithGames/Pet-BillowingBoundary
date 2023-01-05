@@ -1,4 +1,5 @@
 using Game.Managers.StorageManager;
+using Game.Systems.AchievementSystem;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Game.Entities
 		public PlayerSheet PlayerSheet { get; }
 
 		public Taps Taps { get; }
+		public Taps CriticalTaps { get; }
 		public TapDamage TapDamage { get; }
 		public TapCriticalPower TapCriticalPower { get; }
 		public TapCriticalChance TapCriticalChance { get; }
@@ -33,15 +35,22 @@ namespace Game.Entities
 		public Targets TargetsDefeat { get; }
 		public Bosses BossesDefeat { get; }
 
-		public Player(ISaveLoad saveLoad)
+		private BFN M = BFN.Million;
+		private BFN B = BFN.Billion;
+		private BFN T = BFN.Trillion;
+
+		private AchievementSystem achievementSystem;
+
+		public Player(ISaveLoad saveLoad, AchievementSystem achievementSystem)
 		{
+			this.achievementSystem = achievementSystem;
+
 			PlayerSheet = new PlayerSheet();
 
 			TapGold = new(BFN.Zero);
 			TapGoldMultiplier = new(1f);
 			TapGoldChance = new(0f);
 
-			Taps = new(0);
 			TapDamage = new(BFN.One);
 			TapCriticalPower = new(1f);
 			TapCriticalChance = new(0f);
@@ -55,16 +64,26 @@ namespace Game.Entities
 
 				Gold = new(data.gold.compressed);
 
+				Taps = new(data.tapsCount);
+				CriticalTaps = new(data.criticalTapsCount);
+
 				TargetsDefeat = new(data.targetsDefeat);
 				BossesDefeat = new(data.bossesDefeat);
 			}
 			else//first time
 			{
-				Gold = new(new BFN(100000, 0).compressed);
+				Gold = new(BFN.Zero);
+
+				Taps = new(0);
+				CriticalTaps = new(0);
 
 				TargetsDefeat = new(0);
 				BossesDefeat = new(0);
 			}
+
+			Gold.onChanged += OnGoldChanged;
+
+			Taps.onChanged += OnTapsChanged;
 
 			TapGold.onChanged += OnTapChanged;
 			TapGold.onModifiersChanged += OnTapChanged;
@@ -77,11 +96,53 @@ namespace Game.Entities
 			TapDamage.onModifiersChanged += OnTapChanged;
 			TapCriticalPower.onChanged += OnTapChanged;
 			TapCriticalPower.onModifiersChanged += OnTapChanged;
+
+			TargetsDefeat.onChanged += OnTargetsDefeated;
+		}
+
+		private void OnGoldChanged()
+		{
+			if (Gold.CurrentValue >= T)
+			{
+				achievementSystem.Achive_achievement_the_richest_man_on_the_planet();
+			}
+			else if(Gold.CurrentValue >= B)
+			{
+				achievementSystem.Achive_achievement_iam_a_rich_now();
+			}
+			else if(Gold.CurrentValue >= M)
+			{
+				achievementSystem.Achive_achievement_oh_wow_okay();
+			}
+		}
+
+		private void OnTapsChanged()
+		{
+			if(Taps.CurrentValue == 100)
+			{
+				achievementSystem.Achive_achievement_100_times();
+			}
+			else if(Taps.CurrentValue == 1000)
+			{
+				achievementSystem.Achive_achievement_1000_times();
+			}
+			else if(Taps.CurrentValue == 10000)
+			{
+				achievementSystem.Achive_achievement_10000_times();
+			}
 		}
 
 		private void OnTapChanged()
 		{
 			onTapChanged?.Invoke();
+		}
+
+		private void OnTargetsDefeated()
+		{
+			if(TargetsDefeat.CurrentValue == 100)
+			{
+				achievementSystem.Achive_achievement_overkill();
+			}
 		}
 
 		public Data GetData()
@@ -91,6 +152,7 @@ namespace Game.Entities
 				gold = Gold.CurrentValue,
 
 				tapsCount = Taps.CurrentValue,
+				criticalTapsCount = CriticalTaps.CurrentValue,
 				targetsDefeat = TargetsDefeat.CurrentValue,
 				bossesDefeat = BossesDefeat.CurrentValue,
 
@@ -105,6 +167,7 @@ namespace Game.Entities
 			public BFN gold;
 
 			public int tapsCount;
+			public int criticalTapsCount;
 			public int targetsDefeat;
 			public int bossesDefeat;
 
