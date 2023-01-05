@@ -27,7 +27,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2181301600325632
-    m_Localized: Oops!
+    m_Localized: Ooops!
     m_Metadata:
       m_Items: []
   - m_Id: 2181524800212992
@@ -69,7 +69,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 754601083604993
-    m_Localized: "Aumenta le tue possibilit\xE0 di infliggere danni critici.\r\nLa
+    m_Localized: "Aumenta le tue possibilit\xE0 di infliggere danni critici.\nLa
       probabilit\xE0 ora \xE8 del {0}%."
     m_Metadata:
       m_Items: []
