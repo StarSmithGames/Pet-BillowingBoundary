@@ -15,6 +15,29 @@ namespace Game.Systems.AnalyticsSystem
 		void LogEvent(string id, Dictionary<string, object> parameters);
 	}
 
+	public class AmplitudeAnalyticsGroup : IAnalyticsGroup
+	{
+		private Amplitude instance;
+
+		public AmplitudeAnalyticsGroup()
+		{
+			instance = Amplitude.Instance;
+			instance.logging = true;
+			instance.trackSessionEvents(true);
+			instance.init("9b8603d0a7aac332ca6873cc1490f51a");
+		}
+
+		public void LogEvent(string id)
+		{
+			instance.logEvent(id);
+		}
+
+		public void LogEvent(string id, Dictionary<string, object> parameters)
+		{
+			instance.logEvent(id, parameters);
+		}
+	}
+
 	public class FirebaseAnalyticsGroup : IAnalyticsGroup
 	{
 		public bool IsInitialized { get; private set; } = false;

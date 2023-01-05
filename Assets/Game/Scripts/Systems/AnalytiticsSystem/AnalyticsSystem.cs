@@ -6,12 +6,15 @@ namespace Game.Systems.AnalyticsSystem
 {
 	public class AnalyticsSystem
 	{
-
+		private AmplitudeAnalyticsGroup amplitudeAnalyticsGroup;
 		private FirebaseAnalyticsGroup firebaseAnalyticsGroup;
 		private ISaveLoad saveLoad;
 
-		public AnalyticsSystem(FirebaseAnalyticsGroup firebaseAnalyticsGroup, ISaveLoad saveLoad)
+		public AnalyticsSystem(
+			AmplitudeAnalyticsGroup amplitudeAnalyticsGroup,
+			FirebaseAnalyticsGroup firebaseAnalyticsGroup, ISaveLoad saveLoad)
 		{
+			this.amplitudeAnalyticsGroup = amplitudeAnalyticsGroup;
 			this.firebaseAnalyticsGroup = firebaseAnalyticsGroup;
 			this.saveLoad = saveLoad;
 		}
@@ -157,10 +160,12 @@ namespace Game.Systems.AnalyticsSystem
 
 			if (parameters == null)
 			{
+				amplitudeAnalyticsGroup.LogEvent(id);
 				firebaseAnalyticsGroup.LogEvent(id);
 			}
 			else
 			{
+				amplitudeAnalyticsGroup.LogEvent(id, parameters);
 				firebaseAnalyticsGroup.LogEvent(id, parameters);
 			}
 		}

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AdSystemInstaller
   m_EditorClassIdentifier: 
   appId: 17f0b51a5
-  isDebug: 1
+  isDebug: 0
