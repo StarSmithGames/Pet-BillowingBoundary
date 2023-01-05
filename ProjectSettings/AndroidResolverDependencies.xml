@@ -23,7 +23,7 @@
     <package>com.ironsource.adapters:unityadsadapter:4.3.24</package>
     <package>com.ironsource.adapters:vungleadapter:4.3.18</package>
     <package>com.ironsource.sdk:mediationsdk:7.2.6</package>
-    <package>com.squareup.okhttp3:okhttp:4.2.2</package>
+    <package>com.squareup.okhttp3:okhttp:3.12</package>
     <package>com.tapjoy:tapjoy-android-sdk:12.11.0</package>
     <package>com.unity3d.ads:unity-ads:4.4.1</package>
     <package>com.vungle:publisher-sdk-android:6.12.0</package>
@@ -137,8 +137,8 @@
     <file>Assets/Plugins/Android/com.ironsource.adapters.unityadsadapter-4.3.24.aar</file>
     <file>Assets/Plugins/Android/com.ironsource.adapters.vungleadapter-4.3.18.aar</file>
     <file>Assets/Plugins/Android/com.ironsource.sdk.mediationsdk-7.2.6.aar</file>
-    <file>Assets/Plugins/Android/com.squareup.okhttp3.okhttp-4.2.2.jar</file>
-    <file>Assets/Plugins/Android/com.squareup.okio.okio-2.2.2.jar</file>
+    <file>Assets/Plugins/Android/com.squareup.okhttp3.okhttp-3.14.9.jar</file>
+    <file>Assets/Plugins/Android/com.squareup.okio.okio-1.17.3.jar</file>
     <file>Assets/Plugins/Android/com.tapjoy.tapjoy-android-sdk-12.11.0.aar</file>
     <file>Assets/Plugins/Android/com.unity3d.ads.unity-ads-4.4.1.aar</file>
     <file>Assets/Plugins/Android/com.vungle.publisher-sdk-android-6.12.0.aar</file>

@@ -10,7 +10,7 @@
       </repositories>
     </androidPackage>
 
-    <androidPackage spec="com.squareup.okhttp3:okhttp:4.2.2">
+    <androidPackage spec="com.squareup.okhttp3:okhttp:3.12">
       <repositories>
         <repository>https://maven.google.com</repository>
       </repositories>
