@@ -165,7 +165,7 @@ namespace Game.Systems.FloatingSystem
 				case AnimationType.AddGold:
 				{
 					Sequence sequence = DOTween.Sequence();
-					position.y -= 100;
+					position.y -= Random.Range(50, 125);
 					sequence
 						.Append(floatingObject.transform.DOMove(position, 0.5f).SetEase(Ease.OutQuint))
 						.Append(floatingObject.Fade(0f, 0.7f))

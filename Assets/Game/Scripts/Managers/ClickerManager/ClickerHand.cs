@@ -122,9 +122,10 @@ namespace Game.Managers.ClickManager
 						totalGoldForPunch.Compress();
 						goldCount.CurrentValue += totalGoldForPunch;
 
-						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch.ToStringPritty()}", color: Color.yellow, type: AnimationType.BasicDamage);
-						floatingSystem.Create3D(clickable.GetRandomPoint().position, true);
+						//floatingSystem.CreateText(clickable.GetRandomPoint().position, $"+{totalGoldForPunch.ToStringPritty()}", color: Color.yellow, type: AnimationType.BasicDamage);
+						floatingSystem.CreateTextUI(UIGoldHUD.Instance.Count.transform.position, $"+{totalGoldForPunch.ToStringPritty()}", Color.yellow, AnimationType.AddGold);
 						UIGoldHUD.Instance.Punch();
+						floatingSystem.Create3D(clickable.GetRandomPoint().position, true);
 					}
 
 
@@ -137,12 +138,12 @@ namespace Game.Managers.ClickManager
 						hpClickable.CurrentValue -= totalDamageForPunch;
 
 						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"CRIT", color: Color.red, type: AnimationType.BasicDamage);
-						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{totalDamageForPunch.ToStringPritty()}", color: Color.red, type: AnimationType.AdvanceDamage);
+						//floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{totalDamageForPunch.ToStringPritty()}", color: Color.red, type: AnimationType.AdvanceDamage);
 					}
 					else
 					{
 						hpClickable.CurrentValue -= damageForPunch;
-						floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{damageForPunch.ToStringPritty()}", color: Color.red, type: AnimationType.BasicDamage);
+						//floatingSystem.CreateText(clickable.GetRandomPoint().position, $"-{damageForPunch.ToStringPritty()}", color: Color.red, type: AnimationType.BasicDamage);
 					}
 
 					//Hit

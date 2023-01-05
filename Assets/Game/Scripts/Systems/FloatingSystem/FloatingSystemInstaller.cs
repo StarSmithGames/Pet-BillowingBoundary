@@ -25,14 +25,14 @@ namespace Game.Systems.FloatingSystem
 
 			Container
 				.BindFactory<FloatingText, FloatingText.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(12)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(1)
 				.FromComponentInNewPrefab(floatingTextPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
 
 			Container
 				.BindFactory<FloatingTextUI, FloatingTextUI.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(1)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(2)
 				.FromComponentInNewPrefab(floatingText2DPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
