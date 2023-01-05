@@ -95,12 +95,28 @@ MonoBehaviour:
     m_Key: ui.skill.fire_fist.power
     m_Metadata:
       m_Items: []
+  - m_Id: 5097494824947712
+    m_Key: ui.achievements.tap_hundred.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494850113536
+    m_Key: ui.achievements.tap_hundred.description
+    m_Metadata:
+      m_Items: []
   - m_Id: 2181301654851584
     m_Key: ui.achievements.tap_thousand.title
     m_Metadata:
       m_Items: []
   - m_Id: 2181301654851585
     m_Key: ui.achievements.tap_thousand.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494850113537
+    m_Key: ui.achievements.tap_ten_thousand.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494850113538
+    m_Key: ui.achievements.tap_ten_thousand.description
     m_Metadata:
       m_Items: []
   - m_Id: 2181301654851586

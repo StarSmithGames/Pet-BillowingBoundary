@@ -46,7 +46,7 @@ MonoBehaviour:
     m_Localized: 'Tap Damage.
 
       You deal this much damage every time you tap
-      on monster.
+      on targets.
 
       Get more Tap Damage by leveling up.'
     m_Metadata:
@@ -117,7 +117,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2181301654851592
-    m_Localized: It's Okay.
+    m_Localized: Oh Wow, Okay.
     m_Metadata:
       m_Items: []
   - m_Id: 2181301654851593
@@ -149,7 +149,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2231996227588096
-    m_Localized: First skill.
+    m_Localized: "Grants additional fire power for a certain amount of time. \nFor
+      more time, increase the duration of the skill"
     m_Metadata:
       m_Items: []
   - m_Id: 2231996227588097
@@ -162,6 +163,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 2231996227588099
     m_Localized: Increase the power of skill tap on <color=red>x{0}</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494824947712
+    m_Localized: 100 times!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494850113536
+    m_Localized: Tap 100 times.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494850113537
+    m_Localized: 10000 times!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5097494850113538
+    m_Localized: Tap 10000 times. Incredible!
     m_Metadata:
       m_Items: []
   references:

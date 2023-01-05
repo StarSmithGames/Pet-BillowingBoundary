@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Google Sheets Service
   m_EditorClassIdentifier: 
   m_ApiKey: 
-  m_ClientId: 146215063275-cju15tu7i486u05aj3i6qag79pr10c22.apps.googleusercontent.com
-  m_ClientSecret: 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
+  m_ClientId: 146215063275-2k9onp7ngf5bsf380grb8bu3o4c7pcm2.apps.googleusercontent.com
+  m_ClientSecret: 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
   m_AuthenticationType: 1
   m_ApplicationName: Clicker
   m_NewSheetProperties:

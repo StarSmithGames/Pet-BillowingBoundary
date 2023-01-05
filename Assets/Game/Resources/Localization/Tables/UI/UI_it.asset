@@ -22,6 +22,86 @@ MonoBehaviour:
     m_Localized: Negozio
     m_Metadata:
       m_Items: []
+  - m_Id: 30908304920576
+    m_Localized: Ricompensa giornaliera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301600325632
+    m_Localized: Oops!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181524800212992
+    m_Localized: Non hai ancora sbloccato questo bonus.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920577
+    m_Localized: Migliorare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920578
+    m_Localized: Acquistare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908309114880
+    m_Localized: Ottenere
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845750177792
+    m_Localized: Muda Muda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149312
+    m_Localized: "Forza d'impatto.\r\nInfliggi questa quantit\xE0 di danno quando
+      colpisci\r\nobiettivi. Per aumentare, aumentare il livello."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149313
+    m_Localized: "Pi\xF9 oro!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149314
+    m_Localized: "Aumenta la possibilit\xE0 che una moneta cada con un solo tocco.\nPossibilit\xE0
+      ora {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604992
+    m_Localized: "Probabilit\xE0 di colpo critico"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604993
+    m_Localized: "Aumenta le tue possibilit\xE0 di infliggere danni critici.\r\nLa
+      probabilit\xE0 ora \xE8 del {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659200
+    m_Localized: Potenza del colpo critico
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659201
+    m_Localized: Aumenta il danno critico di x{0}.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996198227968
+    m_Localized: <color=orange>Pugno di Fuoco</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588096
+    m_Localized: "Fornisce potenza di fuoco aggiuntiva per un certo periodo di tempo.
+      \nPer ottenere pi\xF9 tempo, aumenta la durata dell'abilit\xE0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588097
+    m_Localized: "Tutte le probabilit\xE0 aumentano di <color=yellow>{0}%</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588098
+    m_Localized: "Aumenta la durata dell'abilit\xE0 di <color=purple>{0}s</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588099
+    m_Localized: "Aumenta la potenza dell'abilit\xE0 di <color=red>x{0}</color>."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

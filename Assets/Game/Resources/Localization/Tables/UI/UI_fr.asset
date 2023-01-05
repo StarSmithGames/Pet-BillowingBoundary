@@ -22,6 +22,88 @@ MonoBehaviour:
     m_Localized: Magasin
     m_Metadata:
       m_Items: []
+  - m_Id: 30908304920576
+    m_Localized: "R\xE9compense quotidienne"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301600325632
+    m_Localized: Oups!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181524800212992
+    m_Localized: "Vous n'avez pas encore d\xE9bloqu\xE9 ce bonus."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920577
+    m_Localized: "Am\xE9liorer"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920578
+    m_Localized: Acheter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908309114880
+    m_Localized: Recevoir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845750177792
+    m_Localized: Muda Muda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149312
+    m_Localized: "Force de frappe\nVous infligez cette quantit\xE9 de d\xE9g\xE2ts
+      en frappant objectif. \nPour augmenter, augmentez le niveau."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149313
+    m_Localized: Chance d'or!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149314
+    m_Localized: 'Augmenter la chance de frapper plus d''or pour
+
+      un coup.
+      Chance maintenant {0}%.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604992
+    m_Localized: Chance de coup critique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604993
+    m_Localized: "Augmentez vos chances d'infliger des d\xE9g\xE2ts critiques.\r\nChance
+      maintenant {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659200
+    m_Localized: Force de frappe critique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659201
+    m_Localized: "Augmente la force des d\xE9g\xE2ts critiques de x{0}."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996198227968
+    m_Localized: <color=orange>Poing de feu</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588096
+    m_Localized: "Conf\xE8re une puissance de feu suppl\xE9mentaire pendant un certain
+      temps. \nPour obtenir plus de temps, augmentez la dur\xE9e de la comp\xE9tence"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588097
+    m_Localized: Toutes les chances augmentent de <color=yellow>{0}%</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588098
+    m_Localized: "Augmente la dur\xE9e de la comp\xE9tence de <color=purple>{0}s</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588099
+    m_Localized: "Augmente la force de comp\xE9tence de <color=red>x{0}</color>."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

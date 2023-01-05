@@ -22,6 +22,86 @@ MonoBehaviour:
     m_Localized: Loja
     m_Metadata:
       m_Items: []
+  - m_Id: 30908304920576
+    m_Localized: "Recompensa di\xE1ria"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301600325632
+    m_Localized: Ups!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181524800212992
+    m_Localized: "Voc\xEA ainda n\xE3o desbloqueou este b\xF4nus."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920577
+    m_Localized: Melhorar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920578
+    m_Localized: Comprar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908309114880
+    m_Localized: Obter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845750177792
+    m_Localized: Muda Muda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149312
+    m_Localized: "For\xE7a de impacto.\nVoc\xEA causa essa quantidade de dano ao
+      acertar\nmetas. Para aumentar, aumente o n\xEDvel."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149313
+    m_Localized: Mais ouro!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149314
+    m_Localized: "Aumente a chance de cair uma moeda com um toque.\nA chance agora
+      \xE9 de {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604992
+    m_Localized: "Chance de acerto cr\xEDtico"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604993
+    m_Localized: "Aumente sua chance de causar dano cr\xEDtico.\nA chance agora \xE9
+      de {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659200
+    m_Localized: "For\xE7a do Golpe Cr\xEDtico"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659201
+    m_Localized: "Aumente o Dano Cr\xEDtico em x{0}."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996198227968
+    m_Localized: <color=orange>Punho de fogo</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588096
+    m_Localized: "Concede poder de fogo adicional por um determinado per\xEDodo de
+      tempo. \nPara obter mais tempo, aumente a dura\xE7\xE3o da habilidade"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588097
+    m_Localized: Todas as probabilidades aumentam em <color=yellow>{0}%</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588098
+    m_Localized: "Aumenta a dura\xE7\xE3o da habilidade em <color=purple>{0}s</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588099
+    m_Localized: Aumenta o poder da habilidade em <color=red>x{0}</color>.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

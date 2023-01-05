@@ -19,7 +19,87 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 7053540659200
-    m_Localized: Shop
+    m_Localized: "Gesch\xE4ft"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920576
+    m_Localized: "T\xE4gliche Belohnung"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181301600325632
+    m_Localized: Oops!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2181524800212992
+    m_Localized: Sie haben diesen Bonus noch nicht freigeschaltet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920577
+    m_Localized: Verbessern
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908304920578
+    m_Localized: Kaufen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30908309114880
+    m_Localized: Bekommen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845750177792
+    m_Localized: Muda Muda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149312
+    m_Localized: "Schlagfestigkeit\nDu verursachst diese Menge an Schaden, indem
+      du auf\ndie Ziele. Um zu erh\xF6hen, erh\xF6hen Sie das Niveau."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149313
+    m_Localized: GoldChance!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 728845771149314
+    m_Localized: "Erh\xF6hen Sie die Chance, mehr Gold f\xFCr\nein Schlag. Chance
+      jetzt {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604992
+    m_Localized: Kritische Trefferchance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754601083604993
+    m_Localized: "Erh\xF6ht die Chance, kritischen Schaden zuzuf\xFCgen.\nChance
+      jetzt {0}%."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659200
+    m_Localized: Kritische Schlagkraft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766877924659201
+    m_Localized: "Erh\xF6ht die St\xE4rke des kritischen Schadens um x{0}."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996198227968
+    m_Localized: <color=orange>Feuer Faust</color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588096
+    m_Localized: "Gew\xE4hrt f\xFCr eine gewisse Zeit zus\xE4tzliche Feuerkraft.
+      \nErh\xF6hen Sie die Dauer der Fertigkeit, um mehr Zeit zu erhalten"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588097
+    m_Localized: Alle Chancen steigen um <color=yellow>{0}%</color>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588098
+    m_Localized: "Erh\xF6ht die Dauer der Fertigkeit um <color=purple>{0}s</color>."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2231996227588099
+    m_Localized: "Erh\xF6ht die Fertigkeitskraft um <color=red>x{0}</color>."
     m_Metadata:
       m_Items: []
   references:
