@@ -19,6 +19,7 @@ namespace Game.Systems.AdSystem
 		public AdSystem(
 			SignalBus signalBus,
 			string appId,
+			bool isDebug,
 			AdBanner adBanner,
 			AdInterstitial adInterstitial,
 			AdRewarded adRewarded,
@@ -37,6 +38,12 @@ namespace Game.Systems.AdSystem
 			RefreshAd();
 
 			signalBus?.Subscribe<SignalApplicationPause>(OnApplicationPaused);
+
+			if (isDebug)
+			{
+				AdBanner.Enable(false);
+				AdInterstitial.Enable(false);
+			}
 
 			Debug.Log("[AdSystem] Initialization!");
 		}

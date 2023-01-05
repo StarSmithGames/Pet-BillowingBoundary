@@ -8,12 +8,14 @@ namespace Game.Systems.AdSystem
 	public class AdSystemInstaller : ScriptableObjectInstaller<AdSystemInstaller>
 	{
 		public string appId;
+		public bool isDebug = false;
 
 		public override void InstallBindings()
 		{
 			Container.DeclareSignal<SignalADSEnableChanged>();
 
 			Container.BindInstance(appId).WhenInjectedInto<AdSystem>();
+			Container.BindInstance(isDebug).WhenInjectedInto<AdSystem>();
 			Container.BindInterfacesAndSelfTo<AdSystem>().AsSingle().NonLazy();
 
 			Container.BindInterfacesAndSelfTo<AdBanner>().AsSingle().NonLazy();
