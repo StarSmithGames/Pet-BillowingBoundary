@@ -97,7 +97,7 @@ namespace Game.UI
 
 			Open(initIndex);
 
-			audioManager.PlayButtonClick();
+			audioManager?.PlayButtonClick();
 			vibrationManager?.Vibrate();
 		}
 	}
@@ -107,7 +107,7 @@ namespace Game.UI
 	{
 		public UnityAction<Tab> onClicked;
 
-		public GameObject tab;
+		public CanvasGroup tab;
 		public bool isHasButton = true;
 		[ShowIf("isHasButton")]
 		public Button tabButton;
@@ -124,7 +124,7 @@ namespace Game.UI
 
 		public void Enable(bool trigger)
 		{
-			tab.SetActive(trigger);
+			tab.Enable(trigger);
 			if (isHasButton)
 			{
 				tabButton.image.color = trigger ? Color.white : tabDisableColor;

@@ -59,9 +59,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: MultiroundPro SDF(cyrillic)
   m_EditorClassIdentifier: 
-  hashCode: -466801449
+  hashCode: -1484271427
   material: {fileID: 7078896345390688535}
-  materialHashCode: 2038285463
+  materialHashCode: -9322115
   m_Version: 1.1.0
   m_SourceFontFileGUID: 72a690bc64966444297eef496418018e
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 72a690bc64966444297eef496418018e, type: 3}
@@ -910,6 +910,18 @@ MonoBehaviour:
   - m_ElementType: 1
     m_Unicode: 252
     m_GlyphIndex: 66
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 1054
+    m_GlyphIndex: 92
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 1044
+    m_GlyphIndex: 82
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 1084
+    m_GlyphIndex: 90
     m_Scale: 1
   m_AtlasTextures:
   - {fileID: -124284547132228805}
