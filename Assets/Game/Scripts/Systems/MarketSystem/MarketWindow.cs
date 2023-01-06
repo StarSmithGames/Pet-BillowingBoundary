@@ -3,12 +3,9 @@ using DG.Tweening;
 using Game.Entities;
 using Game.Managers.AudioManager;
 using Game.Managers.VibrationManager;
-using Game.Systems.ApplicationHandler;
+using Game.Systems.PremiumMarketSystem;
 using Game.UI;
 
-using MoreMountains.NiceVibrations;
-
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -220,6 +217,7 @@ namespace Game.Systems.MarketSystem
 
 			if (player.Gold.CurrentValue < property.GetCost())
 			{
+				subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
 				return;
 			}
 
@@ -231,6 +229,7 @@ namespace Game.Systems.MarketSystem
 		{
 			if (player.Gold.CurrentValue < marketItem.CurrentPurchase.GetCost())
 			{
+				subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
 				return;
 			}
 
