@@ -145,9 +145,9 @@ namespace Game.Entities
 			}
 		}
 
-		public Data GetData()
+		public PlayerSaveData GetData()
 		{
-			return new Data()
+			return new PlayerSaveData()
 			{
 				gold = Gold.CurrentValue,
 
@@ -160,29 +160,29 @@ namespace Game.Entities
 				fireFistData = SkillRegistrator.GetFireFistData(),
 			};
 		}
-
-		[System.Serializable]
-		public class Data
-		{
-			public BFN gold;
-
-			public int tapsCount;
-			public int criticalTapsCount;
-			public int targetsDefeat;
-			public int bossesDefeat;
-
-			public List<Bonus.Data> bonuses = new List<Bonus.Data>();
-			public FireFistSkill.Data fireFistData;
-		}
 	}
 
-	
+	[System.Serializable]
+	public class PlayerSaveData
+	{
+		public BFN gold;
+
+		public int tapsCount;
+		public int criticalTapsCount;
+		public int targetsDefeat;
+		public int bossesDefeat;
+
+		public List<BonusSaveData> bonuses = new List<BonusSaveData>();
+		public FireFistSkillSaveData fireFistData;
+	}
+
+
 
 	public class BonusRegistrator : Registrator<Bonus>
 	{
-		public List<Bonus.Data> GetData()
+		public List<BonusSaveData> GetData()
 		{
-			return new List<Bonus.Data>(registers.Select((x) => x.GetData()));
+			return new List<BonusSaveData>(registers.Select((x) => x.GetData()));
 		}
 	}
 
@@ -201,7 +201,7 @@ namespace Game.Entities
 			onSelectedSkillChanged?.Invoke(CurrentSkill);
 		}
 
-		public FireFistSkill.Data GetFireFistData()
+		public FireFistSkillSaveData GetFireFistData()
 		{
 			return GetAs<FireFistSkill>().GetData();
 		}

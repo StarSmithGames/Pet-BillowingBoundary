@@ -5,6 +5,7 @@ using Game.Systems.WaveRoadSystem;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Game.Managers.StorageManager
 {
@@ -123,18 +124,19 @@ namespace Game.Managers.StorageManager
 		}
 	}
 
-	[System.Serializable]
 	public class Profile
 	{
 		public Data data;
 
 		public Profile()
 		{
-			data = new Data();
+
 		}
 
 		public Profile(string json)
 		{
+			Assert.IsTrue(!json.IsEmpty());
+
 			data = JsonSerializator.ConvertFromUnityJson<Data>(json);
 		}
 
@@ -145,14 +147,19 @@ namespace Game.Managers.StorageManager
 
 		public Data GetData()
 		{
+			if(data == null)
+			{
+				data = new Data();
+			}
+
 			return data;
 		}
 
 		[System.Serializable]
 		public class Data
 		{
-			public Player.Data playerData;
-			public WaveRoad.Data waveRoadData;
+			public PlayerSaveData playerData;
+			public WaveRoadSaveData waveRoadData;
 		}
 	}
 }

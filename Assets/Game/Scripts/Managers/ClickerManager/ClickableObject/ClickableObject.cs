@@ -122,9 +122,9 @@ namespace Game.Managers.ClickManager
 			}
 		}
 
-		public Data GetData()
+		public TargetSaveData GetData()
 		{
-			return new Data()
+			return new TargetSaveData()
 			{
 				hp = Sheet.HealthPointsBar.CurrentValue,
 			};
@@ -149,12 +149,12 @@ namespace Game.Managers.ClickManager
 			AssetDatabase.SaveAssets();
 		}
 #endif
+	}
 
-		[System.Serializable]
-		public class Data
-		{
-			public BFN hp;
-		}
+	[System.Serializable]
+	public class TargetSaveData
+	{
+		public BFN hp;
 	}
 
 	public partial class ClickableObject

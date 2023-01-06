@@ -129,23 +129,33 @@ namespace Game.Systems.WaveRoadSystem
 			onChanged?.Invoke();
 		}
 
-		public Data GetData()
+		public WaveRoadSaveData GetData()
 		{
-			return new Data()
+			return new WaveRoadSaveData()
 			{
 				pattern = pattern,
 				lastClickable = CurrentTarget.GetData(),
 				lastWave = CurrentWave.GetData(),
 			};
 		}
+	}
 
-		[System.Serializable]
-		public class Data
-		{
-			public WaveRoadPatternData pattern;
-			public ClickableObject.Data lastClickable;
-			public Wave.Data lastWave;
-		}
+	[System.Serializable]
+	public class WaveRoadSaveData
+	{
+		public WaveRoadPatternData pattern;
+		public TargetSaveData lastClickable;
+		public WaveSaveData lastWave;
+	}
+
+	[System.Serializable]
+	public class WaveSaveData
+	{
+		public int waveCount;
+		public int targetCount;
+
+		public WaveRoadData waveRoadData;
+		public TargetData targetData;
 	}
 
 	public class Wave : Attribute<int>
@@ -166,7 +176,7 @@ namespace Game.Systems.WaveRoadSystem
 			NextTarget();
 		}
 
-		public Wave(Data data) : base(data.waveCount)
+		public Wave(WaveSaveData data) : base(data.waveCount)
 		{
 			MiddleTargetsBar = new Targets(data.targetCount, 0, data.waveRoadData.middleRoad.countTargets);
 			SetWaveRoad(data.waveRoadData);
@@ -226,9 +236,9 @@ namespace Game.Systems.WaveRoadSystem
 			return null;
 		}
 
-		public Data GetData()
+		public WaveSaveData GetData()
 		{
-			return new Data()
+			return new WaveSaveData()
 			{
 				waveCount = CurrentValue,
 				targetCount = (int)MiddleTargetsBar.CurrentValue,
@@ -237,17 +247,8 @@ namespace Game.Systems.WaveRoadSystem
 				targetData = CurrentTarget,
 			};
 		}
-
-		[System.Serializable]
-		public class Data
-		{
-			public int waveCount;
-			public int targetCount;
-
-			public WaveRoadData waveRoadData;
-			public TargetData targetData;
-		}
 	}
+
 
 	public class Targets : AttributeBar
 	{

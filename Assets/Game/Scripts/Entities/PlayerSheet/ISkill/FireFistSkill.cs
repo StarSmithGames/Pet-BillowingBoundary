@@ -211,23 +211,23 @@ namespace Game.Entities
 			}
 		}
 
-		public Data GetData()
+		public FireFistSkillSaveData GetData()
 		{
-			return new Data()
+			return new FireFistSkillSaveData()
 			{
 				chanceLevel = Chance.Level,
 				durationLevel = Duration.Level,
 				powerLevel = Power.Level,
 			};
 		}
+	}
 
-		[System.Serializable]
-		public class Data
-		{
-			public int chanceLevel;
-			public int durationLevel;
-			public int powerLevel;
-		}
+	[System.Serializable]
+	public class FireFistSkillSaveData
+	{
+		public int chanceLevel;
+		public int durationLevel;
+		public int powerLevel;
 	}
 
 

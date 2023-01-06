@@ -55,7 +55,7 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		}
 	}
 
-	public void SetData(Data data)
+	public void SetData(BonusSaveData data)
 	{
 		IsUnknow = data.isUnknow;
 		Level = data.level;
@@ -111,9 +111,9 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 		isInitialized = true;
 	}
 
-	public Data GetData()
+	public BonusSaveData GetData()
 	{
-		return new Data
+		return new BonusSaveData
 		{
 			data = BonusData,
 			isUnknow = IsUnknow,
@@ -121,13 +121,13 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 			type = BuyType,
 		};
 	}
+}
 
-	[Serializable]
-	public class Data
-	{
-		public BonusData data;
-		public bool isUnknow;
-		public int level;
-		public BuyType type;
-	}
+[Serializable]
+public class BonusSaveData
+{
+	public BonusData data;
+	public bool isUnknow;
+	public int level;
+	public BuyType type;
 }
