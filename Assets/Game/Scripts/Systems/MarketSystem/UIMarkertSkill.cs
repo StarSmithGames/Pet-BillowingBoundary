@@ -1,5 +1,6 @@
 using Game.Entities;
 using Game.Managers.ClickManager;
+using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.Systems.MarketSystem;
 
@@ -26,12 +27,14 @@ namespace Game.Systems.MarketSystem
 
 		private SignalBus signalBus;
 		private Player player;
+		private ISaveLoad saveLoad;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, Player player)
+		private void Construct(SignalBus signalBus, Player player, ISaveLoad saveLoad)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
+			this.saveLoad = saveLoad;
 		}
 
 		private void Start()
@@ -44,6 +47,8 @@ namespace Game.Systems.MarketSystem
 			{
 				properties[i].onBuyClicked += OnBuyClick;
 			}
+
+			saveLoad.GetStorage().IsBuyFreeMode.onChanged += UpdateUI;
 
 			player.Gold.onChanged += GoldCheck;
 			player.SkillRegistrator.onSelectedSkillChanged += OnSelectedSkillChanged;

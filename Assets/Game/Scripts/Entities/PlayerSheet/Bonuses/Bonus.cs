@@ -30,7 +30,7 @@ public abstract class Bonus : MonoBehaviour, IPurchasable
 	protected BFN currentCost;
 
 	protected SignalBus signalBus;
-	private ISaveLoad saveLoad;
+	protected ISaveLoad saveLoad;
 	private LocalizationSystem localizationSystem;
 	private AnalyticsSystem analyticsSystem;
 

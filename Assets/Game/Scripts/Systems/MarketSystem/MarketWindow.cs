@@ -2,8 +2,10 @@ using DG.Tweening;
 
 using Game.Entities;
 using Game.Managers.AudioManager;
+using Game.Managers.StorageManager;
 using Game.Managers.VibrationManager;
 using Game.Systems.PremiumMarketSystem;
+using Game.Systems.WaveRoadSystem;
 using Game.UI;
 
 using System.Collections.Generic;
@@ -40,6 +42,7 @@ namespace Game.Systems.MarketSystem
 		private bool isOpenned = false;
 
 		private UISubCanvas subCanvas;
+		private ISaveLoad saveLoad;
 		private Player player;
 		private UIMarketBonusItem.Factory marketItemBonusFactory;
 		private UIMarketSkillItem.Factory marketItemSkillFactory;
@@ -47,13 +50,16 @@ namespace Game.Systems.MarketSystem
 		private VibrationManager vibrationManager;
 
 		[Inject]
-		private void Construct(UISubCanvas subCanvas, Player player,
+		private void Construct(UISubCanvas subCanvas,
+			ISaveLoad saveLoad,
+			Player player,
 			UIMarketBonusItem.Factory marketItemBonusFactory,
 			UIMarketSkillItem.Factory marketItemSkillFactory,
 			AudioManager audioManager,
 			VibrationManager vibrationManager)
 		{
 			this.subCanvas = subCanvas;
+			this.saveLoad = saveLoad;
 			this.player = player;
 			this.marketItemBonusFactory = marketItemBonusFactory;
 			this.marketItemSkillFactory = marketItemSkillFactory;
@@ -215,25 +221,34 @@ namespace Game.Systems.MarketSystem
 		{
 			var property = MarkertSkill.CurrentSkill.GetProperty(skillPropertyIndex);
 
-			if (player.Gold.CurrentValue < property.GetCost())
+			if (!saveLoad.GetStorage().IsBuyFreeMode.GetData())
 			{
-				subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
-				return;
+				if (player.Gold.CurrentValue < property.GetCost())
+				{
+					subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
+					return;
+				}
+
+				player.Gold.CurrentValue -= property.GetCost();
 			}
 
-			player.Gold.CurrentValue -= property.GetCost();
+			
 			MarkertSkill.CurrentSkill.PurchaseProperty(skillPropertyIndex);
 		}
 
 		private void OnBuyClicked(UIMarketItem marketItem)
 		{
-			if (player.Gold.CurrentValue < marketItem.CurrentPurchase.GetCost())
+			if (!saveLoad.GetStorage().IsBuyFreeMode.GetData())
 			{
-				subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
-				return;
+				if (player.Gold.CurrentValue < marketItem.CurrentPurchase.GetCost())
+				{
+					subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
+					return;
+				}
+
+				player.Gold.CurrentValue -= marketItem.CurrentPurchase.GetCost();
 			}
 
-			player.Gold.CurrentValue -= marketItem.CurrentPurchase.GetCost();
 			marketItem.CurrentPurchase.Purchase();
 		}
 

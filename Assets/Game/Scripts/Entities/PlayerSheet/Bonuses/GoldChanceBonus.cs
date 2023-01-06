@@ -68,6 +68,16 @@ public class GoldChanceBonus : Bonus
 			currentCost = BFN.FormuleExpoLevelLow(BonusData.baseCost, Level + 1);
 		}
 
+		if (saveLoad.GetStorage().IsBuyFreeMode.GetData())
+		{
+			currentCost = BFN.Zero;
+		}
+
+		if (saveLoad.GetStorage().IsBuyFreeMode.GetData())
+		{
+			currentCost = BFN.Zero;
+		}
+
 		base.UpdateCost();
 	}
 }

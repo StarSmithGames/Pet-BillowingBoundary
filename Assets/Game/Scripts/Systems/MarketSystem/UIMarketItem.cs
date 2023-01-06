@@ -1,4 +1,5 @@
 using Game.Entities;
+using Game.Managers.StorageManager;
 using Game.Systems.LocalizationSystem;
 using Game.UI;
 
@@ -49,14 +50,20 @@ namespace Game.Systems.MarketSystem
 
 		protected SignalBus signalBus;
 		protected Player player;
+		protected ISaveLoad saveLoad;
 		protected MarketHandler marketHandler;
 		protected FastMessageWindow.Factory fastMessagesFactory;
 
 		[Inject]
-		private void Construct(SignalBus signalBus, Player player, MarketHandler marketHandler, FastMessageWindow.Factory fastMessagesFactory)
+		private void Construct(SignalBus signalBus,
+			Player player,
+			ISaveLoad saveLoad,
+			MarketHandler marketHandler,
+			FastMessageWindow.Factory fastMessagesFactory)
 		{
 			this.signalBus = signalBus;
 			this.player = player;
+			this.saveLoad = saveLoad;
 			this.marketHandler = marketHandler;
 			this.fastMessagesFactory = fastMessagesFactory;
 		}
@@ -69,6 +76,7 @@ namespace Game.Systems.MarketSystem
 			Lock.Button.onClick.AddListener(OnLockClick);
 
 			player.Gold.onChanged += GoldCheck;
+			saveLoad.GetStorage().IsBuyFreeMode.onChanged += GoldCheck;
 
 			signalBus?.Subscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
@@ -84,6 +92,8 @@ namespace Game.Systems.MarketSystem
 			{
 				player.Gold.onChanged -= GoldCheck;
 			}
+
+			saveLoad.GetStorage().IsBuyFreeMode.onChanged -= GoldCheck;
 
 			signalBus?.TryUnsubscribe<SignalLocalizationChanged>(OnLocalizationChanged);
 		}
@@ -133,7 +143,15 @@ namespace Game.Systems.MarketSystem
 		{
 			if (CurrentPurchase == null || currentButton == null) return;
 
-			currentButton.Enable(marketHandler.IsPlayerCanBuy(CurrentPurchase));
+			if (saveLoad.GetStorage().IsBuyFreeMode.GetData())
+			{
+				currentButton.Enable(true);
+				currentButton?.SetText(BFN.Zero.ToStringPritty());
+			}
+			else
+			{
+				currentButton.Enable(marketHandler.IsPlayerCanBuy(CurrentPurchase));
+			}
 		}
 
 		private void OnBuyClick()
@@ -172,8 +190,16 @@ namespace Game.Systems.MarketSystem
 
 				SetState(purchasable.BuyType);
 
-				currentButton?.Enable(marketHandler.IsPlayerCanBuy(purchasable));
-				currentButton?.SetText(purchasable.GetCost().ToStringPritty());
+				if (saveLoad.GetStorage().IsBuyFreeMode.GetData())
+				{
+					currentButton?.Enable(true);
+					currentButton?.SetText(BFN.Zero.ToStringPritty());
+				}
+				else
+				{
+					currentButton?.Enable(marketHandler.IsPlayerCanBuy(purchasable));
+					currentButton?.SetText(purchasable.GetCost().ToStringPritty());
+				}
 			}
 
 			OnLocalizationChanged();

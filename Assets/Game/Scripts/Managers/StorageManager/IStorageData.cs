@@ -6,17 +6,22 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 namespace Game.Managers.StorageManager
 {
 	public interface IStorageData<T>
 	{
+		event UnityAction onChanged;
+
 		T GetData();
 		void SetData(T data);
 	}
 
 	public class StorageData<T> : IStorageData<T>
 	{
+		public event UnityAction onChanged;
+
 		private Database database;
 		private string key;
 		private T defaultValue;
@@ -41,6 +46,8 @@ namespace Game.Managers.StorageManager
 		public void SetData(T data)
 		{
 			database.Set(GetDataKey(), data);
+
+			onChanged?.Invoke();
 		}
 	}
 

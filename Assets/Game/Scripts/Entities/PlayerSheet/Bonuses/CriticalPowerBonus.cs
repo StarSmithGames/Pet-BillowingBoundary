@@ -79,6 +79,11 @@ public class CriticalPowerBonus : Bonus
 			currentCost = BFN.FormuleExpoLevelHigh(BonusData.baseCost, Level + 1);
 		}
 
+		if (saveLoad.GetStorage().IsBuyFreeMode.GetData())
+		{
+			currentCost = BFN.Zero;
+		}
+
 		base.UpdateCost();
 	}
 }
