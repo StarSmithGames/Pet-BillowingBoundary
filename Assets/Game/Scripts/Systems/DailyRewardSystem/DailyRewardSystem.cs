@@ -127,14 +127,14 @@ namespace Game.Systems.DailyRewardSystem
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
 			date = date.AddDays(1);
 			data.nextDay = date.TotalSeconds();
-			data.currentDay = (DayType)(((int)data.currentDay + 1) % 9);//next
+			data.nextDayType = (DayType)(((int)data.nextDayType + 1) % 9);//next
 		}
 
 		private void Reset()
 		{
 			SetupNextDay();
 			data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
-			data.currentDay = DayType.Day1;
+			data.nextDayType = DayType.Day1;
 			data.currentState = DailyRewardState.Open;
 
 			analyticsSystem.LogEvent_daily_reward_reseted();
@@ -142,9 +142,10 @@ namespace Game.Systems.DailyRewardSystem
 
 		public class Data
 		{
-			public double nextDay = 0;
 			public double lastOpened = -1;
-			public DayType currentDay = DayType.Day1;
+
+			public double nextDay = 0;
+			public DayType nextDayType = DayType.Day1;
 			public DailyRewardState currentState = DailyRewardState.Open;
 		}
 	}

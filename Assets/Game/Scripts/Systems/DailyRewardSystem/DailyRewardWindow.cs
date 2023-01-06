@@ -104,15 +104,15 @@ namespace Game.Systems.DailyRewardSystem
 			var data = saveLoad.GetStorage().DailyRewardData.GetData();
 			for (int i = 0; i < rewards.Count; i++)
 			{
-				if (rewards[i].DayType == data.currentDay)
+				if (rewards[i].DayType == data.nextDayType)
 				{
 					rewards[i].SetState(data.currentState, false);
 				}
-				else if (rewards[i].DayType < data.currentDay)
+				else if (rewards[i].DayType < data.nextDayType)
 				{
 					rewards[i].SetState(DailyRewardState.Claimed, false);
 				}
-				else if (rewards[i].DayType > data.currentDay)
+				else if (rewards[i].DayType > data.nextDayType)
 				{
 					rewards[i].SetState(DailyRewardState.Close, false);
 				}
@@ -128,7 +128,7 @@ namespace Game.Systems.DailyRewardSystem
 		{
 			var data = saveLoad.GetStorage().DailyRewardData.GetData();
 
-			Assert.IsTrue(data.currentDay == rewardItem.DayType);
+			Assert.IsTrue(data.nextDayType == rewardItem.DayType);
 
 			data.currentState = rewardItem.CurrentState;
 			if (rewardItem.CurrentState == DailyRewardState.Claimed)
