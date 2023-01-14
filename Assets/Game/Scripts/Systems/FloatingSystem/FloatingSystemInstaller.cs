@@ -32,27 +32,27 @@ namespace Game.Systems.FloatingSystem
 
 			Container
 				.BindFactory<FloatingTextUI, FloatingTextUI.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(2)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(12).WithMaxSize(12)
 				.FromComponentInNewPrefab(floatingText2DPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
 
 			Container
 				.BindFactory<FloatingCoin2D, FloatingCoin2D.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(100)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(100).WithMaxSize(200)
 				.FromComponentInNewPrefab(floatingCoin2DPrefab)
 				.UnderTransform(x => x.Container.Resolve<UISubCanvas>().VFX))
 				.WhenInjectedInto<FloatingSystem>();
 
 			Container
 				.BindFactory<FloatingCoin3D, FloatingCoin3D.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(10)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(25).WithMaxSize(100)
 				.FromComponentInNewPrefab(floatingCoin3DPrefab))
 				.WhenInjectedInto<FloatingSystem>();
 
 			Container
 				.BindFactory<FloatingCandy3D, FloatingCandy3D.Factory>()
-				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(10)
+				.FromMonoPoolableMemoryPool((x) => x.WithInitialSize(25).WithMaxSize(100)
 				.FromComponentInNewPrefab(floatingCandy3DPrefab))
 				.WhenInjectedInto<FloatingSystem>();
 		}
