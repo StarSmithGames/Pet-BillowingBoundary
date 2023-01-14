@@ -53,7 +53,7 @@ namespace Game.Systems.WaveRoadSystem
 				this.pattern = data.pattern;
 				CurrentWave = new Wave(data.lastWave);
 				UpdateTarget();
-				CurrentTarget.Sheet.HealthPointsBar.CurrentValue = data.lastClickable.hp;
+				CurrentTarget.SetData(data.lastClickable);
 			}
 			else
 			{

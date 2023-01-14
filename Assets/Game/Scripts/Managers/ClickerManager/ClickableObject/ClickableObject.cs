@@ -22,7 +22,6 @@ namespace Game.Managers.ClickManager
 
 		public bool IsInitialized { get; private set; } = false;
 		public bool IsEnabled { get; private set; } = true;
-
 		public TargetData TargetData => data;
 		[SerializeField] private TargetData data;
 		[Header("Vars")]
@@ -49,6 +48,8 @@ namespace Game.Managers.ClickManager
 
 		private bool isDead = false;
 		private Vector3 startRotation;
+
+		private TargetSaveData savedata;
 
 		private WaveRoad waveRoad;
 
@@ -91,7 +92,12 @@ namespace Game.Managers.ClickManager
 		{
 			if (trigger)
 			{
-				if(waveRoad.CurrentWave.CurrentValue != 0)
+				if(savedata != null)
+				{
+					Sheet.HealthPointsBar.Resize(savedata.hp, BFN.FormuleExpoHealth(data.baseHealthPoints, waveRoad.CurrentWave.CurrentValue));
+					savedata = null;
+				}
+				else if (waveRoad.CurrentWave.CurrentValue != 0)
 				{
 					Sheet.HealthPointsBar.Resize(BFN.FormuleExpoHealth(data.baseHealthPoints, waveRoad.CurrentWave.CurrentValue));
 				}
@@ -120,6 +126,11 @@ namespace Game.Managers.ClickManager
 				isDead = true;
 				onDead?.Invoke(this);
 			}
+		}
+
+		public void SetData(TargetSaveData savedata)
+		{
+			this.savedata = savedata;
 		}
 
 		public TargetSaveData GetData()

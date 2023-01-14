@@ -15,9 +15,15 @@ namespace Game.Managers.ClickManager
 	{
 		public HealthPointsBar(BFN currentValue, BFN minValue, BFN maxValue) : base(currentValue, minValue, maxValue) { }
 	
-		public void Resize(BFN value)
+		public void Resize(BFN max)
 		{
-			MaxValue = value;
+			MaxValue = max;
+			CurrentValue = max;
+		}
+
+		public void Resize(BFN value, BFN max)
+		{
+			MaxValue = max;
 			CurrentValue = value;
 		}
 	}
