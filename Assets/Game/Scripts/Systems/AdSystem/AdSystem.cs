@@ -39,11 +39,11 @@ namespace Game.Systems.AdSystem
 
 			signalBus?.Subscribe<SignalApplicationPause>(OnApplicationPaused);
 
-			if (isDebug)
-			{
-				AdBanner.Enable(false);
-				AdInterstitial.Enable(false);
-			}
+			//if (isDebug)
+			//{
+			//	AdBanner.Enable(false);
+			//	AdInterstitial.Enable(false);
+			//}
 
 			Debug.Log("[AdSystem] Initialization!");
 		}

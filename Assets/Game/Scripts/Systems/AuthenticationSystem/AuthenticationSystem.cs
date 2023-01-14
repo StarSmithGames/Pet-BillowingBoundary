@@ -30,7 +30,7 @@ namespace Game.Systems.AuthenticationSystem
 #endif
 
 			googlePlayAuthentication.Authenticate(
-			(result, auth) =>
+			(auth) =>
 			{
 				if (auth)
 				{
