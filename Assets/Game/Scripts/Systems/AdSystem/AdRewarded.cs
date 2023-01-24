@@ -115,6 +115,8 @@ namespace Game.Systems.AdSystem
 		{
 			analyticsSystem.LogEvent_ad_rewarded_failed();
 
+			onClosed?.Invoke(RewardedClosedType.None);
+
 			Debug.LogError($"[AdSystem] Rewarded Unavailable.");
 		}
 
@@ -123,12 +125,16 @@ namespace Game.Systems.AdSystem
 		{
 			analyticsSystem.LogEvent_ad_rewarded_failed();
 
+			onClosed?.Invoke(RewardedClosedType.None);
+
 			Debug.LogError($"[AdSystem] Rewarded Failed {error.getDescription()}");
 		}
 	}
 
 	public enum RewardedClosedType
 	{
+		None,
+
 		Simple,
 		Clicked,
 		Rewarded,

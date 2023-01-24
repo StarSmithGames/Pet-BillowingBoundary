@@ -113,6 +113,8 @@ namespace Game.Systems.PremiumMarketSystem
 			{
 				Price.text = iapManager.GetProducePriceFromStore(key);
 			}
+
+			ButtonReward.interactable = true;
 		}
 
 		private void onPurchased(string id, bool trigger)
