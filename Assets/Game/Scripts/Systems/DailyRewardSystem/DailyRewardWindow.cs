@@ -32,7 +32,6 @@ namespace Game.Systems.DailyRewardSystem
 		private UISubCanvas subCanvas;
 		private ISaveLoad saveLoad;
 		private DailyRewardSystem dailyRewardSystem;
-		private NetworkTimeManager networkTimeManager;
 		private FloatingAwards floatingAwards;
 		private Player player;
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
@@ -41,7 +40,6 @@ namespace Game.Systems.DailyRewardSystem
 		private void Construct(UISubCanvas subCanvas,
 			ISaveLoad saveLoad,
 			DailyRewardSystem dailyRewardSystem,
-			NetworkTimeManager networkTimeManager,
 			FloatingAwards floatingAwards,
 			Player player,
 			AnalyticsSystem.AnalyticsSystem analyticsSystem)
@@ -49,7 +47,6 @@ namespace Game.Systems.DailyRewardSystem
 			this.subCanvas = subCanvas;
 			this.saveLoad = saveLoad;
 			this.dailyRewardSystem = dailyRewardSystem;
-			this.networkTimeManager = networkTimeManager;
 			this.floatingAwards = floatingAwards;
 			this.player = player;
 			this.analyticsSystem = analyticsSystem;
@@ -133,11 +130,9 @@ namespace Game.Systems.DailyRewardSystem
 			data.currentState = rewardItem.CurrentState;
 			if (rewardItem.CurrentState == DailyRewardState.Claimed)
 			{
-				data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
-
 				floatingAwards.StartAwardCoins(rewardItem.transform.position, rewardItem.TotalCoins);
 
-				dailyRewardSystem.RefreshDays();
+				dailyRewardSystem.SetupNextDay();
 
 				analyticsSystem.LogEvent_daily_reward_claimed();
 			}

@@ -110,6 +110,11 @@ namespace Game.Systems.AnalyticsSystem
 			LogEvent("daily_reward_claimed");
 		}
 
+		public void LogEvent_daily_reward_setup_next_day()
+		{
+			LogEvent("daily_reward_setup_next_day");
+		}
+
 		public void LogEvent_daily_reward_reseted()
 		{
 			LogEvent("daily_reward_reseted");

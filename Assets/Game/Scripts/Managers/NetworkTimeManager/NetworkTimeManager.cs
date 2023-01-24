@@ -21,7 +21,7 @@ namespace Game.Managers.NetworkTimeManager
 
 		public DateTime GetDateTimeNow()
 		{
-			return GetTime.Now;
+			return DateTime.UtcNow; //GetTime.Now;
 		}
 	}
 }

@@ -93,13 +93,6 @@ namespace Game.Systems.DailyRewardSystem
 			//}
 		}
 
-		public void RefreshDays()
-		{
-			SetupNextDay();
-
-			onChanged?.Invoke();
-		}
-
 		public List<DailyReward> GetRewards()
 		{
 			return setting.rewards;
@@ -121,19 +114,23 @@ namespace Game.Systems.DailyRewardSystem
 			return data.nextDay - networkTimeManager.GetDateTimeNow().TotalSeconds();
 		}
 
-		private void SetupNextDay()
+		public void SetupNextDay()
 		{
+			data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
 			var date = networkTimeManager.GetDateTimeNow();
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
-			date = date.AddDays(1);
+			date = date.AddDays(1);//next day
 			data.nextDay = date.TotalSeconds();
 			data.nextDayType = (DayType)(((int)data.nextDayType + 1) % 9);//next
+
+			analyticsSystem.LogEvent_daily_reward_setup_next_day();
+
+			onChanged?.Invoke();
 		}
 
 		private void Reset()
 		{
 			SetupNextDay();
-			data.lastOpened = networkTimeManager.GetDateTimeNow().TotalSeconds();
 			data.nextDayType = DayType.Day1;
 			data.currentState = DailyRewardState.Open;
 
