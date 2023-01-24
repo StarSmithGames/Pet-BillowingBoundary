@@ -41,6 +41,19 @@ namespace Game.Systems.MarketSystem
 
 		private bool isOpenned = false;
 
+		private PremiumMarketWindow PremiumMarketWindow
+		{
+			get
+			{
+				if (premiumMarketWindow == null)
+				{
+					premiumMarketWindow = subCanvas.WindowsRegistrator.GetAs<PremiumMarketWindow>();
+				}
+				return premiumMarketWindow;
+			}
+		}
+		private PremiumMarketWindow premiumMarketWindow;
+
 		private UISubCanvas subCanvas;
 		private ISaveLoad saveLoad;
 		private Player player;
@@ -225,7 +238,10 @@ namespace Game.Systems.MarketSystem
 			{
 				if (player.Gold.CurrentValue < property.GetCost())
 				{
-					subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
+					if (!PremiumMarketWindow.IsInProcess)
+					{
+						PremiumMarketWindow.Show();
+					}
 					return;
 				}
 
@@ -242,7 +258,10 @@ namespace Game.Systems.MarketSystem
 			{
 				if (player.Gold.CurrentValue < marketItem.CurrentPurchase.GetCost())
 				{
-					subCanvas.WindowsRegistrator.Show<PremiumMarketWindow>();
+					if (!PremiumMarketWindow.IsInProcess)
+					{
+						PremiumMarketWindow.Show();
+					}
 					return;
 				}
 
