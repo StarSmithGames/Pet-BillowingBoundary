@@ -11,15 +11,18 @@ namespace Game.Systems.AuthenticationSystem
 		private GooglePlayAuthentication googlePlayAuthentication;
 		private FirebaseAuthentication firebaseAuthentication;
 		private AchievementSystem.AchievementSystem achievementSystem;
+		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
 		public AuthenticationSystem(
 			GooglePlayAuthentication googlePlayAuthentication,
 			FirebaseAuthentication firebaseAuthentication,
-			AchievementSystem.AchievementSystem achievementSystem)
+			AchievementSystem.AchievementSystem achievementSystem,
+			AnalyticsSystem.AnalyticsSystem analyticsSystem)
 		{
 			this.googlePlayAuthentication = googlePlayAuthentication;
 			this.firebaseAuthentication = firebaseAuthentication;
 			this.achievementSystem = achievementSystem;
+			this.analyticsSystem = analyticsSystem;
 		}
 
 		public void Initialize()
@@ -32,6 +35,8 @@ namespace Game.Systems.AuthenticationSystem
 			googlePlayAuthentication.Authenticate(
 			(auth) =>
 			{
+				analyticsSystem.LogEvent_authentication($"google_{auth}");
+
 				if (auth)
 				{
 					var authCode = PlayGamesPlatform.Instance.GetServerAuthCode();
@@ -40,6 +45,8 @@ namespace Game.Systems.AuthenticationSystem
 					firebaseAuthentication.AuthenticateWithCredential((credential),
 					(fireResult) =>
 					{
+						analyticsSystem.LogEvent_authentication($"firebase_credential_{fireResult}");
+
 						if (fireResult)
 						{
 							// user is signed in
@@ -49,7 +56,10 @@ namespace Game.Systems.AuthenticationSystem
 						{
 							if (FirebaseAuth.DefaultInstance.CurrentUser == null)
 							{
-								firebaseAuthentication.AuthenticateAnonymously();
+								firebaseAuthentication.AuthenticateAnonymously((result) =>
+								{
+									analyticsSystem.LogEvent_authentication($"firebase_anonymously_{result}");
+								});
 								Debug.Log("[AuthenticationSystem] SignInAnonymouslyAsync.");
 							}
 							else
@@ -66,7 +76,10 @@ namespace Game.Systems.AuthenticationSystem
 				{
 					if (FirebaseAuth.DefaultInstance.CurrentUser == null)
 					{
-						firebaseAuthentication.AuthenticateAnonymously();
+						firebaseAuthentication.AuthenticateAnonymously((result) =>
+						{
+							analyticsSystem.LogEvent_authentication($"firebase_anonymously_{result}");
+						});
 						Debug.Log("[AuthenticationSystem] SignInAnonymouslyAsync.");
 					}
 					else

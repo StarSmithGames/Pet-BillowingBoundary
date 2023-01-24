@@ -10,7 +10,7 @@ namespace Game.Systems.AuthenticationSystem
 	{
 		public bool IsInitialized { get; private set; } = false;
 
-		public void AuthenticateAnonymously()
+		public void AuthenticateAnonymously(UnityAction<bool> callback = null)
 		{
 			FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith((task) =>
 			{
@@ -21,15 +21,23 @@ namespace Game.Systems.AuthenticationSystem
 						if (task.IsCanceled)
 						{
 							Debug.LogError("[FirebaseAuthentication] SignInAnonymouslyAsync was canceled.");
+
+							callback?.Invoke(false);
+
 							return;
 						}
 						if (task.IsFaulted)
 						{
 							Debug.LogError("[FirebaseAuthentication] SignInAnonymouslyAsync encountered an error: " + task.Exception);
+							
+							callback?.Invoke(false);
+
 							return;
 						}
 
 						FirebaseUser newUser = task.Result;
+
+						callback?.Invoke(true);
 
 						Debug.Log($"[FirebaseAuthentication] User signed in successfully: {newUser.DisplayName} {newUser.UserId}");
 					});

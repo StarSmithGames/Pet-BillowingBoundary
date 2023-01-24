@@ -23,6 +23,23 @@ namespace Game.Systems.AnalyticsSystem
 			this.saveLoad = saveLoad;
 		}
 
+		#region DailyRewards
+		public void LogEvent_daily_reward_claimed()
+		{
+			LogEvent("daily_reward_claimed");
+		}
+
+		public void LogEvent_daily_reward_setup_next_day()
+		{
+			LogEvent("daily_reward_setup_next_day");
+		}
+
+		public void LogEvent_daily_reward_reseted()
+		{
+			LogEvent("daily_reward_reseted");
+		}
+		#endregion
+
 		#region Market
 		public void LogEvent_bonus_upgraded(string name)
 		{
@@ -105,21 +122,6 @@ namespace Game.Systems.AnalyticsSystem
 		#endregion
 
 		#region Statistics
-		public void LogEvent_daily_reward_claimed()
-		{
-			LogEvent("daily_reward_claimed");
-		}
-
-		public void LogEvent_daily_reward_setup_next_day()
-		{
-			LogEvent("daily_reward_setup_next_day");
-		}
-
-		public void LogEvent_daily_reward_reseted()
-		{
-			LogEvent("daily_reward_reseted");
-		}
-
 		public void LogEvent_achievment_get(string id)
 		{
 			LogEvent($"achievment_get_{id}");
@@ -140,6 +142,11 @@ namespace Game.Systems.AnalyticsSystem
 			LogEvent("boss_defeat");
 		}
 		#endregion
+
+		public void LogEvent_authentication(string type)
+		{
+			LogEvent($"authentication_{type}");
+		}
 
 		#region Settings
 		public void LogEvent_settings_language(string lang)
