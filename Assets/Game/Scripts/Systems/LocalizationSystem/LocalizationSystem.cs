@@ -99,6 +99,8 @@ namespace Game.Systems.LocalizationSystem
 			signalBus?.Fire(new SignalLocalizationChanged());
 
 			saveLoad.GetStorage().LanguageIndex.SetData(CurrentLocaleIndex);
+
+			signalBus?.Fire(new SignalSave());
 		}
 	}
 
