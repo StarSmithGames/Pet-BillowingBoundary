@@ -153,7 +153,11 @@ namespace Game.Systems.PremiumMarketSystem
 
 			if (data.type == PremiumItemType.ADS)
 			{
-				adSystem.AdRewarded.Show();
+				if (!adSystem.AdRewarded.Show())
+				{
+					//something went wrong 
+					ButtonReward.interactable = true;
+				}
 			}
 			else
 			{
