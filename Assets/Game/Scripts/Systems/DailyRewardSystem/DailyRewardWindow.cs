@@ -85,6 +85,18 @@ namespace Game.Systems.DailyRewardSystem
 			subCanvas.WindowsRegistrator.UnRegistrate(this);
 		}
 
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				Debug.LogError(saveLoad.GetStorage().DailyRewardData.GetData().nextDayType);
+				var reward = rewards.Find((x) => x.DayType == saveLoad.GetStorage().DailyRewardData.GetData().nextDayType);
+				reward.SetState(DailyRewardState.Claimed);
+
+				UpdateUI();
+			}
+		}
+
 		public override void Show(UnityAction callback = null)
 		{
 			UpdateUI();
@@ -101,17 +113,19 @@ namespace Game.Systems.DailyRewardSystem
 			var data = saveLoad.GetStorage().DailyRewardData.GetData();
 			for (int i = 0; i < rewards.Count; i++)
 			{
-				if (rewards[i].DayType == data.nextDayType)
+				int diff = (int)rewards[i].DayType - (int)data.nextDayType;
+
+				if (diff == 0)
 				{
-					rewards[i].SetState(data.currentState, false);
+					rewards[i].SetState(dailyRewardSystem.IsHasReward() ? DailyRewardState.Open : DailyRewardState.Close, false);
 				}
-				else if (rewards[i].DayType < data.nextDayType)
-				{
-					rewards[i].SetState(DailyRewardState.Claimed, false);
-				}
-				else if (rewards[i].DayType > data.nextDayType)
+				else if (diff > 0)
 				{
 					rewards[i].SetState(DailyRewardState.Close, false);
+				}
+				else
+				{
+					rewards[i].SetState(DailyRewardState.Claimed, false);
 				}
 			}
 
@@ -127,7 +141,6 @@ namespace Game.Systems.DailyRewardSystem
 
 			Assert.IsTrue(data.nextDayType == rewardItem.DayType);
 
-			data.currentState = rewardItem.CurrentState;
 			if (rewardItem.CurrentState == DailyRewardState.Claimed)
 			{
 				floatingAwards.StartAwardCoins(rewardItem.transform.position, rewardItem.TotalCoins);

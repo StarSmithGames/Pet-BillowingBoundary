@@ -108,6 +108,8 @@ namespace Game.Systems.FloatingSystem
 				yield return null;
 			}
 
+			player.Gold.CurrentValue = targetGold;
+
 			lerpGoldCoroutine = null;
 
 			signalBus?.Fire<SignalSave>();

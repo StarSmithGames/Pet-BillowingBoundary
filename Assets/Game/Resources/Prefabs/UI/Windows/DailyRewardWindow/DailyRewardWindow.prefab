@@ -1430,6 +1430,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7450023799330761176, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
+      propertyPath: dayType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
 --- !u!224 &8186835263009340943 stripped
@@ -1606,6 +1610,10 @@ PrefabInstance:
     - target: {fileID: 4223221522294458054, guid: bb12ca0f894aca541aeea020cd4d5461, type: 3}
       propertyPath: m_Name
       value: RewardItem3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4876749903430633950, guid: bb12ca0f894aca541aeea020cd4d5461, type: 3}
+      propertyPath: dayType
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4895115587555732337, guid: bb12ca0f894aca541aeea020cd4d5461, type: 3}
       propertyPath: m_Pivot.x
@@ -1806,7 +1814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7450023799330761176, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
       propertyPath: dayType
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
@@ -1923,7 +1931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7450023799330761176, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
       propertyPath: dayType
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
@@ -2034,6 +2042,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 205909885015524761, guid: 9389c4cd39b18244cb83a1f3a437d133, type: 3}
+      propertyPath: dayType
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8930038108642445953, guid: 9389c4cd39b18244cb83a1f3a437d133, type: 3}
       propertyPath: m_Name
       value: RewardItem1
@@ -2063,6 +2075,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7241685674208331237}
     m_Modifications:
+    - target: {fileID: 2969000466859902008, guid: ab7dfaba6bc4e16469e1d4366af4b73b, type: 3}
+      propertyPath: dayType
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2969000466859902008, guid: ab7dfaba6bc4e16469e1d4366af4b73b, type: 3}
       propertyPath: <Icon>k__BackingField
       value: 
@@ -2180,6 +2196,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7563764142063227514}
     m_Modifications:
+    - target: {fileID: 3470218350583962772, guid: 405748b1e4ca9cc45a44f2f38da333ed, type: 3}
+      propertyPath: dayType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3489149207766548027, guid: 405748b1e4ca9cc45a44f2f38da333ed, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2383,7 +2403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7450023799330761176, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}
       propertyPath: dayType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b8e1ea9b7ee3e140862d3f303ceffb2, type: 3}

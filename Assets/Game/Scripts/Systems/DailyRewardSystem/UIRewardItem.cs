@@ -27,7 +27,7 @@ namespace Game.Systems.DailyRewardSystem
 		[SerializeField] private DayType dayType = DayType.Day1;
 
 		public DailyReward Reward { get; private set; }
-		public BFN TotalCoins { get; private set; }
+		public BFN TotalCoins => BFN.FormuleExpoDailyReward(Reward.baseCoins, waveRoad.CurrentWave.CurrentValue);
 
 		private WaveRoad waveRoad;
 
@@ -54,17 +54,7 @@ namespace Game.Systems.DailyRewardSystem
 			Assert.IsTrue(dayType == reward.day);
 
 			Reward = reward;
-
-			if(CurrentState != DailyRewardState.Claimed)
-			{
-				TotalCoins = BFN.FormuleExpoDailyReward(Reward.baseCoins, waveRoad.CurrentWave.CurrentValue);
-
-				Text.text = TotalCoins.ToStringPritty();
-			}
-			else
-			{
-				TotalCoins = BFN.Zero;
-			}
+			Text.text = TotalCoins.ToStringPritty();
 		}
 
 		public void SetState(DailyRewardState rewardState, bool notify = true)

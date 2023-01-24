@@ -23,6 +23,7 @@ namespace Game.Systems.DailyRewardSystem
 		private float t = 0;
 		private bool needCheck = false;
 
+		private SignalBus signalBus;
 		private DailyRewardSetting setting;
 		private UISubCanvas subCanvas;
 		private ISaveLoad saveLoad;
@@ -30,12 +31,14 @@ namespace Game.Systems.DailyRewardSystem
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
 		public DailyRewardSystem(
+			SignalBus signalBus,
 			DailyRewardSetting setting,
 			UISubCanvas subCanvas,
 			ISaveLoad saveLoad,
 			NetworkTimeManager networkTimeManager,
 			AnalyticsSystem.AnalyticsSystem analyticsSystem)
         {
+			this.signalBus = signalBus;
 			this.setting = setting;
 			this.subCanvas = subCanvas;
 			this.saveLoad = saveLoad;
@@ -63,11 +66,14 @@ namespace Game.Systems.DailyRewardSystem
 					}
 				}
 			}
+
+			//data.currentState = !IsMissedDay() && IsCanClaimReward() ? DailyRewardState.Open : DailyRewardState.Close;
 		}
 
 		public void Tick()
 		{
 			if (!isInitialized) return;
+
 			//if (data.currentState != DailyRewardState.Claimed)
 			//{
 			//	if (needCheck)
@@ -101,17 +107,22 @@ namespace Game.Systems.DailyRewardSystem
 
 		public bool IsHasReward()
 		{
-			return saveLoad.GetStorage().DailyRewardData.GetData().currentState == DailyRewardState.Open;
+			return !IsMissedDay() && IsCanClaimReward() || IsFirstDay();
+		}
+
+		public bool IsCanClaimReward()
+		{
+			return (data.lastOpened - networkTimeManager.GetDateTimeNow().TotalSeconds()) < -data.nextDay;//curr > next
 		}
 
 		public bool IsMissedDay()
 		{
-			return GetLastTime() < -oneDay.TotalSeconds;
+			return (data.nextDay - networkTimeManager.GetDateTimeNow().TotalSeconds()) < -oneDay.TotalSeconds;//day dir > one day
 		}
 
-		public double GetLastTime()
+		public bool IsFirstDay()
 		{
-			return data.nextDay - networkTimeManager.GetDateTimeNow().TotalSeconds();
+			return data.nextDayType == DayType.Day1;
 		}
 
 		public void SetupNextDay()
@@ -121,9 +132,11 @@ namespace Game.Systems.DailyRewardSystem
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
 			date = date.AddDays(1);//next day
 			data.nextDay = date.TotalSeconds();
-			data.nextDayType = (DayType)(((int)data.nextDayType + 1) % 9);//next
+			data.nextDayType = (DayType)(((int)data.nextDayType + 1) % 8);//next
 
 			analyticsSystem.LogEvent_daily_reward_setup_next_day();
+
+			signalBus?.Fire<SignalSave>();
 
 			onChanged?.Invoke();
 		}
@@ -132,30 +145,28 @@ namespace Game.Systems.DailyRewardSystem
 		{
 			SetupNextDay();
 			data.nextDayType = DayType.Day1;
-			data.currentState = DailyRewardState.Open;
-
 			analyticsSystem.LogEvent_daily_reward_reseted();
+
+			signalBus?.Fire<SignalSave>();
 		}
 
 		public class Data
 		{
-			public double lastOpened = -1;
-
+			public double lastOpened = 0;
 			public double nextDay = 0;
 			public DayType nextDayType = DayType.Day1;
-			public DailyRewardState currentState = DailyRewardState.Open;
 		}
 	}
 
 	public enum DayType : int
 	{
-		Day1 = 1,
-		Day2 = 2,
-		Day3 = 3,
-		Day4 = 4,
-		Day5 = 5,
-		Day6 = 6,
-		Day7 = 7,
-		Day8 = 8,
+		Day1 = 0,
+		Day2 = 1,
+		Day3 = 2,
+		Day4 = 3,
+		Day5 = 4,
+		Day6 = 5,
+		Day7 = 6,
+		Day8 = 7,
 	}
 }

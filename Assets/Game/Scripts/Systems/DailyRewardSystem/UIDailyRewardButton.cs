@@ -35,7 +35,7 @@ namespace Game.Systems.DailyRewardSystem
 
 			Enable(false);
 
-			StartCoroutine(ShowWithDelay(!saveLoad.GetStorage().IsFirstTime.GetData() ? 2f : 30f));
+			StartCoroutine(ShowWithDelay(!saveLoad.GetStorage().IsFirstTime.GetData() ? 2f : 15f));
 
 			dailyRewardSystem.onChanged += CheckOnAlert;
 		}
