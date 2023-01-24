@@ -13,7 +13,9 @@ namespace Game.Systems.FloatingSystem
 {
 	public class FloatingAwards
 	{
+		private BFN targetGold = BFN.Zero;
 		private BFN maxCoins = new BFN(10000, 0);
+		private Coroutine lerpGoldCoroutine;
 
 		private SignalBus signalBus;
 		private FloatingSystem floatingSystem;
@@ -35,15 +37,17 @@ namespace Game.Systems.FloatingSystem
 			return asyncManager.StartCoroutine(BurstCoins(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
 		}
 
-		public Coroutine StartCollectCoins(Vector3 startPosition, BFN addCoins, UnityAction callback = null)
-		{
-			return asyncManager.StartCoroutine(SlowCollectCoins(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
-		}
+		//public Coroutine StartCollectCoins(Vector3 startPosition, BFN addCoins, UnityAction callback = null)
+		//{
+		//	return asyncManager.StartCoroutine(SlowCollectCoins(startPosition, UIGoldHUD.Instance.transform, (int)Mathf.Lerp(10, 100, BFN.Percent(addCoins, maxCoins)), addCoins, callback));
+		//}
 
 		private IEnumerator BurstCoins(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
 		{
 			audioManager.PlayCoinsReward();
-			asyncManager.StartCoroutine(LerpGoldTo(addCoins, count * 0.05f));
+
+			StartLerpGold(count, addCoins);
+
 			yield return null;
 			for (int i = 0; i < count; i++)
 			{
@@ -54,35 +58,48 @@ namespace Game.Systems.FloatingSystem
 			callback?.Invoke();
 		}
 
-		private IEnumerator SlowCollectCoins(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
+		//private IEnumerator SlowCollectCoins(Vector3 startPosition, Transform target, int count, BFN addCoins, UnityAction callback)
+		//{
+		//	audioManager.PlayCoinsReward();
+
+		//	StartLerpGold(count, addCoins);
+
+		//	var wait = new WaitForSeconds(0.05f);
+		//	for (int i = 0; i < count; i++)
+		//	{
+		//		floatingSystem.CreateCoin2D(startPosition, target);
+
+		//		yield return wait;
+		//	}
+
+		//	callback?.Invoke();
+		//}
+
+		private void StartLerpGold(int count, BFN addCoins)
 		{
-			audioManager.PlayCoinsReward();
-
-			asyncManager.StartCoroutine(LerpGoldTo(addCoins, count * 0.05f));
-			var wait = new WaitForSeconds(0.05f);
-			for (int i = 0; i < count; i++)
+			if (lerpGoldCoroutine == null)
 			{
-				floatingSystem.CreateCoin2D(startPosition, target);
-
-				yield return wait;
+				targetGold = player.Gold.CurrentValue + addCoins;
+				lerpGoldCoroutine = asyncManager.StartCoroutine(LerpGoldTo(count * 0.05f));
 			}
-
-			callback?.Invoke();
+			else
+			{
+				targetGold += addCoins;
+			}
 		}
 
-		private IEnumerator LerpGoldTo(BFN coins, float duration)
+		private IEnumerator LerpGoldTo(float duration)
 		{
 			yield return new WaitForSeconds(Random.Range(0.15f, 0.25f));//Wait first floatingSystem.CreateCoin2D
 
 			var start = player.Gold.CurrentValue;
-			var end = player.Gold.CurrentValue + coins;
 			//var part = coins / duration;
 
 			float t = 0;
 
 			while (t < duration)
 			{
-				player.Gold.CurrentValue = BFN.Lerp(start, end, t);
+				player.Gold.CurrentValue = BFN.Lerp(start, targetGold, t);
 
 				t += Time.deltaTime;
 
@@ -90,6 +107,8 @@ namespace Game.Systems.FloatingSystem
 
 				yield return null;
 			}
+
+			lerpGoldCoroutine = null;
 
 			signalBus?.Fire<SignalSave>();
 		}
