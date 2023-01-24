@@ -83,7 +83,8 @@ namespace Game.Systems.PremiumMarketSystem
 
 			if (data.type == PremiumItemType.ADS)
 			{
-				adSystem.AdRewarded.onClosed += OnRewardClosed;
+				adSystem.AdRewarded.onRewardedClosed += OnRewardedClosed;
+				adSystem.AdRewarded.onRewardClosed += OnRewardClosed;
 			}
 
 			UpdateUI();
@@ -127,14 +128,16 @@ namespace Game.Systems.PremiumMarketSystem
 			}
 		}
 
-		private void OnRewardClosed(RewardedClosedType closedType)
+		private void OnRewardedClosed()
 		{
 			ButtonReward.interactable = true;
-			
-			if (closedType == RewardedClosedType.Rewarded)//free
-			{
-				floatingAwards.StartAwardCoins(ButtonReward.transform.position, totalReward);
-			}
+
+			floatingAwards.StartAwardCoins(ButtonReward.transform.position, totalReward);
+		}
+
+		private void OnRewardClosed()
+		{
+			ButtonReward.interactable = true;
 		}
 
 		private void OnClick()

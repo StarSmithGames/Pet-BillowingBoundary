@@ -9,12 +9,11 @@ namespace Game.Systems.AdSystem
 {
 	public class AdRewarded : IAdPlacement, IInitializable
 	{
-		public event UnityAction<RewardedClosedType> onClosed;
+		public event UnityAction onRewardClosed;
+		public event UnityAction onRewardedClosed;
 
 		public bool IsEnabled { get; private set; } = true;
 		public bool IsShowing { get; private set; } = false;
-
-		private bool isClosed = false;
 
 		private AnalyticsSystem.AnalyticsSystem analyticsSystem;
 
@@ -79,14 +78,11 @@ namespace Game.Systems.AdSystem
 		{
 			IronSource.Agent.loadRewardedVideo();
 
-			if (!isClosed)
-			{
-				analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Simple);
-				onClosed?.Invoke(RewardedClosedType.Simple);
-			}
+			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Simple);
 
 			IsShowing = false;
-			isClosed = false;
+
+			onRewardClosed?.Invoke();
 		}
 		// The user completed to watch the video, and should be rewarded.
 		// The placement parameter will include the reward data.
@@ -94,8 +90,7 @@ namespace Game.Systems.AdSystem
 		private void OnRewardedAdRewarded(IronSourcePlacement placement, IronSourceAdInfo adInfo)
 		{
 			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Rewarded);
-			isClosed = true;
-			onClosed?.Invoke(RewardedClosedType.Rewarded);
+			onRewardedClosed?.Invoke();
 		}
 
 		// Invoked when the video ad was clicked.
@@ -104,8 +99,6 @@ namespace Game.Systems.AdSystem
 		private void OnRewardedAdClicked(IronSourcePlacement placement, IronSourceAdInfo adInfo)
 		{
 			analyticsSystem.LogEvent_ad_rewarded_closed(RewardedClosedType.Clicked);
-			isClosed = true;
-			onClosed?.Invoke(RewardedClosedType.Clicked);
 		}
 
 
@@ -115,8 +108,6 @@ namespace Game.Systems.AdSystem
 		{
 			analyticsSystem.LogEvent_ad_rewarded_failed();
 
-			onClosed?.Invoke(RewardedClosedType.None);
-
 			Debug.LogError($"[AdSystem] Rewarded Unavailable.");
 		}
 
@@ -124,8 +115,6 @@ namespace Game.Systems.AdSystem
 		private void OnRewardedAdShowFailed(IronSourceError error, IronSourceAdInfo adInfo)
 		{
 			analyticsSystem.LogEvent_ad_rewarded_failed();
-
-			onClosed?.Invoke(RewardedClosedType.None);
 
 			Debug.LogError($"[AdSystem] Rewarded Failed {error.getDescription()}");
 		}
