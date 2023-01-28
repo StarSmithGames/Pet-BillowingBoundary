@@ -19,10 +19,12 @@ using UnityEditor.Localization;
 
 namespace Game.Systems.LocalizationSystem
 {
-	public partial class LocalizationSystem : IDisposable
+	public partial class LocalizationSystem : IInitializable, IDisposable
 	{
 		public bool IsLocaleProcess => localeCoroutine != null;
 		private Coroutine localeCoroutine;
+
+		private Data data;
 
 		private SignalBus signalBus;
 		private AsyncManager asyncManager;
@@ -34,12 +36,17 @@ namespace Game.Systems.LocalizationSystem
 			this.asyncManager = asyncManager;
 			this.saveLoad = saveLoad;
 
-			LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+			data = saveLoad.GetStorage().LocalizationData.GetData();
+		}
 
+		public void Initialize()
+		{
 			if (saveLoad.GetStorage().IsFirstTime.GetData() == false)
 			{
-				ChangeLocale(saveLoad.GetStorage().LanguageIndex.GetData());
+				ChangeLocale(data.languageIndex);
 			}
+
+			LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
 		}
 
 		public void Dispose()
@@ -98,9 +105,15 @@ namespace Game.Systems.LocalizationSystem
 		{
 			signalBus?.Fire(new SignalLocalizationChanged());
 
-			saveLoad.GetStorage().LanguageIndex.SetData(CurrentLocaleIndex);
+			data.languageIndex = CurrentLocaleIndex;
 
 			signalBus?.Fire(new SignalSave());
+		}
+
+		[System.Serializable]
+		public class Data
+		{
+			public int languageIndex = 0;
 		}
 	}
 

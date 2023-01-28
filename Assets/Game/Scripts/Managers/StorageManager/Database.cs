@@ -14,6 +14,14 @@ namespace Game.Managers.StorageManager
 			return Data.ContainsKey(key);
 		}
 
+		public void Remove(string key)
+		{
+			if (IsHas(key))
+			{
+				Data.Remove(key);
+			}
+		}
+
 		public T Get<T>(string key, T defaultValue = default)
 		{
 			if (Data.ContainsKey(key))

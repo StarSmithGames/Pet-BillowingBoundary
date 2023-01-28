@@ -1,10 +1,8 @@
 using Game.Entities;
 using Game.Systems.DailyRewardSystem;
+using Game.Systems.LocalizationSystem;
 using Game.Systems.WaveRoadSystem;
 
-using System.Collections.Generic;
-
-using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 
@@ -72,7 +70,7 @@ namespace Game.Managers.StorageManager
 		public IStorageData<bool> IsSound { get; private set; }
 		public IStorageData<bool> IsMusic { get; private set; }
 		public IStorageData<bool> IsVibration { get; private set; }
-		public IStorageData<int> LanguageIndex { get; private set; }
+		public IStorageData<LocalizationSystem.Data> LocalizationData { get; private set; }
 
 
 		/// <summary>
@@ -106,6 +104,8 @@ namespace Game.Managers.StorageManager
 
 		private void Initialization()
 		{
+			Purge();
+
 			IsWasHere = new StorageData<bool>(Database, "is_was_here", false);
 			IsFirstTime = new StorageData<bool>(Database, "is_first_time", true);
 
@@ -120,7 +120,13 @@ namespace Game.Managers.StorageManager
 			IsSound = new StorageData<bool>(Database, "is_sound", true);
 			IsMusic = new StorageData<bool>(Database, "is_music", true);
 			IsVibration = new StorageData<bool>(Database, "is_vibration", true);
-			LanguageIndex = new StorageData<int>(Database, "language_index", 0);
+			LocalizationData = new StorageData<LocalizationSystem.Data>(Database, "localization_data", new LocalizationSystem.Data());
+		}
+
+		//Clear old keys
+		private void Purge()
+		{
+			Database.Remove("language_index");//v1.0.3
 		}
 
 		[System.Serializable]
