@@ -77,15 +77,19 @@ namespace Game.Systems.FloatingSystem
 
 		private void StartLerpGold(int count, BFN addCoins)
 		{
-			if (lerpGoldCoroutine == null)
-			{
-				targetGold = player.Gold.CurrentValue + addCoins;
-				lerpGoldCoroutine = asyncManager.StartCoroutine(LerpGoldTo(count * 0.05f));
-			}
-			else
-			{
-				targetGold += addCoins;
-			}
+			//if (lerpGoldCoroutine == null)
+			//{
+			//	targetGold = player.Gold.CurrentValue + addCoins;
+			//	lerpGoldCoroutine = asyncManager.StartCoroutine(LerpGoldTo(count * 0.05f));
+			//}
+			//else
+			//{
+			//	targetGold += addCoins;
+			//}
+
+			player.Gold.CurrentValue += addCoins;
+			UIGoldHUD.Instance.Punch();
+			signalBus?.Fire<SignalSave>();
 		}
 
 		private IEnumerator LerpGoldTo(float duration)
