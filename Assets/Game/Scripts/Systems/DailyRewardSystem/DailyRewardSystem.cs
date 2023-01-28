@@ -66,8 +66,6 @@ namespace Game.Systems.DailyRewardSystem
 					}
 				}
 			}
-
-			//data.currentState = !IsMissedDay() && IsCanClaimReward() ? DailyRewardState.Open : DailyRewardState.Close;
 		}
 
 		public void Tick()
@@ -112,12 +110,12 @@ namespace Game.Systems.DailyRewardSystem
 
 		public bool IsCanClaimReward()
 		{
-			return (data.lastOpened - networkTimeManager.GetDateTimeNow().TotalSeconds()) < -data.nextDay;//curr > next
+			return (data.nextDay - networkTimeManager.GetDateTimeNow().TotalSeconds()) <= 0;
 		}
 
 		public bool IsMissedDay()
 		{
-			return (data.nextDay - networkTimeManager.GetDateTimeNow().TotalSeconds()) < -oneDay.TotalSeconds;//day dir > one day
+			return (data.nextDay - networkTimeManager.GetDateTimeNow().TotalSeconds()) < -oneDay.TotalSeconds;
 		}
 
 		public bool IsFirstDay()
